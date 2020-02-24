@@ -55,4 +55,5 @@ Route::middleware('session.has.admin')->group(function () {
 
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');
+    Route::get('/test/test', 'BranchMasterController@destroy');
 });
