@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class VenueController extends Controller
 {
@@ -35,7 +37,14 @@ class VenueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $count = venue::where('v_name', $request->get('v_name'))->get();
+        if (count($count) == 0) {
+            $insertBranch = new venue(['v_name' => $request->get('v_name'), 'v_address' => $request->get('v_address')]);
+            $insertBranch->save();
+            return Redirect::back()->with('success', 'Venue Added Successfully.');
+        } else {
+            return Redirect::back()->with('error', 'Venue Already Exists...');
+        }
     }
 
     /**
@@ -46,9 +55,14 @@ class VenueController extends Controller
      */
     public function show(venue $venue)
     {
-        //
+        return view('admin/viewVenue')->with(['data' => venue::get()]);        
     }
-
+    
+    function delete($id)
+    {
+        $refresh = DB::delete('delete from venues where v_id=' . $id);
+        return Redirect::back();
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -69,7 +83,8 @@ class VenueController extends Controller
      */
     public function update(Request $request, venue $venue)
     {
-        //
+        DB::update('update venues set v_name = "' . $request->get('v_name') . '", v_address = "' . $request->get('v_address') . '" where v_id = ' . $request->v_id);
+        return redirect('/admin/venue');
     }
 
     /**

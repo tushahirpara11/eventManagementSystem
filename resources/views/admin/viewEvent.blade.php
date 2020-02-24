@@ -17,7 +17,7 @@
   <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
-<h3>Branch Master</h3> <br />
+<h3>Event Master</h3> <br />
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     var $table4 = jQuery("#table-4");
@@ -57,28 +57,35 @@
 </script>
 <table class="table table-bordered datatable" id="table-4">
   <thead>
-    <th class="col-md-3" style="background-color: white;">
-      <button type="click" onclick="jQuery('#modal-7').modal('show', {
-      backdrop: 'static'
-    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Branch</button>
-    </th>
     <tr>
       <th>#No.</th>
-      <th>Branch Code</th>
-      <th>Branch Name</th>
+      <th>Event ID</th>
+      <th>Branch ID</th>
+      <th>Venue ID</th>
+      <th>Event Name</th>
+      <th>Event Discription</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Status</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      <td id="b_code">{{$data[$i]->b_code}}</td>
-      <td id="b_name">{{$data[$i]->b_name}}</td>
+      <td id="b_code">{{$data[$i]->e_id}}</td>
+      <td id="b_name">{{$data[$i]->b_id}}</td>
+      <td id="b_name">{{$data[$i]->v_id}}</td>
+      <td id="b_name">{{$data[$i]->e_name}}</td>
+      <td id="b_name">{{$data[$i]->e_discription}}</td>
+      <td id="b_name">{{$data[$i]->e_start_date}}</td>
+      <td id="b_name">{{$data[$i]->e_end_date}}</td>
+      <td id="b_name">{{$data[$i]->e_status}}</td>
       <td class="col-md-3">
         <form style="display: inline;">
           <a href="javascript:;" id="{{$data[$i]->b_code}}_{{$data[$i]->b_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
         </form> &nbsp; &nbsp;
-        <form action="{{ route('admin.deletebranch', [$data[$i]->b_id]) }}" method="post" style="display: inline;">
+        <form action="{{ route('admin.deleteevent', [$data[$i]->b_id]) }}" method="post" style="display: inline;">
           {{csrf_field()}}
           {{ method_field('DELETE') }}
           <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i>Delete</button>
@@ -90,12 +97,21 @@
   <tfoot>
     <tr>
       <th></th>
+      <th>Event ID</th>
+      <th>Branch ID</th>
+      <th>Venue ID</th>
+      <th>Event Name</th>
+      <th>Event Discription</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Status</th>
       <th></th>
-      <th>Branch Code</th>
-      <th>Branch Name</th>
     </tr>
   </tfoot>
 </table> <br />
+<button type="click" onclick="jQuery('#modal-7').modal('show', {
+      backdrop: 'static'
+    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Event</button>
 <script>
   function checkResponce() {
     if (!confirm('Are you sure want to Delete this Record?')) {
@@ -105,12 +121,12 @@
   }
 </script>
 <div class="modal fade" id="modal-7">
-  <form method="post" id="addbranch" action="{{route('admin.addbranch')}}">
+  <form method="post" id="addevent" action="{{route('admin.addevent')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Add Branch</h4>
+          <h4 class="modal-title">Add Event</h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -129,7 +145,7 @@
   </form>
 </div>
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updateBranch" action="{{route('admin.updatebranch')}}">
+  <form method="post" id="updateevent" action="{{route('admin.updateevent')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
@@ -180,7 +196,7 @@
         $("#branch_code").after(
           '<span class="error">This field is required</span>'
         );
-      }else if (!/^[0-9]{3}$/.test(branch_code) || branch_code == "") {
+      } else if (!/^[0-9]{3}$/.test(branch_code) || branch_code == "") {
         e.preventDefault();
         $("#branch_code").after(
           '<span class="error">This should have 3 degits Only.</span>'
@@ -214,7 +230,7 @@
         $("#branch_code_field").after(
           '<span class="error">This field is required</span>'
         );
-      }else if (!/^[0-9]{3}$/.test(branch_code) || branch_code == "") {
+      } else if (!/^[0-9]{3}$/.test(branch_code) || branch_code == "") {
         e.preventDefault();
         $("#branch_code_field").after(
           '<span class="error">This should have 3 degits Only.</span>'

@@ -46,7 +46,7 @@ class EventMasterController extends Controller
      */
     public function show(event_master $event_master)
     {
-        //
+        return view('admin/viewEvent')->with('data',event_master::get());
     }
 
     /**

@@ -63,7 +63,7 @@
                 <li class="caret"></li> <!-- Profile sub-links -->
                 <li> <a href="#"> <i class="entypo-user"></i>
                     Edit Profile
-                  </a> 
+                  </a>
                 </li>
               </ul>
             </li>
@@ -85,10 +85,13 @@
   <link rel="stylesheet" href="{{ asset('backend/js/jvectormap/jquery-jvectormap-1.2.2.css') }}" id="style-resource-1">
   <link rel="stylesheet" href="{{ asset('backend/js/datatables/datatables.css') }}" id="style-resource-1">
   <link rel="stylesheet" href="{{ asset('backend/js/rickshaw/rickshaw.min.css') }}" id="style-resource-2">
-
+  <link rel="stylesheet" href="{{ asset('backend/js/select2/select2-bootstrap.css') }}" id="style-resource-1">
+  <link rel="stylesheet" href="{{ asset('backend/js/select2/select2.css') }}" id="style-resource-2">
+  <link rel="stylesheet" href="{{ asset('backend/js/selectboxit/jquery.selectBoxIt.css') }}" id="style-resource-3">   
+  
   <script src="{{ asset('backend/js/datatables/datatables.js') }}" id="script-resource-8"></script>
-  <script src="{{ asset('backend/js/select2/select2.min.js')}}" id="script-resource-9"></script>
-
+  <script src="{{ asset('backend/js/select2/select2.min.js')}}" id="script-resource-9"></script>  
+  <script src="{{ asset('backend/js/selectboxit/jquery.selectBoxIt.min.js') }}" id="script-resource-11"></script>
   <script src="{{ asset('backend/js/gsap/TweenMax.min.js') }}" id="script-resource-1"></script>
   <script src="{{ asset('backend/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') }}" id="script-resource-2"></script>
   <script src="{{ asset('backend/js/bootstrap.js') }}" id="script-resource-3"></script>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\division_master;
+use App\stream_master;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class DivisionMasterController extends Controller
 {
@@ -34,8 +37,15 @@ class DivisionMasterController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {        
+        $count = division_master::where('d_name', $request->get('d_name'))->get();
+        if (count($count) == 0) {
+            $insertBranch = new division_master(['s_id' => $request->get('s_id'), 'd_name' => $request->get('d_name')]);
+            $insertBranch->save();
+            return Redirect::back()->with('success', 'Divison Added Successfully.');
+        } else {
+            return Redirect::back()->with('error', 'Division Already Exists...');
+        }
     }
 
     /**
@@ -45,8 +55,14 @@ class DivisionMasterController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(division_master $division_master)
+    {        
+        return view('admin/viewDivision')->with(['data' => division_master::get(), 'stream' => stream_master::get()]);
+    }
+    
+    function delete($id)
     {
-        //
+        $refresh = DB::delete('delete from division_masters where d_id=' . $id);
+        return Redirect::back();
     }
 
     /**
@@ -67,9 +83,10 @@ class DivisionMasterController extends Controller
      * @param  \App\division_master  $division_master
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, division_master $division_master)
-    {
-        //
+    public function update(Request $request)
+    {        
+        DB::update('update division_masters set s_id = ' . $request->get('s_id') . ', d_name = "' . $request->get('d_name') . '" where d_id = ' . $request->d_id);
+        return redirect('/admin/division');
     }
 
     /**
