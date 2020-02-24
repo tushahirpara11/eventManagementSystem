@@ -54,6 +54,5 @@ Route::middleware('session.has.admin')->group(function () {
     Route::delete('/admin/deleteevent/{id}', 'EventMasterController@delete')->name('admin.deleteevent');
 
     /*Session Expire*/
-    Route::get('/admin/logout', 'BranchMasterController@destroy');
-    Route::get('/test/test', 'BranchMasterController@destroy');
+    Route::get('/admin/logout', 'BranchMasterController@destroy');    
 });
