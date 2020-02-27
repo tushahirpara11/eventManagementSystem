@@ -65,3 +65,5 @@ Route::get('/student/login',function(){
 });
 Route::post('/student/login','UserMasterController@validateUser');
 Route::get('/student/events','UserMasterController@getEvents');
+Route::post('/ajaxbranch','UserMasterController@getStream')->name('ajaxbranch');
+Route::post('/ajaxstream','UserMasterController@getDivision')->name('ajaxstream');

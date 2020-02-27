@@ -38,7 +38,7 @@ class DivisionMasterController extends Controller
      */
     public function store(Request $request)
     {        
-        $count = division_master::where('d_name', $request->get('d_name'))->get();
+        $count = division_master::where(['s_id' => $request->get('s_id'),'d_name'=> $request->get('d_name')])->get();
         if (count($count) == 0) {
             $insertBranch = new division_master(['s_id' => $request->get('s_id'), 'd_name' => $request->get('d_name')]);
             $insertBranch->save();

@@ -190,18 +190,12 @@
                                 </div>
                                 <div class="form-group">
                                     <select name="stream" id="stream" class="form-control">
-                                    <option value="Select Stream">Select Stream</option>
-                                    @foreach ($streams as $stream)
-                                       <option value="{{$stream->s_id}}">{{$stream->s_name}}</option>
-                                    @endforeach
+                                                                        
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <select name="division" id="division" class="form-control">
-                                    <option value="Select Division">Select Division</option>
-                                    @foreach ($divisions as $division)
-                                       <option value="{{$division->d_id}}">{{$division->d_name}}</option>
-                                    @endforeach
+                                   
                                     </select>
                                 </div>
                                 <input type="submit" class="btnRegister"  value="Register"/>
@@ -350,6 +344,39 @@
         );
       }
       
+    });
+  });
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+  $("select[name='branch']").change(function () {
+    $("#stream").html('');
+    var branch = $(this).val();
+    var token = $("input[name='_token']").val();
+    $.ajax({
+      url: "<?php echo route('ajaxbranch') ?>",
+      method: 'POST',
+      data: { b_id: branch, _token: token },
+      success: function (option) {       
+        for(i=0;i<option.option.length;i++){          
+          $("#stream").append(`<option value="${option.option[i].s_id}">${option.option[i].s_name} </option>`);
+        }
+      }
+    });
+  });
+  $("select[name='stream']").click(function () {
+    $("#division").html('');
+    var stream = $(this).val();
+    var token = $("input[name='_token']").val();
+    $.ajax({
+      url: "<?php echo route('ajaxstream') ?>",
+      method: 'POST',
+      data: { s_id: stream, _token: token },
+      success: function (option) {        
+        for(i=0;i<option.option.length;i++){          
+          $("#division").append(`<option value="${option.option[i].d_id}">${option.option[i].d_name} </option>`);
+        }
+      }
     });
   });
 </script>

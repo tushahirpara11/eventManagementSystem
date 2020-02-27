@@ -109,6 +109,22 @@ class UserMasterController extends Controller
         $divisions=division_master::all();
         return view('/student/registration',compact('branches','streams','divisions'));
     }
+    public function getStream(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data=stream_master::where('b_id','=',$request->b_id)->get();
+    		return response()->json(['option' => $data]);
+        }
+    }
+    public function getDivision(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data=division_master::where('s_id','=',$request->s_id)->get();
+    		return response()->json(['option' => $data]);
+        }
+    }
     public function validateUser(Request $request)
     {
         $email=$request->email;
@@ -134,7 +150,7 @@ class UserMasterController extends Controller
     }
     public function getEvents()
     {
-        $events=event_master::all();
+        $events=event_master::where('e_status','=',1)->get();
         return view('/student/event_list',compact('events'));
     }
 }
