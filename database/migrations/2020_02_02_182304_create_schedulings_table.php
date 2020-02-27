@@ -16,7 +16,7 @@ class CreateSchedulingsTable extends Migration
         Schema::create('schedulings', function (Blueprint $table) {
             $table->increments('sched_id',7);                        
             $table->integer('e_id')->unsigned();                                
-            $table->json('sched_details');
+            $table->text('sched_details');
             $table->time('time');            
             $table->foreign('e_id')->references('e_id')->on('event_masters')->onUpdade('cascade')->onDelete('cascade');            
             $table->timestamps();
