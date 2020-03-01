@@ -25,7 +25,7 @@ class CreateUserMastersTable extends Migration
             $table->integer('d_id')->unsigned();            
             $table->string('gender',1);
             $table->integer('u_type')->unsigned();
-            $table->string('password',15);
+            $table->string('password',500);
             $table->string('enrollmentno',12)->nullable();
             $table->foreign('b_id')->references('b_id')->on('branch_masters')->onUpdade('cascade')->onDelete('cascade');            
             $table->foreign('s_id')->references('s_id')->on('stream_masters')->onUpdade('cascade')->onDelete('cascade');            

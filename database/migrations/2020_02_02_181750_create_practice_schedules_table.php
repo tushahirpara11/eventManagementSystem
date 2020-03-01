@@ -18,7 +18,7 @@ class CreatePracticeSchedulesTable extends Migration
             $table->integer('s_e_id')->unsigned();                        
             $table->integer('e_r_id')->unsigned();                        
             $table->integer('u_id')->unsigned();                        
-            $table->json('description');
+            $table->text('description');
             $table->date('date');
             $table->time('time');
             $table->foreign('s_e_id')->references('s_e_id')->on('sub_event_masters')->onUpdade('cascade')->onDelete('cascade');

@@ -17,7 +17,7 @@ class CreateGuestInvitationsTable extends Migration
             $table->increments('i_id',7);            
             $table->integer('e_id')->unsigned();            
             $table->integer('guest_id')->unsigned();            
-            $table->json('description');
+            $table->text('description');
             $table->date('date');
             $table->foreign('e_id')->references('e_id')->on('event_masters')->onUpdade('cascade')->onDelete('cascade');
             $table->foreign('guest_id')->references('guest_id')->on('guests')->onUpdade('cascade')->onDelete('cascade');

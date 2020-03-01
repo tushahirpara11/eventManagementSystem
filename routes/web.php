@@ -62,5 +62,16 @@ Route::middleware('session.has.admin')->group(function () {
     Route::delete('/admin/deletesubevent/{id}', 'SubEventMasterController@delete')->name('admin.deletesubevent');
 
     /*Session Expire*/
-    Route::get('/admin/logout', 'BranchMasterController@destroy');
+    Route::get('/admin/logout', 'BranchMasterController@destroy'); 
+    
 });
+/* Student Route */
+Route::get('/student/registration','UserMasterController@get_data');
+Route::post('/student/register','UserMasterController@store');
+Route::get('/student/login',function(){
+    return view('student/login');
+});
+Route::post('/student/login','UserMasterController@validateUser');
+Route::get('/student/events','UserMasterController@getEvents');
+Route::post('/ajaxbranch','UserMasterController@getStream')->name('ajaxbranch');
+Route::post('/ajaxstream','UserMasterController@getDivision')->name('ajaxstream');
