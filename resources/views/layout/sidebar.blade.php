@@ -3,11 +3,12 @@
       </li>
       <li class="has-sub"> <a href="../../layouts/layout-api/index.html"><i class="entypo-layout"></i><span class="title">Manage Records</span></a>
             <ul>
-                  <li> <a href="{{route('admin.branch')}}"><span class="title">Branch Master</span></a> </li>
-                  <li> <a href="{{route('admin.stream')}}"><span class="title">Stream Master</span></a></li>
-                  <li> <a href="{{route('admin.division')}}"><span class="title">Division Master</span></a></li>
-                  <li> <a href="{{route('admin.venue')}}"><span class="title">Venue Master</span></a></li>
-                  <li> <a href="{{route('admin.event')}}"><span class="title">Event Master</span></a></li>
+                  <li> <a href="{{route('admin.branch')}}"><span class="entypo-layout">Branch Master</span></a> </li>
+                  <li> <a href="{{route('admin.stream')}}"><span class="entypo-layout">Stream Master</span></a></li>
+                  <li> <a href="{{route('admin.division')}}"><span class="entypo-layout">Division Master</span></a></li>
+                  <li> <a href="{{route('admin.venue')}}"><span class="entypo-layout">Venue Master</span></a></li>
+                  <li> <a href="{{route('admin.event')}}"><span class="entypo-layout">Event Master</span></a></li>
+                  <li> <a href="{{route('admin.subevent')}}"><span class="entypo-layout">Sub Event Master</span></a></li>
                   
                   <li> <a href="../../layouts/fixed-sidebar/index.html"><span class="title">Fixed Sidebar</span></a> </li>
                   <li> <a href="../../layouts/chat-open/index.html"><span class="title">Chat Open</span></a> </li>

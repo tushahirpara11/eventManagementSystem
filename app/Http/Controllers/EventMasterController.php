@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\branchMaster;
 use App\event_master;
+use App\venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class EventMasterController extends Controller
 {
@@ -35,7 +39,19 @@ class EventMasterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $count = event_master::where('e_name', $request->get('e_name'))->get();
+        if (count($count) == 0) {
+            $insertEvent = new event_master([
+                'e_name' => $request->get('e_name'), 'e_discription' => $request->get('e_discription'),
+                'e_status' => $request->get('e_status'), 'e_start_date' => $request->get('e_start_date'),
+                'e_end_date' => $request->get('e_end_date'), 'b_id' => $request->get('b_id'),
+                'v_id' => $request->get('v_id')
+            ]);
+            $insertEvent->save();
+            return Redirect::back()->with('success', 'Event Added Successfully.');
+        } else {
+            return Redirect::back()->with('error', 'Event Already Exists...');
+        }
     }
 
     /**
@@ -46,7 +62,19 @@ class EventMasterController extends Controller
      */
     public function show(event_master $event_master)
     {
-        return view('admin/viewEvent')->with('data',event_master::get());
+        return view('admin/viewEvent')->with(['data' => event_master::get(), 'venue' => venue::get(), 'branch' => branchMaster::get()]);
+    }
+
+    public function delete($id)
+    {
+        DB::delete('delete from event_masters where e_id=' . $id);
+        return Redirect::back();
+    }
+
+    function updatestatus($eid, $status)
+    {
+        DB::update('update event_masters set e_status = "' . $status . '" where e_id = ' . $eid);
+        return redirect('/admin/event');
     }
 
     /**
@@ -67,9 +95,13 @@ class EventMasterController extends Controller
      * @param  \App\event_master  $event_master
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, event_master $event_master)
+    public function update(Request $request)
     {
-        //
+        DB::update('update event_masters set b_id = ' . $request->get('b_id') . ', v_id = ' . $request->get('v_id') .
+            ', e_name = "' . $request->get('e_name') . '", e_discription = "' . $request->get('e_discription') .
+            '", e_start_date = "' . $request->get('e_start_date') . '", e_end_date = "' . $request->get('e_end_date') .
+            '" where e_id = ' . $request->e_id);
+        return redirect('/admin/event');
     }
 
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\event_master;
 use App\sub_event_master;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class SubEventMasterController extends Controller
 {
@@ -35,7 +38,18 @@ class SubEventMasterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $count = sub_event_master::where('s_e_name', $request->get('s_e_name'))->get();
+        if (count($count) == 0) {
+            $insertSubEvent = new sub_event_master([
+                's_e_name' => $request->get('s_e_name'), 's_e_discription' => $request->get('s_e_discription'),
+                'status' => $request->get('status'), 's_e_duration' => $request->get('s_e_duration'),
+                'e_id' => $request->get('e_id')
+            ]);
+            $insertSubEvent->save();
+            return Redirect::back()->with('success', 'Sub Event Added Successfully.');
+        } else {
+            return Redirect::back()->with('error', 'Sub Event Already Exists...');
+        }
     }
 
     /**
@@ -46,7 +60,21 @@ class SubEventMasterController extends Controller
      */
     public function show(sub_event_master $sub_event_master)
     {
-        //
+        return view('admin/viewSubEvent')->with([
+            'data' => sub_event_master::get(),
+            'event' => event_master::where(['e_status' => 1])->get()
+        ]);
+    }
+    public function delete($id)
+    {
+        DB::delete('delete from sub_event_masters where s_e_id=' . $id);
+        return Redirect::back();
+    }
+
+    function updatestatus($eid, $status)
+    {
+        DB::update('update sub_event_masters set status = "' . $status . '" where s_e_id = ' . $eid);
+        return redirect('/admin/subevent');
     }
 
     /**
@@ -67,9 +95,12 @@ class SubEventMasterController extends Controller
      * @param  \App\sub_event_master  $sub_event_master
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, sub_event_master $sub_event_master)
+    public function update(Request $request)
     {
-        //
+        DB::update('update sub_event_masters set e_id = ' . $request->get('e_id') . ', s_e_name = "' . $request->get('s_e_name') . '"
+        , s_e_discription = "' . $request->get('s_e_discription') . '", s_e_duration = "' . $request->get('s_e_duration') . '"
+         where s_e_id = ' . $request->s_e_id);
+        return redirect('/admin/subevent');
     }
 
     /**
@@ -78,8 +109,7 @@ class SubEventMasterController extends Controller
      * @param  \App\sub_event_master  $sub_event_master
      * @return \Illuminate\Http\Response
      */
-    public function destroy(sub_event_master $sub_event_master)
+    public function destroy($id)
     {
-        //
     }
 }

@@ -58,38 +58,57 @@
 <table class="table table-bordered datatable" id="table-4">
   <thead>
     <tr>
-      <th>#No.</th>
-      <th>Event ID</th>
-      <th>Branch ID</th>
-      <th>Venue ID</th>
+      <th class="col-xs-1">#No.</th>
+      <th class="col-xs-1">Event ID</th>
+      <th class="col-xs-1">Branch ID</th>
+      <th class="col-xs-1">Venue ID</th>
       <th>Event Name</th>
       <th>Event Discription</th>
       <th>Start Date</th>
       <th>End Date</th>
-      <th>Status</th>
+      <th class="col-xs-1">Status</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      <td id="b_code">{{$data[$i]->e_id}}</td>
-      <td id="b_name">{{$data[$i]->b_id}}</td>
-      <td id="b_name">{{$data[$i]->v_id}}</td>
-      <td id="b_name">{{$data[$i]->e_name}}</td>
-      <td id="b_name">{{$data[$i]->e_discription}}</td>
-      <td id="b_name">{{$data[$i]->e_start_date}}</td>
-      <td id="b_name">{{$data[$i]->e_end_date}}</td>
-      <td id="b_name">{{$data[$i]->e_status}}</td>
-      <td class="col-md-3">
-        <form style="display: inline;">
-          <a href="javascript:;" id="{{$data[$i]->b_code}}_{{$data[$i]->b_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
-        </form> &nbsp; &nbsp;
-        <form action="{{ route('admin.deleteevent', [$data[$i]->b_id]) }}" method="post" style="display: inline;">
+      <td>{{$data[$i]->e_id}}</td>
+      <td>{{$data[$i]->b_id}}</td>
+      <td>{{$data[$i]->v_id}}</td>
+      <td>{{$data[$i]->e_name}}</td>
+      <td>{{$data[$i]->e_discription}}</td>
+      <td>{{$data[$i]->e_start_date}}</td>
+      <td>{{$data[$i]->e_end_date}}</td>
+      <td>@if($data[$i]->e_status == 1)
+        <form action="{{ route('admin.updatestatus', [$data[$i]->e_id,0]) }}" method="post" style="display: inline;">
           {{csrf_field()}}
-          {{ method_field('DELETE') }}
-          <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i>Delete</button>
+          <button type="submit" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i>Deactive</button>
         </form>
+        @elseif($data[$i]->e_status == 0)
+        <form action="{{ route('admin.updatestatus', [$data[$i]->e_id,1]) }}" method="post" style="display: inline;">
+          {{csrf_field()}}
+          <button type="submit" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-check"></i>Active</button>
+        </form>
+        @endif
+      </td>
+      <td class="col-md-2">
+        @for($j = 0; $j < count($branch); $j++) @if($data[$i]->b_id == $branch[$j]->b_id)
+          <!-- {{ $branch_name = $branch[$j]->b_name }}           -->
+          @endif
+          @endfor
+          @for($j = 0; $j < count($venue); $j++) @if($data[$i]->v_id == $venue[$j]->v_id)
+            <!-- {{ $venue_name = $venue[$j]->v_name }} -->
+            @endif
+            @endfor
+            <form style="display: inline;">
+              <a href="javascript:;" id="{{$data[$i]->e_id}}_{{$data[$i]->b_id}}_{{$branch_name}}_{{$data[$i]->v_id}}_{{$venue_name}}_{{$data[$i]->e_name}}_{{$data[$i]->e_discription}}_{{$data[$i]->e_start_date}}_{{$data[$i]->e_end_date}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+            </form> &nbsp; &nbsp;
+            <form action="{{ route('admin.deleteevent', [$data[$i]->e_id]) }}" method="post" style="display: inline;">
+              {{csrf_field()}}
+              {{ method_field('DELETE') }}
+              <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
+            </form>
       </td>
       </tr>
       @endfor
@@ -131,10 +150,44 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group"> <label for="field-1" class="control-label">Branch Code</label> <input type="text" class="form-control" name="b_code" id="branch_code" placeholder="Branch Code"> </div>
+              <div class="form-group">
+                <label for="field-1" class="control-label">Branch</label>
+                <select name="b_id" id="b_id" style="position: static;" class="form-control" data-placeholder="Select one stream...">
+                  @for($i = 0; $i < count($branch); $i++) <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>
+                    @endfor
+                </select>
+              </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group"> <label for="field-2" class="control-label">Branch Name</label> <input type="text" class="form-control" name="b_name" id="branch_name" placeholder="Branch Name"> </div>
+              <div class="form-group">
+                <label for="field-2" class="control-label">Venue</label>
+                <select name="v_id" id="v_id" style="position: static;" class="form-control" data-placeholder="Select one stream...">
+                  @for($i = 0; $i < count($venue); $i++) <option value="{{$venue[$i]->v_id}}">{{$venue[$i]->v_name}}</option>
+                    @endfor
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Event Name</label>
+                <input type="hidden" class="form-control" value="1" name="e_status" id="e_status" />
+                <input type="text" class="form-control" name="e_name" id="e_name" placeholder="Event Name" />
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group"> <label for="field-2" class="control-label">Event Discription</label>
+                <textarea class="form-control" name="e_discription" id="e_discription" value="" placeholder="Event Discription" cols="30" rows="10"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group"> <label for="field-2" class="control-label">Event Start Date</label>
+                <input type="date" name="e_start_date" id="e_start_date" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group"> <label for="field-2" class="control-label">Event End Date</label>
+                <input type="date" name="e_end_date" id="e_end_date" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
+              </div>
             </div>
           </div>
         </div>
@@ -150,20 +203,57 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update Branch</h4>
+          <h4 class="modal-title">Update Event</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
-              <div class="form-group"> <label for="field-1" class="control-label">Branch Code</label> <input type="text" class="form-control" name="b_code" id="branch_code_field" placeholder="Branch Code"> </div>
+              <div class="form-group">
+                <label for="field-1" class="control-label">Branch</label>
+                <input type="hidden" name="e_id" id="e_id_field" />
+                <select name="b_id" id="b_id" style="position: static;" class="form-control" data-placeholder="Select one stream...">
+                  <option id="b_id_field" value=""></option>
+                  @for($i = 0; $i < count($branch); $i++) <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>
+                    @endfor
+                </select>
+              </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group"> <label for="field-2" class="control-label">Branch Name</label> <input type="text" class="form-control" name="b_name" id="branch_name_field" placeholder="Branch Name"> </div>
+              <div class="form-group">
+                <label for="field-2" class="control-label">Venue</label>
+                <select name="v_id" id="v_id" style="position: static;" class="form-control" data-placeholder="Select one stream...">
+                  <option id="v_id_field" value=""></option>
+                  @for($i = 0; $i < count($venue); $i++) <option value="{{$venue[$i]->v_id}}">{{$venue[$i]->v_name}}</option>
+                    @endfor
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Event Name</label>
+                <input type="hidden" class="form-control" value="1" name="e_status" id="e_status" />
+                <input type="text" class="form-control" name="e_name" id="e_name_field" placeholder="Event Name" />
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group"> <label for="field-2" class="control-label">Event Discription</label>
+                <textarea class="form-control" name="e_discription" id="e_discription_field" value="" placeholder="Event Discription" cols="30" rows="10"></textarea>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group"> <label for="field-2" class="control-label">Event Start Date</label>
+                <input type="date" name="e_start_date" id="e_start_date_field" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group"> <label for="field-2" class="control-label">Event End Date</label>
+                <input type="date" name="e_end_date" id="e_end_date_field" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
+              </div>
             </div>
           </div>
         </div>
         <div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-info">Save changes</button> </div>
+          <button type="submit" class="btn btn-info">Save</button> </div>
       </div>
     </div>
   </form>
@@ -171,11 +261,23 @@
 <script>
   function openmodal(id) {
     let record_id = id.split("_");
-    let code = record_id[0];
-    let branch = record_id[1];
+    let e_id = record_id[0];
+    let b_id = record_id[1];
+    let b_id_val = record_id[2];
+    let v_id = record_id[3];
+    let v_id_val = record_id[4];
+    let e_name = record_id[5];
+    let e_discription = record_id[6];
+    let e_start_date = record_id[7];
+    let e_end_date = record_id[8];
 
-    $('#branch_code_field').val(code);
-    $('#branch_name_field').val(branch);
+    $('#e_id_field').val(e_id);
+    $('#b_id_field').val(b_id).text(b_id_val);
+    $('#v_id_field').val(v_id).text(v_id_val);
+    $('#e_name_field').val(e_name);
+    $('#e_discription_field').val(e_discription);
+    $('#e_start_date_field').val(e_start_date);
+    $('#e_end_date_field').val(e_end_date);
 
     jQuery('#modal-6').modal('show', {
       backdrop: 'static'
@@ -185,71 +287,119 @@
 
 <script>
   $(document).ready(function() {
-    $("#addbranch").submit(function(e) {
-      let branch_code = $("#branch_code").val();
-      let branch_name = $("#branch_name").val();
+    $("#addevent").submit(function(e) {
+      let b_id = $("#b_id").val();
+      let v_id = $("#v_id").val();
+      let e_name = $("#e_name").val();
+      let e_discription = $("#e_discription").val();
+      let e_start_date = $("#e_start_date").val();
+      let e_end_date = $("#e_end_date").val();
 
       $(".error").remove();
       // return false;
-      if (branch_code == "") {
+      if (b_id == "") {
         e.preventDefault();
-        $("#branch_code").after(
+        $("#b_id").after(
           '<span class="error">This field is required</span>'
-        );
-      } else if (!/^[0-9]{3}$/.test(branch_code) || branch_code == "") {
-        e.preventDefault();
-        $("#branch_code").after(
-          '<span class="error">This should have 3 degits Only.</span>'
-        );
-      } else if (branch_code.length > 3) {
-        e.preventDefault();
-        $("#branch_code").after(
-          '<span class="error">Branch Code should maximum 3 characters only.</span>'
         );
       }
-      if (!/^[a-zA-Z]/.test(branch_name) || branch_name == "") {
+      if (v_id == "") {
         e.preventDefault();
-        $("#branch_name").after(
+        $("#v_id").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (branch_name.length >= 40) {
+      }
+      if (!/^[a-zA-Z]/.test(e_name) || e_name == "") {
         e.preventDefault();
-        $("#branch_name").after(
-          '<span class="error">Branch Name should maximum 40 characters only.</span>'
+        $("#e_name").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (e_name.length >= 50) {
+        e.preventDefault();
+        $("#e_name").after(
+          '<span class="error">Event Name should maximum 50 characters only.</span>'
+        );
+      }
+      if (!/^[a-zA-Z]/.test(e_discription) || e_discription == "") {
+        e.preventDefault();
+        $("#e_discription").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (e_discription.length > 255) {
+        e.preventDefault();
+        $("#e_discription").after(
+          '<span class="error">Event Name should maximum 50 characters only.</span>'
+        );
+      }
+      if (e_start_date == "") {
+        e.preventDefault();
+        $("#e_start_date").after(
+          '<span class="error">This field is required</span>'
+        );
+      }
+      if (e_end_date == "") {
+        e.preventDefault();
+        $("#e_end_date").after(
+          '<span class="error">This field is required</span>'
         );
       }
     });
-    $("#updateBranch").submit(function(e) {
-      let branch_code = $("#branch_code_field").val();
-      let branch_name = $("#branch_name_field").val();
+    $("#updateevent").submit(function(e) {
+      alert($('#e_start_date_field').val());
+      let b_id_field = $('#b_id_field').val();
+      let v_id_field = $('#v_id_field').val();
+      let e_name_field = $('#e_name_field').val();
+      let e_discription_field = $('#e_discription_field').val();
+      let e_start_date_field = $('#e_start_date_field').val();
+      let e_end_date_field = $('#e_end_date_field').val();
 
       $(".error").remove();
       // return false;
-      if (branch_code == "") {
+      if (b_id_field == "") {
         e.preventDefault();
-        $("#branch_code_field").after(
+        $("#b_id_field").after(
           '<span class="error">This field is required</span>'
-        );
-      } else if (!/^[0-9]{3}$/.test(branch_code) || branch_code == "") {
-        e.preventDefault();
-        $("#branch_code_field").after(
-          '<span class="error">This should have 3 degits Only.</span>'
-        );
-      } else if (branch_code.length > 3) {
-        e.preventDefault();
-        $("#branch_code_field").after(
-          '<span class="error">Branch Code should maximum 3 characters only.</span>'
         );
       }
-      if (!/^[a-zA-Z]/.test(branch_name) || branch_name == "") {
+      if (v_id_field == "") {
         e.preventDefault();
-        $("#branch_name_field").after(
+        $("#v_id_field").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (branch_name.length >= 40) {
+      }
+      if (!/^[a-zA-Z]/.test(e_name_field) || e_name_field == "") {
         e.preventDefault();
-        $("#branch_name_field").after(
-          '<span class="error">Branch Name should maximum 40 characters only.</span>'
+        $("#e_name_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (e_name_field.length >= 40) {
+        e.preventDefault();
+        $("#e_name_field").after(
+          '<span class="error">Event Name should maximum 40 characters only.</span>'
+        );
+      }
+
+      if (!/^[a-zA-Z]/.test(e_discription_field) || e_discription_field == "") {
+        e.preventDefault();
+        $("#e_discription_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (e_discription_field.length >= 450) {
+        e.preventDefault();
+        $("#e_discription_field").after(
+          '<span class="error">Event Discription should maximum 450 characters only.</span>'
+        );
+      }
+      if (e_start_date_field == "") {
+        e.preventDefault();
+        $("#e_start_date_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      }
+      if (e_end_date_field == "") {
+        e.preventDefault();
+        $("#e_end_date_field").after(
+          '<span class="error">This field is required</span>'
         );
       }
     });

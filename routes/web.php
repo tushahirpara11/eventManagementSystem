@@ -51,7 +51,15 @@ Route::middleware('session.has.admin')->group(function () {
     Route::get('/admin/event', 'EventMasterController@show')->name('admin.event');
     Route::post('/admin/event', 'EventMasterController@store')->name('admin.addevent');
     Route::post('/admin/updateevent', 'EventMasterController@update')->name('admin.updateevent');
+    Route::post('/admin/updatestatus/{eid}/{status}', 'EventMasterController@updatestatus')->name('admin.updatestatus');
     Route::delete('/admin/deleteevent/{id}', 'EventMasterController@delete')->name('admin.deleteevent');
+
+    /*Sub Event Master */
+    Route::get('/admin/subevent', 'SubEventMasterController@show')->name('admin.subevent');
+    Route::post('/admin/subevent', 'SubEventMasterController@store')->name('admin.addsubevent');
+    Route::post('/admin/updatesubevent', 'SubEventMasterController@update')->name('admin.updatesubevent');
+    Route::post('/admin/updatesubeventstatus/{eid}/{status}', 'SubEventMasterController@updatestatus')->name('admin.updatesubeventstatus');
+    Route::delete('/admin/deletesubevent/{id}', 'SubEventMasterController@delete')->name('admin.deletesubevent');
 
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');
