@@ -61,17 +61,28 @@ Route::middleware('session.has.admin')->group(function () {
     Route::post('/admin/updatesubeventstatus/{eid}/{status}', 'SubEventMasterController@updatestatus')->name('admin.updatesubeventstatus');
     Route::delete('/admin/deletesubevent/{id}', 'SubEventMasterController@delete')->name('admin.deletesubevent');
 
+    /*Role Event Master */
+    Route::get('/admin/role', 'RoleController@show')->name('admin.role');
+    Route::post('/admin/role', 'RoleController@store')->name('admin.addrole');
+    Route::post('/admin/updaterole', 'RoleController@update')->name('admin.updaterole');    
+    Route::delete('/admin/deleterole/{id}', 'RoleController@delete')->name('admin.deleterole');
+
+    /*Role Event Master */
+    Route::get('/admin/choreographer', 'ChoreographerController@show')->name('admin.choreographer');
+    Route::post('/admin/choreographer', 'ChoreographerController@store')->name('admin.addchoreographer');
+    Route::post('/admin/updatechoreographer', 'ChoreographerController@update')->name('admin.updatechoreographer');    
+    Route::delete('/admin/deletechoreographer/{id}', 'ChoreographerController@delete')->name('admin.deletechoreographer');
+
     /*Session Expire*/
-    Route::get('/admin/logout', 'BranchMasterController@destroy'); 
-    
+    Route::get('/admin/logout', 'BranchMasterController@destroy');
 });
 /* Student Route */
-Route::get('/student/registration','UserMasterController@get_data');
-Route::post('/student/register','UserMasterController@store');
-Route::get('/student/login',function(){
+Route::get('/student/registration', 'UserMasterController@get_data');
+Route::post('/student/register', 'UserMasterController@store');
+Route::get('/student/login', function () {
     return view('student/login');
 });
-Route::post('/student/login','UserMasterController@validateUser');
-Route::get('/student/events','UserMasterController@getEvents');
-Route::post('/ajaxbranch','UserMasterController@getStream')->name('ajaxbranch');
-Route::post('/ajaxstream','UserMasterController@getDivision')->name('ajaxstream');
+Route::post('/student/login', 'UserMasterController@validateUser');
+Route::get('/student/events', 'UserMasterController@getEvents');
+Route::post('/ajaxbranch', 'UserMasterController@getStream')->name('ajaxbranch');
+Route::post('/ajaxstream', 'UserMasterController@getDivision')->name('ajaxstream');
