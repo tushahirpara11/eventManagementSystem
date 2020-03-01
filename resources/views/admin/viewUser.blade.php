@@ -17,7 +17,7 @@
   <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
-<h3>Choreographer</h3> <br />
+<h3>User Masters</h3> <br />
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     var $table4 = jQuery("#table-4");
@@ -59,29 +59,36 @@
   <thead>
     <tr>
       <th class="col-xs-1">#No.</th>
-      <th class="col-xs-1">Sub Event Name</th>
-      <th class="col-xs-1">Choreo. Name</th>
-      <th>Phone</th>
+      <th class="col-xs-1">First Name</th>
+      <th class="col-xs-1">Last Name</th>
       <th class="col-xs-1">Email</th>
+      <th>Phone</th>
+      <th>DOB</th>
+      <th>Branch Id</th>
+      <th>Gender</th>
+      <th>User Type</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      @for($j = 0; $j < count($subevent); $j++) @if($data[$i]->s_e_id == $subevent[$j]->s_e_id)
-        <!-- {{$subEventName = $subevent[$j]->s_e_name}} -->
-        <td>{{$subevent[$j]->s_e_name}}</td>
+      <td>{{$data[$i]->f_name}}</td>
+      <td>{{$data[$i]->l_name}}</td>
+      <td>{{$data[$i]->email}}</td>
+      <td>{{$data[$i]->phone}}</td>
+      <td>{{$data[$i]->dob}}</td>
+      @for($j = 0; $j < count($branch); $j++) @if($data[$i]->b_id == $branch[$j]->b_id)
+        <!-- {{$branchName = $branch[$j]->b_name}} -->
+        <td>{{$branch[$j]->s_e_name}}</td>
         @endif
         @endfor
-        <td>{{$data[$i]->c_name}}</td>
-        <td>{{$data[$i]->c_phone}}</td>
-        <td>{{$data[$i]->c_email}}</td>
         <td class="col-md-2">
           <form style="display: inline;">
-            <a href="javascript:;" id="{{$data[$i]->c_id}}_{{$data[$i]->s_e_id}}_{{$subEventName}}_{{$data[$i]->c_name}}_{{$data[$i]->c_phone}}_{{$data[$i]->c_email}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+            <a href="javascript:;" id="{{$data[$i]->u_id}}_{{$data[$i]->f_name}}_{{$data[$i]->l_name}}_
+              {{$data[$i]->email}}_{{$data[$i]->phone}}_{{$data[$i]->dob}}_{{$data[$i]->b_id}}_{{$branchName}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
           </form> &nbsp; &nbsp;
-          <form action="{{ route('admin.deletechoreographer', [$data[$i]->c_id]) }}" method="post" style="display: inline;">
+          <form action="{{ route('admin.deleteuser', [$data[$i]->u_id]) }}" method="post" style="display: inline;">
             {{csrf_field()}}
             {{ method_field('DELETE') }}
             <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
@@ -93,17 +100,21 @@
   <tfoot>
     <tr>
       <th></th>
-      <th>Sub Event Name</th>
-      <th>Choreo. Name</th>
-      <th>Phone</th>
+      <th>First Name</th>
+      <th>Last Name</th>
       <th>Email</th>
+      <th>Phone</th>
+      <th>DOB</th>
+      <th>Branch Id</th>
+      <th>Gender</th>
+      <th>User Type</th>
       <th></th>
     </tr>
   </tfoot>
 </table> <br />
 <button type="click" onclick="jQuery('#modal-7').modal('show', {
       backdrop: 'static'
-    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Choreographer</button>
+    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add User</button>
 <script>
   function checkResponce() {
     if (!confirm('Are you sure want to Delete this Record?')) {
@@ -113,40 +124,73 @@
   }
 </script>
 <div class="modal fade" id="modal-7">
-  <form method="post" id="addchoreographer" action="{{route('admin.addchoreographer')}}">
+  <form method="post" id="adduser" action="{{route('admin.adduser')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Add Choreographer</h4>
+          <h4 class="modal-title">Add User</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-1" class="control-label">Sub Event Name</label>
-                <select name="s_e_id" id="s_e_id" style="position: static;" class="form-control" data-placeholder="Select one Event...">
-                  @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->e_id}}">{{$subevent[$i]->s_e_name}}</option>
+                <label for="field-2" class="control-label">First Name</label>
+                <input type="text" class="form-control" name="f_name" id="f_name" placeholder="First Name" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Last Name</label>
+                <input type="text" class="form-control" name="l_name" id="l_name" placeholder="Last Name" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Email</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Email" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Phone</label>
+                <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Birth Date</label>
+                <input type="date" class="form-control" name="dob" id="dob" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-1" class="control-label">Branch Name</label>
+                <select name="b_id" id="b_id" style="position: static;" class="form-control" data-placeholder="Select one Branch...">
+                  @for($i = 0; $i < count($branch); $i++) <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>
                     @endfor
                 </select>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Choreo. Name</label>
-                <input type="text" class="form-control" name="c_name" id="c_name" placeholder="Choreographer Name" />
+                <label for="field-1" class="control-label">Gender</label><br />
+                &nbsp;
+                <input type="radio" name="gender" id="male">Male
+                &nbsp;
+                <input type="radio" name="gender" id="female">Female
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Phone</label>
-                <input type="tel" class="form-control" name="c_phone" id="c_phone" placeholder="Choreographer Phone" />
+              <label for="field-2" class="control-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Email</label>
-                <input type="email" class="form-control" name="c_email" id="c_email" placeholder="Choreographer Email" />
+              <label for="field-2" class="control-label">Confirm Password</label>
+                <input type="password" class="form-control" name="cpassword" id="cpassword" />
               </div>
             </div>
           </div>
@@ -158,42 +202,61 @@
   </form>
 </div>
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updatechoreographer" action="{{route('admin.updatechoreographer')}}">
+  <form method="post" id="updateuser" action="{{route('admin.updateuser')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update Choreographer</h4>
+          <h4 class="modal-title">Update User</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-1" class="control-label">Sub Event Name</label>
-                <select name="s_e_id" id="s_e_id" style="position: static;" class="form-control" data-placeholder="Select one Event...">
-                  <option id="s_e_id_field" value=""></option>                  
-                  @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->e_id}}">{{$subevent[$i]->s_e_name}}</option>
+                <label for="field-2" class="control-label">First Name</label>
+                <input type="text" class="form-control" name="f_name" id="f_name_field" placeholder="First Name" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Last Name</label>
+                <input type="text" class="form-control" name="l_name" id="l_name_field" placeholder="Last Name" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Email</label>
+                <input type="email" class="form-control" name="email" id="email_field" placeholder="Email" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Phone</label>
+                <input type="tel" class="form-control" name="phone" id="phone_field" placeholder="Phone" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-2" class="control-label">Birth Date</label>
+                <input type="date" class="form-control" name="dob" id="dob_field" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="field-1" class="control-label">Branch Name</label>
+                <select name="b_id" id="b_id_field" style="position: static;" class="form-control" data-placeholder="Select one Branch...">
+                  @for($i = 0; $i < count($branch); $i++) <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>
                     @endfor
                 </select>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Choreo. Name</label>
-                <input type="hidden" class="form-control" name="c_id" id="c_id_field" />                
-                <input type="text" class="form-control" name="c_name" id="c_name_field" placeholder="Choreographer Name" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Phone</label>
-                <input type="tel" class="form-control" name="c_phone" id="c_phone_field" placeholder="Choreographer Phone" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Email</label>
-                <input type="tel" class="form-control" name="c_email" id="c_email_field" placeholder="Choreographer Email" />
+                <label for="field-1" class="control-label">Gender</label><br />
+                &nbsp;
+                <input type="radio" name="gender" id="male_field">Male
+                &nbsp;
+                <input type="radio" name="gender" id="female_field">Female
               </div>
             </div>
           </div>

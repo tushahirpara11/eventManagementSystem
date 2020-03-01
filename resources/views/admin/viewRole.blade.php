@@ -17,7 +17,7 @@
   <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
-<h3>Sub Event Master</h3> <br />
+<h3>Role Master</h3> <br />
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     var $table4 = jQuery("#table-4");
@@ -90,7 +90,7 @@
 </table> <br />
 <button type="click" onclick="jQuery('#modal-7').modal('show', {
       backdrop: 'static'
-    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Sub Event</button>
+    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Role</button>
 <script>
   function checkResponce() {
     if (!confirm('Are you sure want to Delete this Record?')) {

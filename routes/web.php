@@ -61,17 +61,29 @@ Route::middleware('session.has.admin')->group(function () {
     Route::post('/admin/updatesubeventstatus/{eid}/{status}', 'SubEventMasterController@updatestatus')->name('admin.updatesubeventstatus');
     Route::delete('/admin/deletesubevent/{id}', 'SubEventMasterController@delete')->name('admin.deletesubevent');
 
-    /*Role Event Master */
+    /*Role Master */
     Route::get('/admin/role', 'RoleController@show')->name('admin.role');
     Route::post('/admin/role', 'RoleController@store')->name('admin.addrole');
     Route::post('/admin/updaterole', 'RoleController@update')->name('admin.updaterole');    
     Route::delete('/admin/deleterole/{id}', 'RoleController@delete')->name('admin.deleterole');
 
-    /*Role Event Master */
+    /*Choreographer */
     Route::get('/admin/choreographer', 'ChoreographerController@show')->name('admin.choreographer');
     Route::post('/admin/choreographer', 'ChoreographerController@store')->name('admin.addchoreographer');
     Route::post('/admin/updatechoreographer', 'ChoreographerController@update')->name('admin.updatechoreographer');    
     Route::delete('/admin/deletechoreographer/{id}', 'ChoreographerController@delete')->name('admin.deletechoreographer');
+
+    /*Guest*/
+    Route::get('/admin/guest', 'GuestController@show')->name('admin.guest');
+    Route::post('/admin/guest', 'GuestController@store')->name('admin.addguest');
+    Route::post('/admin/updateguest', 'GuestController@update')->name('admin.updateguest');    
+    Route::delete('/admin/deleteguest/{id}', 'GuestController@delete')->name('admin.deleteguest');
+
+    /*Manage user*/
+    Route::get('/admin/user', 'UserMasterController@show')->name('admin.user');
+    Route::post('/admin/user', 'UserMasterController@adminStore')->name('admin.adduser');
+    Route::post('/admin/updateuser', 'UserMasterController@update')->name('admin.updateuser');    
+    Route::delete('/admin/deleteuser/{id}', 'UserMasterController@delete')->name('admin.deleteuser');
 
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');

@@ -11,6 +11,8 @@
                   <li> <a href="{{route('admin.subevent')}}"><span class="entypo-layout">Sub Event Master</span></a></li>
                   <li> <a href="{{route('admin.role')}}"><span class="entypo-layout">Role Master</span></a></li>
                   <li> <a href="{{route('admin.choreographer')}}"><span class="entypo-layout">Choreographer</span></a></li>
+                  <li> <a href="{{route('admin.guest')}}"><span class="entypo-layout">Guest</span></a></li>
+                  <li> <a href="{{route('admin.user')}}"><span class="entypo-layout">User</span></a></li>
                   
                   <li> <a href="../../layouts/fixed-sidebar/index.html"><span class="title">Fixed Sidebar</span></a> </li>
                   <li> <a href="../../layouts/chat-open/index.html"><span class="title">Chat Open</span></a> </li>

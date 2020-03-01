@@ -42,20 +42,37 @@ class UserMasterController extends Controller
     public function store(Request $request)
     {
         user_master::create([
-            'f_name'=>$request->f_name,
-            'l_name'=>$request->l_name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'password'=>encrypt($request->password),
-            'dob'=>$request->dob,
-            'gender'=>$request->gender,
-            'u_type'=>$request->u_type,
-            'enrollmentno'=>$request->enrollment,
-            'b_id'=>$request->branch,
-            's_id'=>$request->stream,
-            'd_id'=>$request->division,
+            'f_name' => $request->f_name,
+            'l_name' => $request->l_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => encrypt($request->password),
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'u_type' => $request->u_type,
+            'enrollmentno' => $request->enrollment,
+            'b_id' => $request->branch,
+            's_id' => $request->stream,
+            'd_id' => $request->division,
         ]);
         return Redirect::back()->with('success', 'Registration successfull !!! Please Login');
+    }
+
+    public function adminStore(Request $request)
+    {
+        user_master::create([
+            'f_name' => $request->f_name,
+            'l_name' => $request->l_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => encrypt($request->password),
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'u_type' => $request->u_type,
+            'enrollmentno' => $request->enrollment,
+            'b_id' => $request->branch,
+        ]);
+        return Redirect::back()->with('success', 'User Added Successfull');
     }
 
     /**
@@ -66,7 +83,7 @@ class UserMasterController extends Controller
      */
     public function show(user_master $user_master)
     {
-        //
+        return view('admin/viewUser')->with(['data' => user_master::where('u_type', 2)->get(), 'branch' => branchMaster::get()]);
     }
 
     /**
@@ -104,53 +121,45 @@ class UserMasterController extends Controller
     }
     public function get_data()
     {
-        $branches=branchMaster::all();
-        $streams=stream_master::all();
-        $divisions=division_master::all();
-        return view('/student/registration',compact('branches','streams','divisions'));
+        $branches = branchMaster::all();
+        $streams = stream_master::all();
+        $divisions = division_master::all();
+        return view('/student/registration', compact('branches', 'streams', 'divisions'));
     }
     public function getStream(Request $request)
     {
-        if($request->ajax())
-        {
-            $data=stream_master::where('b_id','=',$request->b_id)->get();
-    		return response()->json(['option' => $data]);
+        if ($request->ajax()) {
+            $data = stream_master::where('b_id', '=', $request->b_id)->get();
+            return response()->json(['option' => $data]);
         }
     }
     public function getDivision(Request $request)
     {
-        if($request->ajax())
-        {
-            $data=division_master::where('s_id','=',$request->s_id)->get();
-    		return response()->json(['option' => $data]);
+        if ($request->ajax()) {
+            $data = division_master::where('s_id', '=', $request->s_id)->get();
+            return response()->json(['option' => $data]);
         }
     }
     public function validateUser(Request $request)
     {
-        $email=$request->email;
-        $password=$request->password;
-        $data= DB::table('user_masters')->where('email','=',$email)->get();
-        if(empty($data[0]->email))
-        {
-            return redirect::back()->with('error','Invalid EmailID !!!!');
-        }
-        else
-        {
-            if($password == decrypt($data[0]->password))
-            {
-                session(['user'=>$data[0]->f_name]);
-                session(['id'=>$data[0]->u_id]);
+        $email = $request->email;
+        $password = $request->password;
+        $data = DB::table('user_masters')->where('email', '=', $email)->get();
+        if (empty($data[0]->email)) {
+            return redirect::back()->with('error', 'Invalid EmailID !!!!');
+        } else {
+            if ($password == decrypt($data[0]->password)) {
+                session(['user' => $data[0]->f_name]);
+                session(['id' => $data[0]->u_id]);
                 return redirect('/student/events');
-            }
-            else
-            {
-                return redirect::back()->with('error','Invalid Password !!!!');
+            } else {
+                return redirect::back()->with('error', 'Invalid Password !!!!');
             }
         }
     }
     public function getEvents()
     {
-        $events=event_master::where('e_status','=',1)->get();
-        return view('/student/event_list',compact('events'));
+        $events = event_master::where('e_status', '=', 1)->get();
+        return view('/student/event_list', compact('events'));
     }
 }
