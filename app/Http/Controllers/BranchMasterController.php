@@ -12,6 +12,16 @@ use function PHPSTORM_META\type;
 
 class BranchMasterController extends Controller
 {
+    public function __construct()
+    {
+        if(session('admin') == 'admin')
+        {
+            return redirect('/admin/branch');
+        }
+        else{
+            return redirect()->route('login');
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +34,9 @@ class BranchMasterController extends Controller
     function checkLogin(Request $request)
     {
         if ($request->get('username') == 'admin' && $request->get('password') == 'admin') {
-            session(['admin' => $request->get('username')]);
+            session(['admin' => $request->get('username')]);            
             return redirect('/admin/branch');
-        } else {
+        } else {            
             return Redirect::back()->with('error', 'Invalid Credential..!');
         }
     }
@@ -117,7 +127,6 @@ class BranchMasterController extends Controller
             $request->session()->flush('admin');
             $cookie = Cookie::forget('admin');
             return redirect('admin/')->withCookie($cookie);
-            // return redirect(URL::previous());
         }
     }
 }

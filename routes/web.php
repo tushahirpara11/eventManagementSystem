@@ -18,11 +18,11 @@ Route::get('/admin', function () {
     } else {
         return redirect('/admin/branch');
     }
-});
+})->name('login');
 
 Route::post('/admin/authenticate', 'BranchMasterController@checkLogin');
 
-Route::middleware('session.has.admin')->group(function () {
+Route::group(['middleware' => ['admin']], function () {
     /*Branch Master */
     Route::get('/admin/branch', 'BranchMasterController@show')->name('admin.branch');
     Route::post('/admin/branch', 'BranchMasterController@store')->name('admin.addbranch');

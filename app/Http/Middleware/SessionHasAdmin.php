@@ -16,11 +16,10 @@ class SessionHasAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->session()->has('admin')) {
-            return view('admin.index');
+        if (!$request->session()->has('admin')) {            
+            return redirect('/admin');            
         } else {
-            $response = $next($request);
-            return $response->withCookie(cookie('admin', 'adminLogin'));
+            return $next($request);            
         }
     }
 }
