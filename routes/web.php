@@ -18,11 +18,11 @@ Route::get('/admin', function () {
     } else {
         return redirect('/admin/branch');
     }
-});
+})->name('login');
 
 Route::post('/admin/authenticate', 'BranchMasterController@checkLogin');
 
-Route::middleware('session.has.admin')->group(function () {
+Route::group(['middleware' => ['admin']], function () {
     /*Branch Master */
     Route::get('/admin/branch', 'BranchMasterController@show')->name('admin.branch');
     Route::post('/admin/branch', 'BranchMasterController@store')->name('admin.addbranch');
@@ -84,6 +84,13 @@ Route::middleware('session.has.admin')->group(function () {
     Route::post('/admin/user', 'UserMasterController@adminStore')->name('admin.adduser');
     Route::post('/admin/updateuser', 'UserMasterController@update')->name('admin.updateuser');    
     Route::delete('/admin/deleteuser/{id}', 'UserMasterController@delete')->name('admin.deleteuser');
+
+    /*Manage Group*/
+    Route::get('/admin/group', 'GroupController@show')->name('admin.group');
+    Route::post('/admin/group', 'GroupController@store')->name('admin.addgroup');
+    Route::post('/admin/updategroup', 'GroupController@update')->name('admin.updategroup');    
+    Route::delete('/admin/deletegroup/{id}', 'GroupController@delete')->name('admin.deletegroup');
+    Route::post('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
 
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');

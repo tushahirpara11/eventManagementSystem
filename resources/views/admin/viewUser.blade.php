@@ -80,13 +80,14 @@
       <td>{{$data[$i]->dob}}</td>
       @for($j = 0; $j < count($branch); $j++) @if($data[$i]->b_id == $branch[$j]->b_id)
         <!-- {{$branchName = $branch[$j]->b_name}} -->
-        <td>{{$branch[$j]->s_e_name}}</td>
+        <td>{{$branch[$j]->b_name}}</td>
         @endif
         @endfor
+        <td>{{$data[$i]->gender}}</td>
+        <td>{{$data[$i]->u_type}}</td>
         <td class="col-md-2">
           <form style="display: inline;">
-            <a href="javascript:;" id="{{$data[$i]->u_id}}_{{$data[$i]->f_name}}_{{$data[$i]->l_name}}_
-              {{$data[$i]->email}}_{{$data[$i]->phone}}_{{$data[$i]->dob}}_{{$data[$i]->b_id}}_{{$branchName}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+            <a href="javascript:;" id="{{$data[$i]->u_id}}_{{$data[$i]->f_name}}_{{$data[$i]->l_name}}_{{$data[$i]->email}}_{{$data[$i]->phone}}_{{$data[$i]->dob}}_{{$data[$i]->b_id}}_{{$branchName}}_{{$data[$i]->gender}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
           </form> &nbsp; &nbsp;
           <form action="{{ route('admin.deleteuser', [$data[$i]->u_id]) }}" method="post" style="display: inline;">
             {{csrf_field()}}
@@ -124,7 +125,7 @@
   }
 </script>
 <div class="modal fade" id="modal-7">
-  <form method="post" id="adduser" action="{{route('admin.adduser')}}">
+  <form method="post" id="addUser" action="{{route('admin.adduser')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
@@ -172,24 +173,25 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
               <div class="form-group">
                 <label for="field-1" class="control-label">Gender</label><br />
                 &nbsp;
-                <input type="radio" name="gender" id="male">Male
+                <input type="radio" name="gender" value="male" id="male">Male
                 &nbsp;
-                <input type="radio" name="gender" id="female">Female
+                <input type="radio" name="gender" value="female" id="female">Female<br />
+                <input type="hidden" id="msg">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-              <label for="field-2" class="control-label">Password</label>
+                <label for="field-2" class="control-label">Password</label>
                 <input type="password" class="form-control" name="password" id="password" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-              <label for="field-2" class="control-label">Confirm Password</label>
+                <label for="field-2" class="control-label">Confirm Password</label>
                 <input type="password" class="form-control" name="cpassword" id="cpassword" />
               </div>
             </div>
@@ -202,7 +204,7 @@
   </form>
 </div>
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updateuser" action="{{route('admin.updateuser')}}">
+  <form method="post" id="updateUser" action="{{route('admin.updateuser')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
@@ -214,6 +216,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="field-2" class="control-label">First Name</label>
+                <input type="hidden" class="form-control" name="u_id" id="u_id" />
                 <input type="text" class="form-control" name="f_name" id="f_name_field" placeholder="First Name" />
               </div>
             </div>
@@ -245,6 +248,7 @@
               <div class="form-group">
                 <label for="field-1" class="control-label">Branch Name</label>
                 <select name="b_id" id="b_id_field" style="position: static;" class="form-control" data-placeholder="Select one Branch...">
+                  <option id="b_id_val" value=""></option>
                   @for($i = 0; $i < count($branch); $i++) <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>
                     @endfor
                 </select>
@@ -270,18 +274,28 @@
 <script>
   function openmodal(id) {
     let record_id = id.split("_");
-    let c_id = record_id[0];
-    let s_e_id = record_id[1];
-    let s_e_id_value = record_id[2];
-    let c_name = record_id[3];
-    let c_phone = record_id[4];
-    let c_email = record_id[5];
+    let u_id = record_id[0];
+    let f_name_field = record_id[1];
+    let l_name_field = record_id[2];
+    let email_field = record_id[3];
+    let phone_field = record_id[4];
+    let dob_field = record_id[5];
+    let b_id_val = record_id[6];
+    let b_value = record_id[7];
+    let gender = record_id[8];
 
-    $('#c_id_field').val(c_id);
-    $('#s_e_id_field').val(s_e_id).text(s_e_id_value);
-    $('#c_name_field').val(c_name);
-    $('#c_phone_field').val(c_phone);
-    $('#c_email_field').val(c_email);
+    $("#u_id").val(u_id);
+    $("#f_name_field").val(f_name_field);
+    $("#l_name_field").val(l_name_field);
+    $("#email_field").val(email_field);
+    $("#phone_field").val(phone_field);
+    $("#dob_field").val(dob_field);
+    $("#b_id_val").val(b_id_val).text(b_value);
+    if (gender == 'male') {
+      $('#male_field').prop('checked', true);
+    } else {
+      $('#female_field').prop('checked', true);
+    }
 
     jQuery('#modal-6').modal('show', {
       backdrop: 'static'
@@ -291,95 +305,201 @@
 
 <script>
   $(document).ready(function() {
-    $("#addchoreographer").submit(function(e) {
-      let s_e_id = $("#s_e_id").val();
-      let c_name = $("#c_name").val();
-      let c_phone = $("#c_phone").val();
-      let c_email = $("#c_email").val();
+    $("#addUser").submit(function(e) {
+      let f_name = $("#f_name").val();
+      let l_name = $("#l_name").val();
+      let email = $("#email").val();
+      let phone = $("#phone").val();
+      let dob = $("#dob").val();
+      let b_id = $("#b_id").val();
+      let gender = $('[name="gender"]:checked').length;
+      let password = $("#password").val();
+      let cpassword = $("#cpassword").val();
 
       $(".error").remove();
       // return false;
-      if (s_e_id == "") {
+      if (b_id == "") {
         e.preventDefault();
-        $("#s_e_id").after(
+        $("#b_id").after(
           '<span class="error">This field is required</span>'
         );
       }
 
-      if (!/^[a-zA-Z]/.test(c_name) || c_name == "") {
+      if (!/^[a-zA-Z]/.test(f_name) || f_name == "") {
         e.preventDefault();
-        $("#c_name").after(
+        $("#f_name ").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (c_name.length >= 50) {
+      } else if (f_name.length >= 15) {
         e.preventDefault();
-        $("#c_name").after(
-          '<span class="error">Sub Event Name should maximum 50 characters only.</span>'
+        $("#f_name ").after(
+          '<span class="error">First Name should maximum 15 characters only.</span>'
         );
       }
 
-      if (!/^[0-9]{10}/.test(c_phone) || c_phone == "") {
+      if (!/^[a-zA-Z]/.test(l_name) || l_name == "") {
         e.preventDefault();
-        $("#c_phone").after(
+        $("#l_name ").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (c_phone.length > 10) {
+      } else if (l_name.length >= 15) {
         e.preventDefault();
-        $("#c_phone").after(
-          '<span class="error">Contact should maximum 10 characters only.</span>'
+        $("#l_name ").after(
+          '<span class="error">Last Name should maximum 15 characters only.</span>'
         );
       }
 
-      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(c_email) || c_email == "") {
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || email == "") {
         e.preventDefault();
-        $("#c_email").after(
+        $("#email").after(
           '<span class="error">Enter valid Email</span>'
+        );
+      }
+
+      if (!/^[6-9]+[0-9]{9}/.test(phone) || phone == "") {
+        e.preventDefault();
+        $("#phone").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (phone.length != 10) {
+        e.preventDefault();
+        $("#phone").after(
+          '<span class="error">Contact must be 10 digits only.</span>'
+        );
+      }
+      if (dob == "") {
+        e.preventDefault();
+        $("#dob").after(
+          '<span class="error">This field is required</span>'
+        );
+      }
+      if (gender == 0) {
+        e.preventDefault();
+        $("#msg").after(
+          '<span class="error">This field is required</span>'
+        );
+      }
+      if (password == "") {
+        e.preventDefault();
+        $("#password").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (password.length != 8) {
+        e.preventDefault();
+        $("#password").after(
+          '<span class="error">Password must be maximum 8 character only.</span>'
+        );
+      }
+      if (cpassword == "") {
+        e.preventDefault();
+        $("#cpassword").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (cpassword.length != 8) {
+        e.preventDefault();
+        $("#cpassword").after(
+          '<span class="error">Confirm Password must be maximum 8 character only.</span>'
+        );
+      } else if (password != cpassword) {
+        e.preventDefault();
+        $("#cpassword").after(
+          '<span class="error">Password and Confirm password must be same.</span>'
         );
       }
     });
-    $("#updatechoreographer").submit(function(e) {
-      let s_e_id = $("#s_e_id_field").val();
-      let c_name = $("#c_name_field").val();
-      let c_phone = $("#c_phone_field").val();
-      let c_email = $("#c_email_field").val();
+    $("#updateUser").submit(function(e) {
+      let f_name = $("#f_name_field").val();
+      let l_name = $("#l_name_field").val();
+      let email = $("#email_field").val();
+      let phone = $("#phone_field").val();
+      let dob = $("#dob_field").val();
+      let b_id = $("#b_id_field").val();
+      // let gender = $('[id="gender_field"]:checked').length;
+      let password = $("#password_field").val();
+      let cpassword = $("#cpassword_field").val();
 
       $(".error").remove();
       // return false;
-      if (s_e_id == "") {
+      if (b_id == "") {
         e.preventDefault();
-        $("#s_e_id_field").after(
+        $("#b_id_field").after(
           '<span class="error">This field is required</span>'
         );
       }
 
-      if (!/^[a-zA-Z]/.test(c_name) || c_name == "") {
+      if (!/^[a-zA-Z]/.test(f_name) || f_name == "") {
         e.preventDefault();
-        $("#c_name_field").after(
+        $("#f_name_field").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (c_name.length >= 50) {
+      } else if (f_name.length >= 15) {
         e.preventDefault();
-        $("#c_name_field").after(
-          '<span class="error">Sub Event Name should maximum 50 characters only.</span>'
+        $("#f_name_field").after(
+          '<span class="error">First Name should maximum 15 characters only.</span>'
         );
       }
 
-      if (!/^[0-9]{10}/.test(c_phone) || c_phone == "") {
+      if (!/^[a-zA-Z]/.test(l_name) || l_name == "") {
         e.preventDefault();
-        $("#c_phone_field").after(
+        $("#l_name_field").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (c_phone.length > 10) {
+      } else if (l_name.length >= 15) {
         e.preventDefault();
-        $("#c_phone_field").after(
-          '<span class="error">Contact should maximum 10 characters only.</span>'
+        $("#l_name ").after(
+          '<span class="error">Last Name should maximum 15 characters only.</span>'
         );
       }
 
-      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(c_email) || c_email == "") {
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || email == "") {
         e.preventDefault();
-        $("#c_email_field").after(
+        $("#email_field").after(
           '<span class="error">Enter valid Email</span>'
+        );
+      }
+
+      if (!/^[6-9]+[0-9]{9}/.test(phone) || phone == "") {
+        e.preventDefault();
+        $("#phone_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (phone.length != 10) {
+        e.preventDefault();
+        $("#phone_field").after(
+          '<span class="error">Contact must be 10 digits only.</span>'
+        );
+      }
+      if (dob == "") {
+        e.preventDefault();
+        $("#dob_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      }
+      if (password == "") {
+        e.preventDefault();
+        $("#password_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (password.length != 8) {
+        e.preventDefault();
+        $("#password_field").after(
+          '<span class="error">Password must be maximum 8 character only.</span>'
+        );
+      }
+      if (cpassword == "") {
+        e.preventDefault();
+        $("#cpassword_field").after(
+          '<span class="error">This field is required</span>'
+        );
+      } else if (cpassword.length != 8) {
+        e.preventDefault();
+        $("#cpassword_field").after(
+          '<span class="error">Confirm Password must be maximum 8 character only.</span>'
+        );
+      } else if (password != cpassword) {
+        e.preventDefault();
+        $("#cpassword_field").after(
+          '<span class="error">Password and Confirm password must be same.</span>'
         );
       }
     });
