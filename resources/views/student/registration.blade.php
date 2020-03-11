@@ -5,7 +5,7 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+  <?php include('bootlinks.php') ?>
         <style>
         .error {
     color: red;
@@ -112,6 +112,12 @@
   <button type="button" class="close" data-dismiss="alert">×</button>
   <strong>{{ Session::get('success') }}</strong>
 </div>
+@endif 
+@if (session('error'))
+<div class="alert alert-success alert-block">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>{{ Session::get('error') }}</strong>
+</div>
 @endif
 </head>
 
@@ -190,12 +196,12 @@
                                 </div>
                                 <div class="form-group">
                                     <select name="stream" id="stream" class="form-control">
-                                                                        
+                                    <option value="Select Stream">Select Stream</option>                                 
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <select name="division" id="division" class="form-control">
-                                   
+                                    <option value="Select Division">Select Division</option>
                                     </select>
                                 </div>
                                 <input type="submit" class="btnRegister"  value="Register"/>
@@ -221,7 +227,7 @@
       let gender = $("#gender").val();
       let dob = $("#dob").val();
       let branch = $("#branch").val();
-      let stream = $("#stream").val();
+      let stream = $("#stream").val();      
       let division = $("#division").val();
 
       $(".error").remove();
@@ -255,7 +261,7 @@
       } else if (l_name.length > 15) {
         e.preventDefault();
         $("#l_name").after(
-          '<span class="error">first name should maximum 15 characters only.</span>'
+          '<span class="error">last name should maximum 15 characters only.</span>'
         );
       }
       if (email == "") {
@@ -325,19 +331,35 @@
           '<span class="error">Please Select Gender</span>'
         );
       }
+      if (dob == "") {
+        e.preventDefault();
+        $("#dob").after(
+          '<span class="error">Please Select Date of Birth</span>'
+        );
+      }
       if (branch == "Select Branch") {
         e.preventDefault();
         $("#branch").after(
           '<span class="error">Please Select branch</span>'
         );
       }
-      if (stream == "Select Stream") {
+      if (stream === null) {
+        e.preventDefault();
+        $("#stream").after(
+          '<span class="error">Please Select Stream</span>'
+        );
+      }else if(stream == "Select Stream"){
         e.preventDefault();
         $("#stream").after(
           '<span class="error">Please Select Stream</span>'
         );
       }
-      if (division == "Select Division") {
+      if (division === null) {
+        e.preventDefault();
+        $("#division").after(
+          '<span class="error">Please Select Division</span>'
+        );
+      }else if(division == "Select Division"){
         e.preventDefault();
         $("#division").after(
           '<span class="error">Please Select Division</span>'

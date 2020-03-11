@@ -95,6 +95,15 @@ Route::get('/student/login', function () {
     return view('student/login');
 });
 Route::post('/student/login', 'UserMasterController@validateUser');
-Route::get('/student/events', 'UserMasterController@getEvents');
 Route::post('/ajaxbranch', 'UserMasterController@getStream')->name('ajaxbranch');
 Route::post('/ajaxstream', 'UserMasterController@getDivision')->name('ajaxstream');
+Route::middleware('session.has.user')->group(function () {
+    Route::get('/student/events', 'UserMasterController@getEvents');
+    Route::post('/student/update','UserMasterController@update');
+    Route::get('/student/logout', 'UserMasterController@logout');
+    Route::get('/student/profile','UserMasterController@userProfile');
+    Route::get('/student/change_password',function(){
+        return view('student/change_password');
+    });
+    Route::post('/student/change_password','UserMasterController@change_password');
+});

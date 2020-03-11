@@ -28,8 +28,9 @@
               Welcome {{ session('user')}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/">Profile</a>
-              <a class="dropdown-item" href="/">Change Password</a>
+              <a class="dropdown-item" href="/student/profile">Profile</a>
+              <a class="dropdown-item" href="/student/change_password">Change Password</a>
+              <a class="dropdown-item" href="/student/logout">Logout</a>
               <div class="dropdown-divider"></div>              
             </div>
           </li>
