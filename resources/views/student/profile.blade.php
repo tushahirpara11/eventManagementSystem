@@ -84,7 +84,7 @@
                                 </td>
                             </tr> 
                         </table>
-                    <input type="button" value="Edit" id="editbtn" class="btn btn-primary"><br><br>
+                    <input type="button" value="Edit" id="editbtn" class="btn btn-primary"><br>
                 </div>
           </div>
       </div>
@@ -93,7 +93,7 @@
  <div id="updateform">
     <div class="col-lg-8">
         <div class="card">
-            <div class="card-header bg-primary"><h3>Change Password<h3></div><br>
+            <div class="card-header bg-primary"><h3>Update Student Profile<h3></div><br>
                 <div class="card-block">
                           <form method="POST" id="update" action="/student/update">
                           {{ csrf_field() }}

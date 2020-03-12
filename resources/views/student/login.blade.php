@@ -142,7 +142,13 @@ body {
         <button type="button" class="close" data-dismiss="alert">×</button>
         <strong>{{ Session::get('error') }}</strong>
         </div>
-@endif
+        @endif
+        @if (session('success'))
+        <div class="alert alert-success alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{ Session::get('success') }}</strong>
+        </div>
+        @endif
 </head>
 
 <body>
@@ -163,12 +169,7 @@ body {
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" />
                 <label for="inputPassword">Password</label>
               </div>
-
-              <!---<div class="custom-control custom-checkbox mb-3">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Remember password</label>
-              </div>--->
-              <a href=""><label for='usr'>Forget Password</label></a>
+              <a href="/student/forgot_password"><label for='usr'>Forget Password</label></a>
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
               <a href="/student/registration" class="btn btn-lg btn-primary btn-block text-uppercase">Sign Up</a>
               <hr class="my-4">

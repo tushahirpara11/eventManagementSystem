@@ -7,14 +7,13 @@ use App\branchMaster;
 use App\stream_master;
 use App\division_master;
 use App\event_master;
+use App\sub_event_master;
+use App\Mail\SendMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
 use DB;
-=======
-use Illuminate\Support\Facades\DB;
->>>>>>> cf8c4185307e805fa8709a37ebfb0f813f23a1ae
 
 class UserMasterController extends Controller
 {
@@ -129,7 +128,6 @@ class UserMasterController extends Controller
      */
     public function update(Request $request)
     {
-<<<<<<< HEAD
         DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
         l_name = "' . $request->get('l_name') . '",
         email = "' . $request->get('email') . '",
@@ -141,13 +139,6 @@ class UserMasterController extends Controller
         s_id = "' . $request->get('stream') . '",
         d_id = "' . $request->get('division') . '" where u_id = ' . $request->get('id'));
         return Redirect::back()->with('success', 'Update Profile Successfull');
-=======
-        DB::update('update user_masters set f_name = "' . $request->get('f_name') . '", l_name = "' . $request->get('l_name') .
-            '", email = "' . $request->get('email') . '", phone = "' . $request->get('phone') .
-            '", dob = "' . $request->get('dob') . '", b_id = ' . $request->get('b_id') .
-            ' where u_id = ' . $request->get('u_id'));
-        return redirect('/admin/user');
->>>>>>> cf8c4185307e805fa8709a37ebfb0f813f23a1ae
     }
 
     /**
@@ -233,4 +224,43 @@ class UserMasterController extends Controller
         {
             return Redirect::back()->with('error', 'Old Password Does Not Match !!!!!');        }
     }
-}
+    public function getSubevent(Request $request)
+    {
+        $e_id=$request->e_id;
+        $sub_event=sub_event_master::where('e_id','=',$e_id)->get();
+        return view('/student/event_registration',compact('sub_event'));
+    }
+    public function mail(Request $request)
+    {
+        $check=user_master::where('email','=',$request->email)->get();
+        $name="http://127.0.0.1:8000/student/reset_password";
+        if(count($check) > 0)
+        {
+            session(['email'=>$request->email]);
+            Mail::to($request->email)->send(new SendMailable($name));
+            return Redirect::back()->with('success','Check Your Mail!!!');   
+        }
+        else
+        {
+            return Redirect::back()->with('error','You Are Not Registered !!!!! ');
+        }
+    }
+    public function reset_password_form()
+    {
+        return view('/student/reset_password');
+    }
+    public function resetPassword(Request $request)
+    {
+        $mail = $request->email;
+        $password=encrypt($request->password);
+        $check=DB::update('update user_masters set password = "' . $password . '" where email = "' . $mail.'"');
+        if($check)
+        {
+            return redirect('/student/login')->with('success','Password Reset Successfully !!! Please Login');
+        }
+        else
+        {
+            return Redirect::back()->with('error','Something Went Wrong !!!!');
+        }
+    }
+} 

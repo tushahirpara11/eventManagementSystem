@@ -96,15 +96,9 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('/admin/logout', 'BranchMasterController@destroy');
 });
 /* Student Route */
-Route::get('/student/registration', 'UserMasterController@get_data');
-Route::post('/student/register', 'UserMasterController@store');
-Route::get('/student/login', function () {
-    return view('student/login');
-});
-Route::post('/student/login', 'UserMasterController@validateUser');
-Route::post('/ajaxbranch', 'UserMasterController@getStream')->name('ajaxbranch');
-Route::post('/ajaxstream', 'UserMasterController@getDivision')->name('ajaxstream');
+
 Route::middleware('session.has.user')->group(function () {
+
     Route::get('/student/events', 'UserMasterController@getEvents');
     Route::post('/student/update','UserMasterController@update');
     Route::get('/student/logout', 'UserMasterController@logout');
@@ -114,3 +108,19 @@ Route::middleware('session.has.user')->group(function () {
     });
     Route::post('/student/change_password','UserMasterController@change_password');
 });
+
+Route::get('/student/registration', 'UserMasterController@get_data');
+Route::post('/student/register', 'UserMasterController@store');
+Route::get('/student/login', function () {
+    return view('student/login');
+});
+Route::post('/student/login', 'UserMasterController@validateUser');
+Route::post('/ajaxbranch', 'UserMasterController@getStream')->name('ajaxbranch');
+Route::post('/ajaxstream', 'UserMasterController@getDivision')->name('ajaxstream');
+Route::post('/student/sub_event_list','UserMasterController@getSubevent');
+Route::get('/student/forgot_password', function(){
+    return view('student/forgot_password');
+});
+Route::post('/send/email','UserMasterController@mail');
+Route::get('student/reset_password', 'UserMasterController@reset_password_form');
+Route::post('/student/reset_password','UserMasterController@resetPassword');

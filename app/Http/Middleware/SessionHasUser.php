@@ -16,10 +16,9 @@ class SessionHasUser
     public function handle($request, Closure $next)
     {
         if (!$request->session()->has('user')) {
-            return view('student.registration');
+            return redirect('/student/registration');
         } else {
-            $response = $next($request);
-            return $response->withCookie(cookie('user', 'userLogin'));
+            return $next($request);
         }
     }
 }
