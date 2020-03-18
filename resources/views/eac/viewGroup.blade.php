@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('eaclayout.app')
 @section('content')
 <style>
   .error {
@@ -71,36 +71,36 @@
       <td>{{$i+1}}</td>
       @for($j = 0; $j < count($event); $j++) @if($data[$i]->e_id == $event[$j]->e_id)
         <!-- {{$eventName = $event[$j]->e_name}} -->
-        <td>{{$event[$j]->e_name}}</td>
-        @endif
-        @endfor
-        @for($j = 0; $j < count($sub_event); $j++) @if($data[$i]->s_e_id == $sub_event[$j]->s_e_id)
-          <!-- {{$subEventName = $sub_event[$j]->s_e_name}} -->
-          <td>{{$sub_event[$j]->s_e_name}}</td>
-          @endif
-          @endfor
-          @for($j = 0; $j < count($user); $j++) @if($data[$i]->u_id == $user[$j]->u_id)
-            <!-- {{$userName = $user[$j]->f_name." ".$user[$j]->l_name}} -->
-            <td>{{$user[$j]->f_name}} {{$user[$j]->l_name}}</td>
-            @endif
-            @endfor
-            @for($j = 0; $j < count($role); $j++) @if($data[$i]->r_id == $role[$j]->r_id)
-              <!-- {{$roleName = $role[$j]->r_name}} -->
-              <td>{{$role[$j]->r_name}}</td>
-              @endif
-              @endfor
-              <td class="col-md-2">
-                <form style="display: inline;">
-                  <a href="javascript:;" id="{{$data[$i]->g_id}}_{{$data[$i]->e_id}}_{{$eventName}}_{{$data[$i]->s_e_id}}_{{$subEventName}}_{{$data[$i]->u_id}}_{{$userName}}_{{$data[$i]->r_id}}_{{$roleName}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
-                </form> &nbsp; &nbsp;
-                <form action="{{ route('admin.deletegroup', [$data[$i]->g_id]) }}" method="post" style="display: inline;">
-                  {{csrf_field()}}
-                  {{ method_field('DELETE') }}
-                  <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
-                </form>
-              </td>
-              </tr>
-              @endfor
+      <td>{{$event[$j]->e_name}}</td>
+      @endif
+      @endfor
+      @for($j = 0; $j < count($sub_event); $j++) @if($data[$i]->s_e_id == $sub_event[$j]->s_e_id)
+        <!-- {{$subEventName = $sub_event[$j]->s_e_name}} -->
+      <td>{{$sub_event[$j]->s_e_name}}</td>
+      @endif      
+      @endfor      
+      @for($j = 0; $j < count($user); $j++) @if($data[$i]->u_id == $user[$j]->u_id)
+        <!-- {{$userName = $user[$j]->f_name." ".$user[$j]->l_name}} -->
+      <td>{{$user[$j]->f_name}} {{$user[$j]->l_name}}</td>
+      @endif
+      @endfor
+      @for($j = 0; $j < count($role); $j++) @if($data[$i]->r_id == $role[$j]->r_id)
+        <!-- {{$roleName = $role[$j]->r_name}} -->
+      <td>{{$role[$j]->r_name}}</td>
+      @endif
+      @endfor
+      <td class="col-md-2">
+        <form style="display: inline;">
+          <a href="javascript:;" id="{{$data[$i]->g_id}}_{{$data[$i]->e_id}}_{{$eventName}}_{{$data[$i]->s_e_id}}_{{$subEventName}}_{{$data[$i]->u_id}}_{{$userName}}_{{$data[$i]->r_id}}_{{$roleName}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+        </form> &nbsp; &nbsp;
+        <form action="{{ route('admin.deletegroup', [$data[$i]->g_id]) }}" method="post" style="display: inline;">
+          {{csrf_field()}}
+          {{ method_field('DELETE') }}
+          <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
+        </form>
+      </td>
+      </tr>
+      @endfor
   </tbody>
   <tfoot>
     <tr>
@@ -188,7 +188,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="field-1" class="control-label">Event</label>
-                <input type="hidden" name="g_id" id="g_id" />
+                <input type="hidden" name="g_id" id="g_id"/>
                 <select name="e_id" id="e_id_field" style="position: static;" class="form-control" data-placeholder="Select one stream...">
                   <option id="e_id_update" value=""></option>
                   @for($i = 0; $i < count($event); $i++) <option value="{{$event[$i]->e_id}}">{{$event[$i]->e_name}}</option>
@@ -200,7 +200,7 @@
               <div class="form-group">
                 <label for="field-1" class="control-label">Sub Event</label>
                 <select name="s_e_id" id="s_e_id_field" style="position: static;" class="form-control" data-placeholder="Select one stream...">
-                  <option id="s_e_id_update" value=""></option>
+                  <option id="s_e_id_update" value=""></option>                 
                 </select>
               </div>
             </div>
@@ -216,9 +216,9 @@
               <div class="form-group">
                 <label for="field-1" class="control-label">Role</label>
                 <select name="r_id" id="r_id_field" style="position: static;" class="form-control" data-placeholder="Select one stream...">
-                  <option id="r_id_update" value=""></option>
+                  <option id="r_id_update" value=""></option>    
                   @for($i = 0; $i < count($role); $i++) <option value="{{$role[$i]->r_id}}">{{$role[$i]->r_name}}</option>
-                    @endfor
+                    @endfor              
                 </select>
               </div>
             </div>
@@ -242,13 +242,13 @@
     let u_id_val = record_id[6];
     let r_id = record_id[7];
     let r_id_val = record_id[8];
-
-    $('#g_id').val(g_id);
+    
+    $('#g_id').val(g_id);    
     $('#e_id_update').val(e_id).text(e_id_val);
     $('#s_e_id_update').val(s_e_id).text(s_e_id_val);
     $('#u_id_update').val(u_id).text(u_id_val);
     $('#r_id_update').val(r_id).text(r_id_val);
-
+    
     jQuery('#modal-6').modal('show', {
       backdrop: 'static'
     });
@@ -337,7 +337,7 @@
         _token: token
       },
       success: function(option) {
-        for (i = 0; i < option.option.length; i++) {         
+        for (i = 0; i < option.option.length; i++) {
           $("#u_id").append(`<option value="${option.option[i].u_id}">${option.option[i].f_name} ${option.option[i].l_name} </option>`);
         }
         for (i = 0; i < option.sub_event.length; i++) {
@@ -346,7 +346,7 @@
       }
     });
   });
-  $("select[id='e_id_field']").click(function() {
+  $("select[id='e_id_field']").click(function () {
     $("#s_e_id_field").html('');
     $("#u_id_field").html('');
     var e_id = $(this).val();
@@ -365,7 +365,7 @@
         for (i = 0; i < option.sub_event.length; i++) {
           $("#s_e_id_field").append(`<option value="${option.sub_event[i].s_e_id}">${option.sub_event[i].s_e_name} </option>`);
         }
-      }
+      }    
     });
   });
 </script>

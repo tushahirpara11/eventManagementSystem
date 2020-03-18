@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\branchMaster;
+use App\user_master;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +15,9 @@ class BranchMasterController extends Controller
 {
     public function __construct()
     {
-        if(session('admin') == 'admin')
-        {
+        if (session('admin') == 'admin') {
             return redirect('/admin/branch');
-        }
-        else{
+        } else {
             return redirect()->route('login');
         }
     }
@@ -34,9 +33,9 @@ class BranchMasterController extends Controller
     function checkLogin(Request $request)
     {
         if ($request->get('username') == 'admin' && $request->get('password') == 'admin') {
-            session(['admin' => $request->get('username')]);            
+            session(['admin' => $request->get('username')]);
             return redirect('/admin/branch');
-        } else {            
+        } else {
             return Redirect::back()->with('error', 'Invalid Credential..!');
         }
     }

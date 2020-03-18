@@ -47,18 +47,41 @@ class RoleController extends Controller
         }
     }
 
+    public function storeEacRole(Request $request)
+    {
+        $count = role::where(['r_name' => $request->get('r_name')])->get();
+        if (count($count) == 0) {
+            $role = new role(['r_name' => $request->get('r_name')]);
+            $role->save();
+            return Redirect::back()->with('success', 'Role Added Successfully.');
+        } else {
+            return Redirect::back()->with('error', 'Role Already Exists...');
+        }
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  \App\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(role $role)
+    public function show()
     {
         return view('/admin/viewRole')->with('data', role::get());
     }
 
+    public function showEacRole()
+    {
+        return view('/eac/viewRole')->with('data', role::get());
+    }
+    
     function delete($id)
+    {
+        $refresh = DB::delete('delete from roles where r_id=' . $id);
+        return Redirect::back();
+    }
+
+    function deleteEacRole($id)
     {
         $refresh = DB::delete('delete from roles where r_id=' . $id);
         return Redirect::back();
@@ -69,7 +92,7 @@ class RoleController extends Controller
      * @param  \App\role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(role $role)
+    public function edit()
     {
         //
     }
@@ -85,6 +108,12 @@ class RoleController extends Controller
     {
         DB::update('update roles set r_name = "' . $request->get('r_name') . '" where r_id = ' . $request->r_id);
         return redirect('/admin/role');
+    }
+
+    public function updateEacRole(Request $request)
+    {
+        DB::update('update roles set r_name = "' . $request->get('r_name') . '" where r_id = ' . $request->r_id);
+        return redirect('/eac/role');
     }
 
     /**

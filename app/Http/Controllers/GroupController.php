@@ -80,11 +80,11 @@ class GroupController extends Controller
     }
 
     public function getsubevent(Request $request)
-    {
-        if ($request->ajax()) {
+    {        
+        if ($request->ajax()) {            
             $branchData = event_master::where('e_id', '=', $request->e_id)->get();
             $sub_event = sub_event_master::where('e_id', '=', $request->e_id)->get();
-            $data = user_master::where('b_id', '=', $branchData[0]->e_id)->get();
+            $data = user_master::where('b_id', '=', $branchData[0]->e_id)->get();            
             return response()->json(['option' => $data, 'sub_event' => $sub_event]);
         }
     }

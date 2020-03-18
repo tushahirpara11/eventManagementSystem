@@ -50,6 +50,21 @@ class GuestController extends Controller
         }
     }
 
+    public function storeEacGuest(Request $request)
+    {
+        $count = guest::where(['phome' => $request->get('phome'), 'email' => $request->get('email')])->get();
+        if (count($count) == 0) {
+            $insertChoreo = new guest([
+                'name' => $request->get('name'),
+                'phome' => $request->get('phome'), 'email' => $request->get('email')
+            ]);
+            $insertChoreo->save();
+            return Redirect::back()->with('success', 'Guest Added Successfully.');
+        } else {
+            return Redirect::back()->with('error', 'Guest Already Exists...');
+        }
+    }
+
     /**
      * Display the specified resource.
      *
@@ -61,7 +76,18 @@ class GuestController extends Controller
         return view('admin/viewGuest')->with(['data' => guest::get()]);
     }
 
+    public function showEacGuest()
+    {
+        return view('eac/viewGuest')->with(['data' => guest::get()]);
+    }
+
     public function delete($id)
+    {
+        $refresh = DB::delete('delete from guests where guest_id=' . $id);
+        return Redirect::back();
+    }
+
+    public function deleteEacGuest($id)
     {
         $refresh = DB::delete('delete from guests where guest_id=' . $id);
         return Redirect::back();
@@ -91,6 +117,14 @@ class GuestController extends Controller
         email = "' . $request->get('email') . '",
         phome = "' . $request->get('phome') . '" where guest_id = ' . $request->get('guest_id'));
         return redirect('/admin/guest');
+    }
+
+    public function updateEacGuest(Request $request, guest $guest)
+    {     
+        DB::update('update guests set name = "' . $request->get('name') . '",
+        email = "' . $request->get('email') . '",
+        phome = "' . $request->get('phome') . '" where guest_id = ' . $request->get('guest_id'));
+        return redirect('/eac/guest');
     }
 
     /**

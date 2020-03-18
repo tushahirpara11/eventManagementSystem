@@ -7,7 +7,10 @@ use App\branchMaster;
 use App\stream_master;
 use App\division_master;
 use App\event_master;
+use App\group;
+use App\role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
@@ -129,9 +132,13 @@ class UserMasterController extends Controller
      * @param  \App\user_master  $user_master
      * @return \Illuminate\Http\Response
      */
-    public function destroy(user_master $user_master)
+    public function destroyEac(user_master $request)
     {
-        //
+        if (session()->has('eac')) {
+            session()->flush('eac');
+            $cookie = Cookie::forget('eac');
+            return redirect('eac/')->withCookie($cookie);
+        }
     }
     public function get_data()
     {
@@ -171,6 +178,34 @@ class UserMasterController extends Controller
             }
         }
     }
+    function validateEacLogin(Request $request)
+    {
+        $count = user_master::where([
+            'email' => $request->get('email'), 'u_type' => $request->get('u_type')
+        ])->get();
+        if (count($count) == 1) {
+            if ($request->get('password') == decrypt($count[0]->password)) {
+                $group = group::where(['u_id' => $count[0]->u_id])->get();
+                if (count($group) == 1) {
+                    $role = role::where(['r_id' => $group[0]->r_id])->get();
+                    if (count($role) == 1 && $role[0]->r_name == 'SEC') {
+                        session(['eac' => $count[0]->email]);                                                
+                        session(['e_id' => $group[0]->e_id]);                        
+                        return redirect('/eac/choreographer');
+                    } else {
+                        return Redirect::back()->with('error', 'You have not Permission to access routes!');
+                    }
+                } else {
+                    return Redirect::back()->with('error', 'You have not Provide to access this routes!');
+                }
+            } else {
+                return redirect::back()->with('error', 'Invalid Password..!');
+            }
+        } else {
+            return Redirect::back()->with('error', 'Invalid Credential..!');
+        }
+    }
+
     public function getEvents()
     {
         $events = event_master::where('e_status', '=', 1)->get();
