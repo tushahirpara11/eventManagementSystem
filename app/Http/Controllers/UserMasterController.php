@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class UserMasterController extends Controller
 {
@@ -63,7 +64,6 @@ class UserMasterController extends Controller
 
     public function adminStore(Request $request)
     {
-        // dd($count);
         $count = user_master::where(['email' => $request->get('email'), 'phone' => $request->get('phone')])->get();
         if (count($count) == 0) {
             user_master::create([
@@ -94,6 +94,14 @@ class UserMasterController extends Controller
         return view('admin/viewUser')->with(['data' => user_master::where('u_type', 2)->get(), 'branch' => branchMaster::get()]);
     }
 
+    public function showEacUser(user_master $user_master)
+    {
+        return view('eac/viewUser')->with([
+            'data' => DB::select('select * from user_masters u,branch_masters b where u.b_id=b.b_id and u.email !="' . Session::get('eac') . '" and u.b_id=' . Session::get('b_id')),
+            'branch' => branchMaster::get()
+        ]);
+    }
+
     function delete($id)
     {
         $refresh = DB::delete('delete from user_masters where u_id=' . $id);
@@ -120,10 +128,19 @@ class UserMasterController extends Controller
     public function update(Request $request)
     {
         DB::update('update user_masters set f_name = "' . $request->get('f_name') . '", l_name = "' . $request->get('l_name') .
-            '", email = "' . $request->get('email') . '", phone = "' . $request->get('phone') .
+            '", email = "' . $request->get('email') . '", gender="' . $request->input('gender') . '", phone = "' . $request->get('phone') .
             '", dob = "' . $request->get('dob') . '", b_id = ' . $request->get('b_id') .
             ' where u_id = ' . $request->get('u_id'));
         return redirect('/admin/user');
+    }
+
+    public function updateEacUser(Request $request)
+    {
+        DB::update('update user_masters set f_name = "' . $request->get('f_name') . '", l_name = "' . $request->get('l_name') .
+            '", email = "' . $request->get('email') . '", gender="' . $request->input('gender') . '", phone = "' . $request->get('phone') .
+            '", dob = "' . $request->get('dob') . '", b_id = ' . $request->get('b_id') .
+            ' where u_id = ' . $request->get('u_id'));
+        return redirect('/eac/user');
     }
 
     /**
@@ -189,8 +206,9 @@ class UserMasterController extends Controller
                 if (count($group) == 1) {
                     $role = role::where(['r_id' => $group[0]->r_id])->get();
                     if (count($role) == 1 && $role[0]->r_name == 'SEC') {
-                        session(['eac' => $count[0]->email]);                                                
-                        session(['e_id' => $group[0]->e_id]);                        
+                        session(['eac' => $count[0]->email]);
+                        session(['e_id' => $group[0]->e_id]);
+                        session(['b_id' => $count[0]->b_id]);
                         return redirect('/eac/choreographer');
                     } else {
                         return Redirect::back()->with('error', 'You have not Permission to access routes!');

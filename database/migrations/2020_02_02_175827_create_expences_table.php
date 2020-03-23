@@ -14,16 +14,19 @@ class CreateExpencesTable extends Migration
     public function up()
     {
         Schema::create('expences', function (Blueprint $table) {
-            $table->increments('expence_id',7);
-            $table->integer('s_e_id')->unsigned();
+            $table->increments('expence_id', 7);
+            $table->integer('e_t_id')->unsigned();
             $table->integer('e_id')->unsigned();
+            $table->integer('s_e_id')->unsigned();
             $table->integer('u_id')->unsigned();
-            $table->string('name',30);
-            $table->string('description',255);
-            $table->integer('status')->unsigned();        
+            $table->string('name', 30);
+            $table->text('description');
+            $table->mediumInteger('amount')->unsigned();
+            $table->tinyInteger('status');
+            $table->foreign('e_t_id')->references('e_t_id')->on('expence_types')->onUpdade('cascade')->onDelete('cascade');
             $table->foreign('e_id')->references('e_id')->on('event_masters')->onUpdade('cascade')->onDelete('cascade');
             $table->foreign('s_e_id')->references('s_e_id')->on('sub_event_masters')->onUpdade('cascade')->onDelete('cascade');
-            $table->foreign('u_id')->references('u_id')->on('user_masters')->onUpdade('cascade')->onDelete('cascade');                        
+            $table->foreign('u_id')->references('u_id')->on('user_masters')->onUpdade('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

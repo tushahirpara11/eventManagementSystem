@@ -90,7 +90,7 @@ Route::group(['middleware' => ['admin']], function () {
     Route::post('/admin/group', 'GroupController@store')->name('admin.addgroup');
     Route::post('/admin/updategroup', 'GroupController@update')->name('admin.updategroup');
     Route::delete('/admin/deletegroup/{id}', 'GroupController@delete')->name('admin.deletegroup');
-    Route::post('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
+    Route::get('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
 
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');
@@ -129,16 +129,15 @@ Route::group(['middleware' => ['eac']], function () {
     Route::delete('/eac/deleteguest/{id}', 'GuestController@deleteEacGuest')->name('eac.deleteguest');
 
     /*Manage user*/
-    Route::get('/eac/user', 'UserMasterController@showEacUser')->name('eac.user');
-    Route::post('/eac/user', 'UserMasterController@StoreEacUser')->name('eac.adduser');
+    Route::get('/eac/user', 'UserMasterController@showEacUser')->name('eac.user');   
     Route::post('/eac/updateuser', 'UserMasterController@updateEacUser')->name('eac.updateuser');
     Route::delete('/eac/deleteuser/{id}', 'UserMasterController@deleteEacUser')->name('eac.deleteuser');
 
     /*Manage Group*/
-    Route::get('/eac/group', 'GroupController@show')->name('eac.group');
-    Route::post('/eac/group', 'GroupController@store')->name('eac.addgroup');
-    Route::post('/eac/updategroup', 'GroupController@update')->name('eac.updategroup');
-    Route::delete('/eac/deletegroup/{id}', 'GroupController@delete')->name('eac.deletegroup');
+    Route::get('/eac/group', 'GroupController@showEacGroup')->name('eac.group');
+    Route::post('/eac/group', 'GroupController@storeEacGroup')->name('eac.addgroup');
+    Route::post('/eac/updategroup', 'GroupController@updateEacGroup')->name('eac.updategroups');
+    Route::delete('/eac/deletegroup/{id}', 'GroupController@deleteEacGroup')->name('eac.deletegroup');
     Route::post('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
 
     /*Session Expire*/

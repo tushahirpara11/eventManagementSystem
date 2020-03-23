@@ -81,7 +81,8 @@ class ChoreographerController extends Controller
 
     public function showEacChoreo()
     {
-        $data = DB::select("select c.c_id, c.s_e_id, c.c_name, c.c_phone, c.c_email from choreographers c, sub_event_masters s where c.s_e_id = s.s_e_id and s.e_id = " . Session::get('e_id') . " and s.status = " . 1);
+        $data = DB::select("select * from choreographers c, 
+        sub_event_masters s where c.s_e_id = s.s_e_id and s.e_id = " . Session::get('e_id') . " and s.status = " . 1);
         $subevent = DB::select("select * from sub_event_masters s
          where s.e_id = " . Session::get('e_id') . " and s.status = " . 1);
         return view('eac/viewChoreographer')->with(['data' => $data, 'subevent' => $subevent]);

@@ -68,23 +68,23 @@
   </thead>
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
-      <td>{{$i+1}}</td>
-      <td>{{$data[$i]->s_e_name}}</td>
-      <td>{{$data[$i]->c_name}}</td>
-      <td>{{$data[$i]->c_phone}}</td>
-      <td>{{$data[$i]->c_email}}</td>
-      <td class="col-md-2">
-        <form style="display: inline;">
-          <a href="javascript:;" id="{{$data[$i]->c_id}}_{{$data[$i]->s_e_id}}_{{$data[$i]->s_e_name}}_{{$data[$i]->c_name}}_{{$data[$i]->c_phone}}_{{$data[$i]->c_email}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
-        </form> &nbsp; &nbsp;
-        <form action="{{ route('eac.deletechoreographer', [$data[$i]->c_id]) }}" method="post" style="display: inline;">
-          {{csrf_field()}}
-          {{ method_field('DELETE') }}
-          <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
-        </form>
-      </td>
-      </tr>
-      @endfor
+      <td>{{$i+1}}</td>      
+        <td>{{$data[$i]->s_e_name}}</td>        
+        <td>{{$data[$i]->c_name}}</td>
+        <td>{{$data[$i]->c_phone}}</td>
+        <td>{{$data[$i]->c_email}}</td>
+        <td class="col-md-2">
+          <form style="display: inline;">
+            <a href="javascript:;" id="{{$data[$i]->c_id}}_{{$data[$i]->s_e_id}}_{{$data[$i]->s_e_name}}_{{$data[$i]->c_name}}_{{$data[$i]->c_phone}}_{{$data[$i]->c_email}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+          </form> &nbsp; &nbsp;
+          <form action="{{ route('eac.deletechoreographer', [$data[$i]->c_id]) }}" method="post" style="display: inline;">
+            {{csrf_field()}}
+            {{ method_field('DELETE') }}
+            <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
+          </form>
+        </td>
+        </tr>
+        @endfor
   </tbody>
   <tfoot>
     <tr>
@@ -124,7 +124,7 @@
                 <select name="s_e_id" id="s_e_id" style="position: static;" class="form-control" data-placeholder="Select one Event...">
                   @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->e_id}}">{{$subevent[$i]->s_e_name}}</option>
                     @endfor
-                </select>1
+                </select>
               </div>
             </div>
             <div class="col-md-6">

@@ -331,13 +331,13 @@
     var token = $("input[name='_token']").val();
     $.ajax({
       url: "<?php echo route('ajaxSubEvent') ?>",
-      method: 'POST',
+      method: 'get',      
       data: {
-        e_id: e_id,
-        _token: token
+        _token: token,
+        e_id: e_id
       },
-      success: function(option) {
-        for (i = 0; i < option.option.length; i++) {         
+      success: function(option) {        
+        for (i = 0; i < option.option.length; i++) {
           $("#u_id").append(`<option value="${option.option[i].u_id}">${option.option[i].f_name} ${option.option[i].l_name} </option>`);
         }
         for (i = 0; i < option.sub_event.length; i++) {
@@ -353,7 +353,7 @@
     var token = $("input[name='_token']").val();
     $.ajax({
       url: "<?php echo route('ajaxSubEvent') ?>",
-      method: 'POST',
+      method: 'get',
       data: {
         e_id: e_id,
         _token: token

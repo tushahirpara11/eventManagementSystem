@@ -78,25 +78,21 @@
       <td>{{$data[$i]->email}}</td>
       <td>{{$data[$i]->phone}}</td>
       <td>{{$data[$i]->dob}}</td>
-      @for($j = 0; $j < count($branch); $j++) @if($data[$i]->b_id == $branch[$j]->b_id)
-        <!-- {{$branchName = $branch[$j]->b_name}} -->
-        <td>{{$branch[$j]->b_name}}</td>
-        @endif
-        @endfor
-        <td>{{$data[$i]->gender}}</td>
-        <td>{{$data[$i]->u_type}}</td>
-        <td class="col-md-2">
-          <form style="display: inline;">
-            <a href="javascript:;" id="{{$data[$i]->u_id}}_{{$data[$i]->f_name}}_{{$data[$i]->l_name}}_{{$data[$i]->email}}_{{$data[$i]->phone}}_{{$data[$i]->dob}}_{{$data[$i]->b_id}}_{{$branchName}}_{{$data[$i]->gender}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
-          </form> &nbsp; &nbsp;
-          <form action="{{ route('admin.deleteuser', [$data[$i]->u_id]) }}" method="post" style="display: inline;">
-            {{csrf_field()}}
-            {{ method_field('DELETE') }}
-            <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
-          </form>
-        </td>
-        </tr>
-        @endfor
+      <td>{{$data[$i]->b_name}}</td>
+      <td>{{$data[$i]->gender}}</td>
+      <td>{{$data[$i]->u_type}}</td>
+      <td class="col-md-2">
+        <form style="display: inline;">
+          <a href="javascript:;" id="{{$data[$i]->u_id}}_{{$data[$i]->f_name}}_{{$data[$i]->l_name}}_{{$data[$i]->email}}_{{$data[$i]->phone}}_{{$data[$i]->dob}}_{{$data[$i]->b_id}}_{{$data[$i]->b_name}}_{{$data[$i]->gender}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+        </form> &nbsp; &nbsp;
+        <form action="{{ route('eac.updateuser', [$data[$i]->u_id]) }}" method="post" style="display: inline;">
+          {{csrf_field()}}
+          {{ method_field('DELETE') }}
+          <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
+        </form>
+      </td>
+      </tr>
+      @endfor
   </tbody>
   <tfoot>
     <tr>
@@ -124,87 +120,9 @@
     this.form.submit();
   }
 </script>
-<div class="modal fade" id="modal-7">
-  <form method="post" id="addUser" action="{{route('admin.adduser')}}">
-    {{csrf_field()}}
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Add User</h4>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">First Name</label>
-                <input type="text" class="form-control" name="f_name" id="f_name" placeholder="First Name" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Last Name</label>
-                <input type="text" class="form-control" name="l_name" id="l_name" placeholder="Last Name" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Email</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="Email" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Phone</label>
-                <input type="tel" class="form-control" name="phone" id="phone" placeholder="Phone" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Birth Date</label>
-                <input type="date" class="form-control" name="dob" id="dob" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-1" class="control-label">Branch Name</label>
-                <select name="b_id" id="b_id" style="position: static;" class="form-control" data-placeholder="Select one Branch...">
-                  @for($i = 0; $i < count($branch); $i++) <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>
-                    @endfor
-                </select>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <div class="form-group">
-                <label for="field-1" class="control-label">Gender</label><br />
-                &nbsp;
-                <input type="radio" name="gender" value="male" id="male">Male
-                &nbsp;
-                <input type="radio" name="gender" value="female" id="female">Female<br />
-                <input type="hidden" id="msg">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Password</label>
-                <input type="password" class="form-control" name="password" id="password" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="field-2" class="control-label">Confirm Password</label>
-                <input type="password" class="form-control" name="cpassword" id="cpassword" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-info">Save</button> </div>
-      </div>
-    </div>
-  </form>
-</div>
+
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updateUser" action="{{route('admin.updateuser')}}">
+  <form method="post" id="updateUser" action="{{route('eac.updateuser')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
@@ -256,11 +174,12 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
+                <input type="hidden" name="gender_hidden" value="" id="gender_hidden" />
                 <label for="field-1" class="control-label">Gender</label><br />
                 &nbsp;
-                <input type="radio" name="gender" id="male_field">Male
+                <input type="radio" name="gender" value="male" id="male_field">Male
                 &nbsp;
-                <input type="radio" name="gender" id="female_field">Female
+                <input type="radio" name="gender"  value="female" id="female_field">Female
               </div>
             </div>
           </div>
@@ -292,9 +211,9 @@
     $("#dob_field").val(dob_field);
     $("#b_id_val").val(b_id_val).text(b_value);
     if (gender == 'male') {
-      $('#male_field').prop('checked', true);
+      $('#male_field').prop('checked', true);      
     } else {
-      $('#female_field').prop('checked', true);
+      $('#female_field').prop('checked', true);      
     }
 
     jQuery('#modal-6').modal('show', {
@@ -305,116 +224,13 @@
 
 <script>
   $(document).ready(function() {
-    $("#addUser").submit(function(e) {
-      let f_name = $("#f_name").val();
-      let l_name = $("#l_name").val();
-      let email = $("#email").val();
-      let phone = $("#phone").val();
-      let dob = $("#dob").val();
-      let b_id = $("#b_id").val();
-      let gender = $('[name="gender"]:checked').length;
-      let password = $("#password").val();
-      let cpassword = $("#cpassword").val();
-
-      $(".error").remove();
-      // return false;
-      if (b_id == "") {
-        e.preventDefault();
-        $("#b_id").after(
-          '<span class="error">This field is required</span>'
-        );
-      }
-
-      if (!/^[a-zA-Z]/.test(f_name) || f_name == "") {
-        e.preventDefault();
-        $("#f_name ").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (f_name.length >= 15) {
-        e.preventDefault();
-        $("#f_name ").after(
-          '<span class="error">First Name should maximum 15 characters only.</span>'
-        );
-      }
-
-      if (!/^[a-zA-Z]/.test(l_name) || l_name == "") {
-        e.preventDefault();
-        $("#l_name ").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (l_name.length >= 15) {
-        e.preventDefault();
-        $("#l_name ").after(
-          '<span class="error">Last Name should maximum 15 characters only.</span>'
-        );
-      }
-
-      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) || email == "") {
-        e.preventDefault();
-        $("#email").after(
-          '<span class="error">Enter valid Email</span>'
-        );
-      }
-
-      if (!/^[6-9]+[0-9]{9}/.test(phone) || phone == "") {
-        e.preventDefault();
-        $("#phone").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (phone.length != 10) {
-        e.preventDefault();
-        $("#phone").after(
-          '<span class="error">Contact must be 10 digits only.</span>'
-        );
-      }
-      if (dob == "") {
-        e.preventDefault();
-        $("#dob").after(
-          '<span class="error">This field is required</span>'
-        );
-      }
-      if (gender == 0) {
-        e.preventDefault();
-        $("#msg").after(
-          '<span class="error">This field is required</span>'
-        );
-      }
-      if (password == "") {
-        e.preventDefault();
-        $("#password").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (password.length != 8) {
-        e.preventDefault();
-        $("#password").after(
-          '<span class="error">Password must be maximum 8 character only.</span>'
-        );
-      }
-      if (cpassword == "") {
-        e.preventDefault();
-        $("#cpassword").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (cpassword.length != 8) {
-        e.preventDefault();
-        $("#cpassword").after(
-          '<span class="error">Confirm Password must be maximum 8 character only.</span>'
-        );
-      } else if (password != cpassword) {
-        e.preventDefault();
-        $("#cpassword").after(
-          '<span class="error">Password and Confirm password must be same.</span>'
-        );
-      }
-    });
     $("#updateUser").submit(function(e) {
       let f_name = $("#f_name_field").val();
       let l_name = $("#l_name_field").val();
       let email = $("#email_field").val();
       let phone = $("#phone_field").val();
       let dob = $("#dob_field").val();
-      let b_id = $("#b_id_field").val();
-      // let gender = $('[id="gender_field"]:checked').length;
+      let b_id = $("#b_id_field").val();            
       let password = $("#password_field").val();
       let cpassword = $("#cpassword_field").val();
 
