@@ -15,6 +15,10 @@ class SessionHasUser
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if (!$request->session()->has('user')) {
+            return redirect('/student/registration');
+        } else {
+            return $next($request);
+        }
     }
 }

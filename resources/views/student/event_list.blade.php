@@ -22,7 +22,13 @@
           <td>{{$data->e_discription}}</td>
           <td>{{$data->e_start_date}}</td>
           <td>{{$data->e_end_date}}</td>
-          <td><button name="apply" class="btn btn-success" value="Apply">Register</button></td>
+          <td>
+          <form method="post" action="/student/sub_event_list">
+          {{ csrf_field() }}
+            <input type="hidden" name="e_id" value="{{ $data -> e_id }}" />
+            <input type="submit" name="submit" class="btn btn-primary" value="Register" />
+          </form>
+          </td>
         </tr>
       @endforeach
     </tbody>
