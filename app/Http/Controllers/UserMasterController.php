@@ -8,6 +8,8 @@ use App\stream_master;
 use App\division_master;
 use App\event_master;
 use App\sub_event_master;
+use App\event_registration;
+use App\venue;
 use App\Mail\SendMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -249,6 +251,18 @@ class UserMasterController extends Controller
     {
         return view('/student/reset_password');
     }
+    public function change_password_form()
+    {
+        return view('/student/change_password');
+    }
+    public function get_login_form()
+    {
+        return view('/student/login');
+    }
+    public function get_forgot_password_form()
+    {
+        return view('/student/forgot_password');
+    }
     public function resetPassword(Request $request)
     {
         $mail = $request->email;
@@ -262,5 +276,13 @@ class UserMasterController extends Controller
         {
             return Redirect::back()->with('error','Something Went Wrong !!!!');
         }
+    }
+    public function registered_events()
+    {
+        $event_registration=event_registration::where('u_id','=',session('id'))->get();
+        $sub_events=sub_event_master::all();
+        $events=event_master::all();
+        $vanue=venue::all();
+        return view('/student/registered_events',compact('event_registration','sub_events','events','vanue'));
     }
 } 

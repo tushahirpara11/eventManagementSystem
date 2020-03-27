@@ -140,7 +140,7 @@
                         <h3 class="register-heading">Student Registration</h3>
                         <div class="row register-form">
                             <div class="col-md-6">
-                            <input type="hidden" name="u_type" value="0" />                                <div class="form-group">
+                            <input type="hidden" name="u_type" value="5" />                                <div class="form-group">
                                     <input type="text" name="f_name" id="f_name" class="form-control" placeholder="First Name " />
                                 </div>
                                 <div class="form-group">
