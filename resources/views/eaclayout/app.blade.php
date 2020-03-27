@@ -9,7 +9,7 @@
   <meta name="description" content="Event Management System" />
 
   <!-- CSRF Token -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="csrf-token" content="{{ csrf_token() }}">  
   <link rel="icon" href="{{ asset('backend/images/favicon.ico') }}">
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-141030632-1"></script>
   <script>

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\event_registration;
 use App\scheduling;
+use App\sub_event_master;
+use App\user_master;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SchedulingController extends Controller
 {
@@ -47,6 +51,14 @@ class SchedulingController extends Controller
     public function show(scheduling $scheduling)
     {
         //
+    }
+
+    public function showEacScheduling()
+    {
+        $userData = DB::select('select * from user_masters u, event_registrations e where u.u_id=e.u_id');
+        $subEvent = sub_event_master::get();
+        $eventRegistration = event_registration::get();
+        return view('eac.viewScheduling')->with(['user' => $userData, 'subevent' => $subEvent, 'registerEvet' => $eventRegistration]);
     }
 
     /**

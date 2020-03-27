@@ -313,7 +313,7 @@
     $("#u_id").html('');
     var e_id = $(this).val();
     var token = $("input[name='_token']").val();
-    $.ajax({
+    ({
       url: "<?php echo route('ajaxSubEvent') ?>",
       method: 'POST',
       data: {

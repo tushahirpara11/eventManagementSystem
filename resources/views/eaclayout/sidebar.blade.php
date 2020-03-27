@@ -8,6 +8,7 @@
       <li> <a href="{{route('eac.guest')}}"><span class="entypo-layout">Guest</span></a></li>
       <li> <a href="{{route('eac.user')}}"><span class="entypo-layout">User</span></a></li>
       <li> <a href="{{route('eac.group')}}"><span class="entypo-layout">Group</span></a></li>
+      <li> <a href="{{route('eac.attendence')}}"><span class="entypo-layout">Attendence</span></a></li>
     </ul>
   </li>
 </ul>
