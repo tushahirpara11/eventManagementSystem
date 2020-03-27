@@ -64,43 +64,101 @@ Route::group(['middleware' => ['admin']], function () {
     /*Role Master */
     Route::get('/admin/role', 'RoleController@show')->name('admin.role');
     Route::post('/admin/role', 'RoleController@store')->name('admin.addrole');
-    Route::post('/admin/updaterole', 'RoleController@update')->name('admin.updaterole');    
+    Route::post('/admin/updaterole', 'RoleController@update')->name('admin.updaterole');
     Route::delete('/admin/deleterole/{id}', 'RoleController@delete')->name('admin.deleterole');
 
     /*Choreographer */
     Route::get('/admin/choreographer', 'ChoreographerController@show')->name('admin.choreographer');
     Route::post('/admin/choreographer', 'ChoreographerController@store')->name('admin.addchoreographer');
-    Route::post('/admin/updatechoreographer', 'ChoreographerController@update')->name('admin.updatechoreographer');    
+    Route::post('/admin/updatechoreographer', 'ChoreographerController@update')->name('admin.updatechoreographer');
     Route::delete('/admin/deletechoreographer/{id}', 'ChoreographerController@delete')->name('admin.deletechoreographer');
 
     /*Guest*/
     Route::get('/admin/guest', 'GuestController@show')->name('admin.guest');
     Route::post('/admin/guest', 'GuestController@store')->name('admin.addguest');
-    Route::post('/admin/updateguest', 'GuestController@update')->name('admin.updateguest');    
+    Route::post('/admin/updateguest', 'GuestController@update')->name('admin.updateguest');
     Route::delete('/admin/deleteguest/{id}', 'GuestController@delete')->name('admin.deleteguest');
 
     /*Manage user*/
     Route::get('/admin/user', 'UserMasterController@show')->name('admin.user');
     Route::post('/admin/user', 'UserMasterController@adminStore')->name('admin.adduser');
-    Route::post('/admin/updateuser', 'UserMasterController@update')->name('admin.updateuser');    
+    Route::post('/admin/updateuser', 'UserMasterController@updateAdmin')->name('admin.updateuser');
     Route::delete('/admin/deleteuser/{id}', 'UserMasterController@delete')->name('admin.deleteuser');
 
     /*Manage Group*/
     Route::get('/admin/group', 'GroupController@show')->name('admin.group');
     Route::post('/admin/group', 'GroupController@store')->name('admin.addgroup');
-    Route::post('/admin/updategroup', 'GroupController@update')->name('admin.updategroup');    
+    Route::post('/admin/updategroup', 'GroupController@update')->name('admin.updategroup');
     Route::delete('/admin/deletegroup/{id}', 'GroupController@delete')->name('admin.deletegroup');
-    Route::post('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
+    Route::get('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
 
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');
 });
+
+/* Event Handler */
+Route::get('/eac', function () {
+    if (session()->has('eac') == 0) {
+        return view('eac/index');
+    } else {
+        return redirect('eac/choreographer');
+    }
+})->name('login');
+
+Route::post('/eac/authenticate', 'UserMasterController@validateEacLogin');
+
+Route::group(['middleware' => ['eac']], function () {
+
+    /*Sub Event Master */
+    Route::get('/eac/subevent', 'SubEventMasterController@showEacSubEvent')->name('eac.subevent');
+    Route::post('/eac/subevent', 'SubEventMasterController@storeEacSubEvent')->name('eac.addsubevent');
+    Route::post('/eac/updatesubevent', 'SubEventMasterController@updateEacSubEvent')->name('eac.updatesubevent');
+    Route::post('/eac/updatesubeventstatus/{eid}/{status}', 'SubEventMasterController@updatestatusEacSubEvent')->name('eac.updatesubeventstatus');
+    Route::delete('/eac/deletesubevent/{id}', 'SubEventMasterController@deleteEacSubEvent')->name('eac.deletesubevent');
+
+    /*Choreographer */
+    Route::get('/eac/choreographer', 'ChoreographerController@showEacChoreo')->name('eac.choreographer');
+    Route::post('/eac/choreographer', 'ChoreographerController@storeEacChoreo')->name('eac.addchoreographer');
+    Route::post('/eac/updatechoreographer', 'ChoreographerController@updateEacChoreo')->name('eac.updatechoreographer');
+    Route::delete('/eac/deletechoreographer/{id}', 'ChoreographerController@deleteEacChoreo')->name('eac.deletechoreographer');
+
+    /*Guest*/
+    Route::get('/eac/guest', 'GuestController@showEacGuest')->name('eac.guest');
+    Route::post('/eac/guest', 'GuestController@storeEacGuest')->name('eac.addguest');
+    Route::post('/eac/updateguest', 'GuestController@updateEacGuest')->name('eac.updateguest');
+    Route::delete('/eac/deleteguest/{id}', 'GuestController@deleteEacGuest')->name('eac.deleteguest');
+
+    /*Manage user*/
+    Route::get('/eac/user', 'UserMasterController@showEacUser')->name('eac.user');
+    Route::post('/eac/updateuser', 'UserMasterController@updateEacUser')->name('eac.updateuser');
+    Route::delete('/eac/deleteuser/{id}', 'UserMasterController@deleteEacUser')->name('eac.deleteuser');
+
+    /*Manage Group*/
+    Route::get('/eac/group', 'GroupController@showEacGroup')->name('eac.group');
+    Route::post('/eac/group', 'GroupController@storeEacGroup')->name('eac.addgroup');
+    Route::post('/eac/updategroup', 'GroupController@updateEacGroup')->name('eac.updategroups');
+    Route::delete('/eac/deletegroup/{id}', 'GroupController@deleteEacGroup')->name('eac.deletegroup');
+    Route::post('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
+
+    /*Manage Attendence*/
+    Route::get('/eac/attendence', 'AttendenceController@showEacAttendence')->name('eac.attendence');
+    Route::get('/eac/edit/{id}/{date}', 'AttendenceController@edit')->name('eac.ediAttendence');
+    Route::post('/eac/updateattendence', 'AttendenceController@updateEacAttendence')->name('eac.updateattendence');
+    Route::delete('/eac/deleteattendence/{id}', 'AttendenceController@deleteEacAttendence')->name('eac.deleteattendence');
+
+    /*Manage Attendence*/
+    Route::get('/eac/scheduling', 'SchedulingController@showEacScheduling')->name('eac.scheduling');
+
+    /*Session Expire*/
+    Route::get('/eac/logout', 'UserMasterController@destroyEac');
+});
+
 /* Student Route */
 
 Route::middleware('session.has.user')->group(function () {
 
     Route::get('/student/events', 'UserMasterController@getEvents');
-    Route::post('/student/update','UserMasterController@update');
+    Route::post('/student/update', 'UserMasterController@update');
     Route::get('/student/logout', 'UserMasterController@logout');
     Route::get('/student/profile','UserMasterController@userProfile');
     Route::get('/student/change_password','UserMasterController@change_password_form');

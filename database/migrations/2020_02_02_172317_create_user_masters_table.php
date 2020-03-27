@@ -20,12 +20,12 @@ class CreateUserMastersTable extends Migration
             $table->string('email',60)->unique();                                                
             $table->string('phone',13)->unique();            
             $table->date('dob');
-            $table->integer('b_id')->unsigned();
-            $table->integer('s_id')->unsigned();
-            $table->integer('d_id')->unsigned();            
-            $table->string('gender',1);
+            $table->integer('b_id')->unsigned()->nullable();
+            $table->integer('s_id')->unsigned()->nullable();
+            $table->integer('d_id')->unsigned()->nullable();            
+            $table->string('gender',6);
             $table->integer('u_type')->unsigned();
-            $table->string('password',500);
+            $table->text('password');
             $table->string('enrollmentno',12)->nullable();
             $table->foreign('b_id')->references('b_id')->on('branch_masters')->onUpdade('cascade')->onDelete('cascade');            
             $table->foreign('s_id')->references('s_id')->on('stream_masters')->onUpdade('cascade')->onDelete('cascade');            

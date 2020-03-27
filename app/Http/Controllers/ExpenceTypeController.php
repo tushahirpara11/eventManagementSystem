@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\event_registration;
-use App\scheduling;
-use App\sub_event_master;
-use App\user_master;
+use App\expence_type;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class SchedulingController extends Controller
+class ExpenceTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,29 +41,21 @@ class SchedulingController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\scheduling  $scheduling
+     * @param  \App\expence_type  $expence_type
      * @return \Illuminate\Http\Response
      */
-    public function show(scheduling $scheduling)
+    public function show(expence_type $expence_type)
     {
         //
-    }
-
-    public function showEacScheduling()
-    {
-        $userData = DB::select('select * from user_masters u, event_registrations e where u.u_id=e.u_id');
-        $subEvent = sub_event_master::get();
-        $eventRegistration = event_registration::get();
-        return view('eac.viewScheduling')->with(['user' => $userData, 'subevent' => $subEvent, 'registerEvet' => $eventRegistration]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\scheduling  $scheduling
+     * @param  \App\expence_type  $expence_type
      * @return \Illuminate\Http\Response
      */
-    public function edit(scheduling $scheduling)
+    public function edit(expence_type $expence_type)
     {
         //
     }
@@ -76,10 +64,10 @@ class SchedulingController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\scheduling  $scheduling
+     * @param  \App\expence_type  $expence_type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, scheduling $scheduling)
+    public function update(Request $request, expence_type $expence_type)
     {
         //
     }
@@ -87,10 +75,10 @@ class SchedulingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\scheduling  $scheduling
+     * @param  \App\expence_type  $expence_type
      * @return \Illuminate\Http\Response
      */
-    public function destroy(scheduling $scheduling)
+    public function destroy(expence_type $expence_type)
     {
         //
     }

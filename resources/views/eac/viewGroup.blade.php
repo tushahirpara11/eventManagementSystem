@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('eaclayout.app')
 @section('content')
 <style>
   .error {
@@ -69,38 +69,22 @@
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      @for($j = 0; $j < count($event); $j++) @if($data[$i]->e_id == $event[$j]->e_id)
-        <!-- {{$eventName = $event[$j]->e_name}} -->
-        <td>{{$event[$j]->e_name}}</td>
-        @endif
-        @endfor
-        @for($j = 0; $j < count($sub_event); $j++) @if($data[$i]->s_e_id == $sub_event[$j]->s_e_id)
-          <!-- {{$subEventName = $sub_event[$j]->s_e_name}} -->
-          <td>{{$sub_event[$j]->s_e_name}}</td>
-          @endif
-          @endfor          
-          @for($j = 0; $j < count($user); $j++) @if($data[$i]->u_id == $user[$j]->u_id)
-            <!-- {{$userName = $user[$j]->f_name." ".$user[$j]->l_name}} -->            
-            <td>{{$user[$j]->f_name}} {{$user[$j]->l_name}}</td>
-            @endif
-            @endfor          
-            @for($j = 0; $j < count($role); $j++) @if($data[$i]->r_id == $role[$j]->r_id)
-              <!-- {{$roleName = $role[$j]->r_name}} -->
-              <td>{{$role[$j]->r_name}}</td>
-              @endif
-              @endfor
-              <td class="col-md-2">
-                <form style="display: inline;">
-                  <a href="javascript:;" id="{{$data[$i]->g_id}}_{{$data[$i]->e_id}}_{{$eventName}}_{{$data[$i]->s_e_id}}_{{$subEventName}}_{{$data[$i]->u_id}}_{{$userName}}_{{$data[$i]->r_id}}_{{$roleName}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
-                </form> &nbsp; &nbsp;
-                <form action="{{ route('admin.deletegroup', [$data[$i]->g_id]) }}" method="post" style="display: inline;">
-                  {{csrf_field()}}
-                  {{ method_field('DELETE') }}
-                  <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
-                </form>
-              </td>
-              </tr>
-              @endfor
+      <td>{{$data[$i]->e_name}}</td>
+      <td>{{$data[$i]->s_e_name}}</td>
+      <td>{{$data[$i]->f_name}} {{$data[$i]->l_name}}</td>
+      <td>{{$data[$i]->r_name}}</td>
+      <td class="col-md-2">
+        <form style="display: inline;">
+          <a href="javascript:;" id="{{$data[$i]->g_id}}_{{$data[$i]->e_id}}_{{$data[$i]->e_name}}_{{$data[$i]->s_e_id}}_{{$data[$i]->s_e_name}}_{{$data[$i]->u_id}}_{{$data[$i]->f_name}} {{$data[$i]->l_name}}_{{$data[$i]->r_id}}_{{$data[$i]->r_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+        </form> &nbsp; &nbsp;
+        <form action="{{ route('eac.deletegroup', [$data[$i]->g_id]) }}" method="post" style="display: inline;">
+          {{csrf_field()}}
+          {{ method_field('DELETE') }}
+          <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
+        </form>
+      </td>
+      </tr>
+      @endfor
   </tbody>
   <tfoot>
     <tr>
@@ -126,7 +110,7 @@
 </script>
 <!-- Modal -->
 <div class="modal fade" id="modal-7">
-  <form method="post" id="addgroup" action="{{route('admin.addgroup')}}">
+  <form method="post" id="addgroup" action="{{route('eac.addgroup')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
@@ -176,7 +160,7 @@
   </form>
 </div>
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updategroup" action="{{route('admin.updategroup')}}">
+  <form method="post" id="updategroup" action="{{route('eac.updategroups')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
@@ -329,14 +313,14 @@
     $("#u_id").html('');
     var e_id = $(this).val();
     var token = $("input[name='_token']").val();
-    $.ajax({
+    ({
       url: "<?php echo route('ajaxSubEvent') ?>",
-      method: 'get',      
+      method: 'POST',
       data: {
-        _token: token,
-        e_id: e_id
+        e_id: e_id,
+        _token: token
       },
-      success: function(option) {        
+      success: function(option) {
         for (i = 0; i < option.option.length; i++) {
           $("#u_id").append(`<option value="${option.option[i].u_id}">${option.option[i].f_name} ${option.option[i].l_name} </option>`);
         }
@@ -353,7 +337,7 @@
     var token = $("input[name='_token']").val();
     $.ajax({
       url: "<?php echo route('ajaxSubEvent') ?>",
-      method: 'get',
+      method: 'POST',
       data: {
         e_id: e_id,
         _token: token
