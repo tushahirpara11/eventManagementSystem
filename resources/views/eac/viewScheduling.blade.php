@@ -1,23 +1,6 @@
 @extends('eaclayout.app')
 @section('content')
-<style>
-  .error {
-    color: red;
-  }
-</style>
-@if (session('success'))
-<div class="alert alert-success alert-block">
-  <button type="button" class="close" data-dismiss="alert">×</button>
-  <strong>{{ Session::get('success') }}</strong>
-</div>
-@endif
-@if (session('error'))
-<div class="alert alert-danger alert-block">
-  <button type="button" class="close" data-dismiss="alert">×</button>
-  <strong>{{ Session::get('error') }}</strong>
-</div>
-@endif
-<h3>User Masters</h3> <br />
+<h3>Event Scheduling</h3> <br />
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     var $table4 = jQuery("#table-4");
@@ -61,30 +44,29 @@
       <th class="col-xs-1">#No.</th>
       <th class="col-xs-1">Enrollment No.</th>
       <th class="col-xs-1">Name</th>
-      @for($i = 0; $i < count($subevent); $i++) <th class="col-xs-1">{{$subevent[$i]->s_e_name}}</th>
+      @for($i = 0; $i < count($subevent); $i++)<th class="col-xs-1">{{$subevent[$i]->s_e_name}}</th>
         @endfor
         <th class="col-xs-1">count</th>
     </tr>
   </thead>
   <tbody>
-    @for($i = 0; $i < count($user); $i++) <!-- {{$flag=0}} {{$count=0}} -->
-      <tr class="odd gradeX">
-        <td>{{$i+1}}</td>
-        <td class="col-xs-1">{{$user[$i]->enrollmentno}}</td>
-        <td class="col-xs-1">{{$user[$i]->f_name}} {{$user[$i]->l_name}}</td>
-        @for($j = 0; $j < count($registerEvet); $j++) @if($user[$i]->u_id == $registerEvet[$j]->u_id)
-          <!-- {{$flag = 1}} -->
-          @endif
-          @endfor
-          @if($flag==1)
-          <!-- {{$count++}} -->
-          <td class="col-xs-1"><i class="btn-success entypo-check"></i></td>
-          @else
-          <td class="col-xs-1"><i class="btn-danger entypo-cancel"></i></td>
-          @endif
-          <td class="col-xs-1">{{$count}}</td>
-      </tr>
-      @endfor
+    @for($i=0; $i < count($data); $i++) <tr class="odd gradeX">
+      <!-- {{$count=0}} -->
+      <td class="col-xs-1">{{$i+1}}</td>
+      <td class="col-xs-1">{{$data[$i]->enrollmentno}}</td>      
+      <td class="col-xs-1">{{$data[$i]->f_name}} {{$data[$i]->l_name}}</td>
+      @for($j = 0; $j < count($subevent); $j++) 
+      <!-- {{$e=$subevent[$j]->s_e_name}}  -->
+      @if(array_key_exists($subevent[$j]->s_e_name,$data[$i]) && $data[$i]->$e)
+        <!-- {{$count++}} -->
+        <td class="col-xs-1"><i class="btn-success entypo-check"></i></td>
+        @else
+        <td class="col-xs-1"><i class="btn-danger entypo-cancel"></i></td>
+        @endif
+        @endfor
+        <td  class="col-xs-1">{{$count}}</td>
+        </tr>
+        @endfor
   </tbody>
   <tfoot>
     <tr>

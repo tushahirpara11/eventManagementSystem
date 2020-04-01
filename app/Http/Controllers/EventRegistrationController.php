@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\event_registration;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventRegistrationController extends Controller
 {
@@ -67,9 +68,14 @@ class EventRegistrationController extends Controller
      * @param  \App\event_registration  $event_registration
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, event_registration $event_registration)
+    public function updateStatus($status, $s_e_id, $id)
     {
-        //
+        $update = DB::update('update event_registrations set status=' . $status . ' where s_e_id=' . $s_e_id . ' and u_id=' . $id);
+        if ($update) {
+            return back()->with('success', "Status Updated Successfully");
+        } else {
+            return back()->with('error', "Status not Updated");
+        }
     }
 
     /**

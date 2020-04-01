@@ -55,10 +55,25 @@ class SchedulingController extends Controller
 
     public function showEacScheduling()
     {
-        $userData = DB::select('select * from user_masters u, event_registrations e where u.u_id=e.u_id');
         $subEvent = sub_event_master::get();
-        $eventRegistration = event_registration::get();
-        return view('eac.viewScheduling')->with(['user' => $userData, 'subevent' => $subEvent, 'registerEvet' => $eventRegistration]);
+        $ary = array();
+        $a = "";
+        foreach ($subEvent as $key => $value) {
+            array_push($ary, "sum(case when sem.s_e_name ='" . $value->s_e_name . "' THEN case when er.status = 1 THEN 1 else 0 end end) as '" . $value->s_e_name . "'");
+        }
+        $a .= 'select er.u_id,um.f_name,um.l_name,um.enrollmentno';
+        for ($i = 0; $i < count($ary); $i++) {
+            $a .= ',' . $ary[$i];
+        }
+        $a .= ' from event_registrations er join user_masters um on er.u_id = um.u_id join sub_event_masters sem on sem.s_e_id = er.s_e_id group by er.u_id,um.f_name,um.l_name,um.enrollmentno';
+        $ans = DB::select($a);
+        $keys = array();
+        foreach ($ans as $key => $value) {
+            foreach ($value as $key => $value) {
+                array_push($keys, $key);
+            }
+        }
+        return view('eac.viewScheduling')->with(['data' => $ans, 'keys' => $key, 'subevent' => $subEvent]);
     }
 
     /**

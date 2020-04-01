@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\attendence;
+use App\user_master;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class AttendenceController extends Controller
 {
@@ -34,9 +36,27 @@ class AttendenceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function storeFcAttendence(Request $request)
+    {        
+        $user = user_master::where('email', $request->fc)->get();
+        $checkAttendence = attendence::where('date', date("Y-m-d"))
+            ->where('s_e_id', $request->s_e_id)
+            ->get();            
+        if (count($checkAttendence) == 0) {
+            $storedAtt = new attendence([
+                's_e_id' => $request->s_e_id,
+                'u_id' => $user[0]->u_id,
+                'present' => json_encode('[' . $request->present . ']'),
+                'date' => date("Y-m-d")
+            ]);
+            if ($storedAtt->save()) {
+                return back()->with('success', 'Attendence added Successfully');
+            } else {
+                return back()->with('error', 'Attendence not Added');
+            }
+        } else {
+            return back()->with('error', "Today's Attendence Already Taken");
+        }
     }
 
     /**
@@ -50,6 +70,13 @@ class AttendenceController extends Controller
         $data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = 
         s.s_e_id and a.u_id=u.u_id');
         return view('eac.viewAttendence')->with(['data' => $data]);
+    }
+    public function showFcAttendence()
+    {
+        $data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = 
+        s.s_e_id and a.u_id=u.u_id and a.s_e_id=' . Session::get('f_s_e_id'));
+        $student = DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=sm.s_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id'));
+        return view('fc.viewAttendence')->with(['data' => $data, 'student' => $student]);
     }
 
     /**

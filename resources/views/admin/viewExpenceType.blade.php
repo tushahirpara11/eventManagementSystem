@@ -17,7 +17,7 @@
   <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
-<h3>Role Master</h3> <br />
+<h3>Expence Type</h3> <br />
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     var $table4 = jQuery("#table-4");
@@ -59,19 +59,19 @@
   <thead>
     <tr>
       <th>#No.</th>
-      <th>Role Name</th>
+      <th>Expence Name</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      <td>{{$data[$i]->r_name}}</td>
+      <td>{{$data[$i]->name}}</td>
       <td class="col-md-2">
         <form style="display: inline;">
-          <a href="javascript:;" id="{{$data[$i]->r_id}}_{{$data[$i]->r_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+          <a href="javascript:;" id="{{$data[$i]->e_t_id}}_{{$data[$i]->name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
         </form> &nbsp; &nbsp;
-        <form action="{{ route('admin.deleterole', [$data[$i]->r_id]) }}" method="post" style="display: inline;">
+        <form action="{{ route('admin.deleteExpence', [$data[$i]->e_t_id]) }}" method="post" style="display: inline;">
           {{csrf_field()}}
           {{ method_field('DELETE') }}
           <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
@@ -90,7 +90,7 @@
 </table> <br />
 <button type="click" onclick="jQuery('#modal-7').modal('show', {
       backdrop: 'static'
-    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Role</button>
+    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Expence Type</button>
 <script>
   function checkResponce() {
     if (!confirm('Are you sure want to Delete this Record?')) {
@@ -100,19 +100,19 @@
   }
 </script>
 <div class="modal fade" id="modal-7">
-  <form method="post" id="addrole" action="{{route('admin.addrole')}}">
+  <form method="post" id="addExpence" action="{{route('admin.addExpence')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Add Role</h4>
+          <h4 class="modal-title">Add Expence Type</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Role Name</label>
-                <input type="text" class="form-control" name="r_name" id="r_name" placeholder="Role Name" />
+                <label for="field-2" class="control-label">Expence Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Expence Name" />
               </div>
             </div>
           </div>
@@ -124,20 +124,20 @@
   </form>
 </div>
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updaterole" action="{{route('admin.updaterole')}}">
+  <form method="post" id="updateExpence" action="{{route('admin.updateExpence')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update Role</h4>
+          <h4 class="modal-title">Update Expence</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Role Name</label>
-                <input type="hidden" class="form-control" name="r_id" id="r_id_field"/>
-                <input type="text" class="form-control" name="r_name" id="r_name_field" placeholder="Role Name" />
+                <label for="field-2" class="control-label">Expence Name</label>
+                <input type="hidden" class="form-control" name="e_t_id" id="e_t_id_field"/>
+                <input type="text" class="form-control" name="name" id="name_field" placeholder="Expence Name" />
               </div>
             </div>
           </div>
@@ -151,11 +151,11 @@
 <script>
   function openmodal(id) {
     let record_id = id.split("_");
-    let r_id = record_id[0];
-    let r_name = record_id[1];    
+    let e_t_id = record_id[0];
+    let name = record_id[1];    
 
-    $('#r_id_field').val(r_id);
-    $('#r_name_field').val(r_name);
+    $('#e_t_id_field').val(e_t_id);
+    $('#name_field').val(name);
     
     jQuery('#modal-6').modal('show', {
       backdrop: 'static'
@@ -165,37 +165,37 @@
 
 <script>
   $(document).ready(function() {
-    $("#addrole").submit(function(e) {      
-      let r_name = $("#r_name").val();
+    $("#addExpence").submit(function(e) {      
+      let name = $("#name").val();
       
       $(".error").remove();
       // return false;
-      if (!/^[a-zA-Z]/.test(r_name) || r_name == "") {
+      if (!/^[a-zA-Z]/.test(name) || name == "") {
         e.preventDefault();
-        $("#r_name").after(
+        $("#name").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (r_name.length > 16) {
+      } else if (name.length > 16) {
         e.preventDefault();
-        $("#r_name").after(
-          '<span class="error">Role Name should maximum 15 characters only.</span>'
+        $("#name").after(
+          '<span class="error">Expence Name should maximum 15 characters only.</span>'
         );
       }
     });
-    $("#updaterole").submit(function(e) {      
-      let r_name_field = $("#r_name_field").val();
+    $("#updateExpence").submit(function(e) {      
+      let name_field = $("#name_field").val();
       
       $(".error").remove();
       // return false;
-      if (!/^[a-zA-Z]/.test(r_name_field) || r_name_field == "") {
+      if (!/^[a-zA-Z]/.test(name_field) || name_field == "") {
         e.preventDefault();
-        $("#r_name_field").after(
+        $("#name_field").after(
           '<span class="error">This field is required</span>'
         );
-      } else if (r_name_field.length > 16) {
+      } else if (name_field.length > 16) {
         e.preventDefault();
-        $("#r_name_field").after(
-          '<span class="error">Role Name should maximum 15 characters only.</span>'
+        $("#name_field").after(
+          '<span class="error">Expence Name should maximum 15 characters only.</span>'
         );
       }     
     });

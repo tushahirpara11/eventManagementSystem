@@ -18,8 +18,7 @@ class CreateExpencesTable extends Migration
             $table->integer('e_t_id')->unsigned();
             $table->integer('e_id')->unsigned();
             $table->integer('s_e_id')->unsigned();
-            $table->integer('u_id')->unsigned();
-            $table->string('name', 30);
+            $table->integer('u_id')->unsigned();            
             $table->text('description');
             $table->mediumInteger('amount')->unsigned();
             $table->tinyInteger('status');

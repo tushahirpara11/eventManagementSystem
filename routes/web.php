@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/* Admin Routes */
+
 Route::get('/admin', function () {
     if (session()->has('admin') == 0) {
         return view('admin/index');
@@ -92,11 +94,18 @@ Route::group(['middleware' => ['admin']], function () {
     Route::delete('/admin/deletegroup/{id}', 'GroupController@delete')->name('admin.deletegroup');
     Route::get('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
 
+    /*Expence Type */
+    Route::get('/admin/expence', 'ExpenceTypeController@show')->name('admin.Expence');
+    Route::post('/admin/expence', 'ExpenceTypeController@store')->name('admin.addExpence');
+    Route::post('/admin/updateexpence', 'ExpenceTypeController@update')->name('admin.updateExpence');
+    Route::delete('/admin/deleteexpence/{id}', 'ExpenceTypeController@delete')->name('admin.deleteExpence');
+
     /*Session Expire*/
     Route::get('/admin/logout', 'BranchMasterController@destroy');
 });
 
 /* Event Handler */
+
 Route::get('/eac', function () {
     if (session()->has('eac') == 0) {
         return view('eac/index');
@@ -146,15 +155,56 @@ Route::group(['middleware' => ['eac']], function () {
     Route::post('/eac/updateattendence', 'AttendenceController@updateEacAttendence')->name('eac.updateattendence');
     Route::delete('/eac/deleteattendence/{id}', 'AttendenceController@deleteEacAttendence')->name('eac.deleteattendence');
 
-    /*Manage Attendence*/
+    /*Manage Expence*/
+    Route::get('/eac/expence', 'ExpenceController@showEacExpence')->name('eac.Expence');
+    Route::post('/eac/updateexpence/{status}/{id}', 'ExpenceController@updateEacExpence')->name('eac.updateExpence');
+    Route::post('/eac/updatestatus', 'ExpenceController@updateEacStatus')->name('eac.updateStatus');
+    Route::delete('/eac/deleteexpence/{id}', 'ExpenceController@deleteEacExpence')->name('eac.deleteExpence');
+
+    /*Manage Scedhuling*/
     Route::get('/eac/scheduling', 'SchedulingController@showEacScheduling')->name('eac.scheduling');
 
     /*Session Expire*/
-    Route::get('/eac/logout', 'UserMasterController@destroyEac');
+    Route::get('/eac/logout', 'UserMasterController@destroyEac')->name('eac.logout');
+});
+
+/* Faculty Co-ordinator Handler */
+
+Route::get('/fc', function () {
+    if (session()->has('fc') == 0) {
+        return view('fc/index');
+    } else {
+        return redirect('fc/user');
+    }
+})->name('login');
+
+Route::post('/fc/authenticate', 'UserMasterController@validateFcLogin');
+
+Route::group(['middleware' => ['fc']], function () {
+
+    /*Manage user*/
+    Route::get('/fc/user', 'UserMasterController@showFcUser')->name('fc.user');
+    Route::post('/fc/updateuser', 'UserMasterController@updateFcUser')->name('fc.updateuser');
+    Route::post('/fc/updateuser/{status}/{s_e_id}/{id}', 'EventRegistrationController@updateStatus')->name('fc.updateEventRegisterStatus');
+
+    /*Manage Attendence*/
+    Route::get('/fc/attendence', 'AttendenceController@showFcAttendence')->name('fc.attendence');
+    Route::post('/fc/addAttendence', 'AttendenceController@storeFcAttendence')->name('fc.addAttendence');
+    Route::post('/fc/updateattendence', 'AttendenceController@updateFcAttendence')->name('fc.updateattendence');
+    Route::get('/fc/edit/{id}/{date}', 'AttendenceController@edit')->name('fc.ediAttendence');
+    Route::delete('/fc/deleteattendence/{id}', 'AttendenceController@deleteFcAttendence')->name('fc.deleteattendence');
+
+    /*Manage Expence*/
+    Route::get('/fc/expence', 'ExpenceController@showFcExpence')->name('fc.Expence');
+    Route::post('/fc/expence', 'ExpenceController@storeFcExpence')->name('fc.addExpence');
+    Route::post('/fc/updateexpence', 'ExpenceController@updateFcExpence')->name('fc.updateExpence');
+    Route::delete('/fc/deleteexpence/{id}', 'ExpenceController@deleteFcExpence')->name('fc.deleteExpence');
+
+    /*Session Expire*/
+    Route::get('/fc/logout', 'UserMasterController@destroyFc')->name('fc.logout');
 });
 
 /* Student Route */
-
 Route::middleware('session.has.user')->group(function () {
 
     Route::get('/student/events', 'UserMasterController@getEvents');
@@ -166,7 +216,6 @@ Route::middleware('session.has.user')->group(function () {
     });
     Route::post('/student/change_password', 'UserMasterController@change_password');
 });
-
 Route::get('/student/registration', 'UserMasterController@get_data');
 Route::post('/student/register', 'UserMasterController@store');
 Route::get('/student/login', function () {
