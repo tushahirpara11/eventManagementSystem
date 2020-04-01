@@ -34,6 +34,14 @@ class GroupController extends Controller
     {
         //
     }
+    public function getGroup(Request $request)
+    {
+        if ($request->ajax()) {            
+            $data = group::where('s_e_id', $request->get('s_e_id'))->get();            
+            $user = user_master::where('u_id', '=', $data[0]->u_id)->get();
+            return response()->json(['option' => $data, 'user' => $user]);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -103,7 +111,7 @@ class GroupController extends Controller
     {
         $event = event_master::where('e_status', 1)->get();
         $subevent = sub_event_master::where('status', 1)->get();
-        $user = user_master::where('u_type', 2)->get();
+        $user = user_master::where('u_type', 2)->get();        
         return view('admin/viewGroup')->with(['data' => group::get(), 'event' =>  $event, 'sub_event' => $subevent, 'user' => $user, 'role' => role::get()]);
     }
 

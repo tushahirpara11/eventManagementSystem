@@ -78,12 +78,12 @@
           <!-- {{$subEventName = $sub_event[$j]->s_e_name}} -->
           <td>{{$sub_event[$j]->s_e_name}}</td>
           @endif
-          @endfor
+          @endfor          
           @for($j = 0; $j < count($user); $j++) @if($data[$i]->u_id == $user[$j]->u_id)
-            <!-- {{$userName = $user[$j]->f_name." ".$user[$j]->l_name}} -->
+            <!-- {{$userName = $user[$j]->f_name." ".$user[$j]->l_name}} -->            
             <td>{{$user[$j]->f_name}} {{$user[$j]->l_name}}</td>
             @endif
-            @endfor
+            @endfor          
             @for($j = 0; $j < count($role); $j++) @if($data[$i]->r_id == $role[$j]->r_id)
               <!-- {{$roleName = $role[$j]->r_name}} -->
               <td>{{$role[$j]->r_name}}</td>

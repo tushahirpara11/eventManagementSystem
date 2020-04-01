@@ -1,5 +1,6 @@
 @extends('student/index')
 @section('title','Change Password')
+@section('head','Change Password')
 @section('content')
 <style>
     .error{

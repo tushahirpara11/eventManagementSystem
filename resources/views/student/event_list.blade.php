@@ -2,6 +2,18 @@
 @section('title','Events')
 @section('head','Events')
 @section('content')
+@if (session('success'))
+<div class="alert alert-success alert-block">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>{{ Session::get('success') }}</strong>
+</div>
+@endif
+@if (session('error'))
+<div class="alert alert-danger alert-block">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>{{ Session::get('error') }}</strong>
+</div>
+@endif
 <div class="container">
 <table class='table  table-hover table-striped'>
     <thead class="table-info">

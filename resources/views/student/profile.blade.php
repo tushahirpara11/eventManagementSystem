@@ -32,7 +32,7 @@
 <body>
 
 <div id="editform">
-      <div class="col-lg-8">
+      <div class="col-lg-6">
         <div class="card">
             <div class="card-header bg-primary"><h3>Student Profile<h3></div><br>
                 <div class="card-block">
@@ -91,7 +91,7 @@
   </div>
 
  <div id="updateform">
-    <div class="col-lg-8">
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-header bg-primary"><h3>Update Student Profile<h3></div><br>
                 <div class="card-block">

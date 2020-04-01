@@ -210,24 +210,21 @@ Route::middleware('session.has.user')->group(function () {
     Route::get('/student/events', 'UserMasterController@getEvents');
     Route::post('/student/update', 'UserMasterController@update');
     Route::get('/student/logout', 'UserMasterController@logout');
-    Route::get('/student/profile', 'UserMasterController@userProfile');
-    Route::get('/student/change_password', function () {
-        return view('student/change_password');
-    });
-    Route::post('/student/change_password', 'UserMasterController@change_password');
+    Route::get('/student/profile','UserMasterController@userProfile');
+    Route::get('/student/change_password','UserMasterController@change_password_form');
+    Route::post('/student/change_password','UserMasterController@change_password');
+    Route::get('/student/registered_events','UserMasterController@registered_events');
+    Route::post('/student/event_registration','EventRegistrationController@store');
+    Route::post('/student/sub_event_list','UserMasterController@getSubevent');
 });
 Route::get('/student/registration', 'UserMasterController@get_data');
 Route::post('/student/register', 'UserMasterController@store');
-Route::get('/student/login', function () {
-    return view('student/login');
-});
+Route::get('/student/login','UserMasterController@get_login_form');
 Route::post('/student/login', 'UserMasterController@validateUser');
 Route::post('/ajaxbranch', 'UserMasterController@getStream')->name('ajaxbranch');
 Route::post('/ajaxstream', 'UserMasterController@getDivision')->name('ajaxstream');
-Route::post('/student/sub_event_list', 'UserMasterController@getSubevent');
-Route::get('/student/forgot_password', function () {
-    return view('student/forgot_password');
-});
-Route::post('/send/email', 'UserMasterController@mail');
+Route::get('/student/forgot_password','UserMasterController@get_forgot_password_form');
+Route::post('/send/email','UserMasterController@mail');
 Route::get('student/reset_password', 'UserMasterController@reset_password_form');
-Route::post('/student/reset_password', 'UserMasterController@resetPassword');
+Route::post('/student/reset_password','UserMasterController@resetPassword');
+Route::post('/ajaxGroup', 'GroupController@getGroup')->name('ajaxGroup');
