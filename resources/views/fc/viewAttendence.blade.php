@@ -75,7 +75,7 @@
       <td>{{$data[$i]->date}}</td>
       <td class="col-md-2">
         <form style="display: inline;">
-          <a href="{{route('eac.ediAttendence',[$data[$i]->s_e_id,$data[$i]->date])}}" id="" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+          <a href="{{route('eac.ediAttendence',[$data[$i]->s_e_id,$data[$i]->date])}}" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
         </form> &nbsp; &nbsp;
         <form action="" method="post" style="display: inline;">
           {{csrf_field()}}
@@ -97,9 +97,11 @@
     </tr>
   </tfoot>
 </table><br />
+@if(count($attendence) == 0 && $attendence != 'undefined')
 <button type="click" onclick="jQuery('#modal-6').modal('show', {
       backdrop: 'static'
-    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add User</button>
+    });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Attendence</button>
+@endif
 <script>
   function checkResponce() {
     if (!confirm('Are you sure want to Delete this Record?')) {

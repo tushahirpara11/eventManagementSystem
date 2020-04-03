@@ -200,6 +200,18 @@ Route::group(['middleware' => ['fc']], function () {
     Route::post('/fc/updateexpence', 'ExpenceController@updateFcExpence')->name('fc.updateExpence');
     Route::delete('/fc/deleteexpence/{id}', 'ExpenceController@deleteFcExpence')->name('fc.deleteExpence');
 
+    /*Manage Practice Schedule*/
+    Route::get('/fc/practiceschedule', 'PracticeScheduleController@showFcPracticeSchedule')->name('fc.practiceSchedule');
+    Route::post('/fc/practiceschedule', 'PracticeScheduleController@storeFcPracticeSchedule')->name('fc.addPracticeSchedule');
+    Route::post('/fc/updatepracticeschedule', 'PracticeScheduleController@updateFcPracticeSchedule')->name('fc.updatePracticeSchedule');
+    Route::delete('/fc/deletepracticeschedule/{id}', 'PracticeScheduleController@deleteFcPracticeSchedule')->name('fc.deletePracticeSchedule');
+
+    /*Manage Costumes*/
+    Route::get('/fc/costumes', 'CostumeController@showFcCostumes')->name('fc.costumes');
+    Route::post('/fc/costumes', 'CostumeController@storeFcCostumes')->name('fc.addCostumes');
+    Route::post('/fc/updatecostumes', 'CostumeController@updateFcCostumes')->name('fc.updateCostumes');
+    Route::delete('/fc/deletecostumes/{id}', 'CostumeController@deleteFcCostumes')->name('fc.deleteCostumes');
+
     /*Session Expire*/
     Route::get('/fc/logout', 'UserMasterController@destroyFc')->name('fc.logout');
 });
@@ -210,21 +222,21 @@ Route::middleware('session.has.user')->group(function () {
     Route::get('/student/events', 'UserMasterController@getEvents');
     Route::post('/student/update', 'UserMasterController@update');
     Route::get('/student/logout', 'UserMasterController@logout');
-    Route::get('/student/profile','UserMasterController@userProfile');
-    Route::get('/student/change_password','UserMasterController@change_password_form');
-    Route::post('/student/change_password','UserMasterController@change_password');
-    Route::get('/student/registered_events','UserMasterController@registered_events');
-    Route::post('/student/event_registration','EventRegistrationController@store');
-    Route::post('/student/sub_event_list','UserMasterController@getSubevent');
+    Route::get('/student/profile', 'UserMasterController@userProfile');
+    Route::get('/student/change_password', 'UserMasterController@change_password_form');
+    Route::post('/student/change_password', 'UserMasterController@change_password');
+    Route::get('/student/registered_events', 'UserMasterController@registered_events');
+    Route::post('/student/event_registration', 'EventRegistrationController@store');
+    Route::post('/student/sub_event_list', 'UserMasterController@getSubevent');
 });
 Route::get('/student/registration', 'UserMasterController@get_data');
 Route::post('/student/register', 'UserMasterController@store');
-Route::get('/student/login','UserMasterController@get_login_form');
+Route::get('/student/login', 'UserMasterController@get_login_form');
 Route::post('/student/login', 'UserMasterController@validateUser');
 Route::post('/ajaxbranch', 'UserMasterController@getStream')->name('ajaxbranch');
 Route::post('/ajaxstream', 'UserMasterController@getDivision')->name('ajaxstream');
-Route::get('/student/forgot_password','UserMasterController@get_forgot_password_form');
-Route::post('/send/email','UserMasterController@mail');
+Route::get('/student/forgot_password', 'UserMasterController@get_forgot_password_form');
+Route::post('/send/email', 'UserMasterController@mail');
 Route::get('student/reset_password', 'UserMasterController@reset_password_form');
-Route::post('/student/reset_password','UserMasterController@resetPassword');
+Route::post('/student/reset_password', 'UserMasterController@resetPassword');
 Route::post('/ajaxGroup', 'GroupController@getGroup')->name('ajaxGroup');

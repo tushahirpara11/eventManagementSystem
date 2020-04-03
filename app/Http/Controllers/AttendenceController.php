@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\attendence;
+use App\practice_schedule;
 use App\user_master;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,11 +38,11 @@ class AttendenceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function storeFcAttendence(Request $request)
-    {        
+    {
         $user = user_master::where('email', $request->fc)->get();
         $checkAttendence = attendence::where('date', date("Y-m-d"))
             ->where('s_e_id', $request->s_e_id)
-            ->get();            
+            ->get();
         if (count($checkAttendence) == 0) {
             $storedAtt = new attendence([
                 's_e_id' => $request->s_e_id,
@@ -75,8 +76,9 @@ class AttendenceController extends Controller
     {
         $data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = 
         s.s_e_id and a.u_id=u.u_id and a.s_e_id=' . Session::get('f_s_e_id'));
-        $student = DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=sm.s_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id'));
-        return view('fc.viewAttendence')->with(['data' => $data, 'student' => $student]);
+        $student = DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id'));
+        $attendece = DB::select('select * from attendences a,practice_schedules p where a.s_e_id=p.s_e_id and a.date=p.date and a.s_e_id =' . Session::get('f_s_e_id') . ' and a.date = "' . date("Y-m-d") . '"');
+        return view('fc.viewAttendence')->with(['data' => $data, 'student' => $student, 'attendence' => $attendece]);
     }
 
     /**

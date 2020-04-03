@@ -59,8 +59,7 @@
   <thead>
     <tr>
       <th>#No.</th>
-      <th>First Name</th>
-      <th>Last Name</th>
+      <th>Name</th>      
       <th>Email</th>
       <th>Phone</th>
       <th>Branch</th>
@@ -75,8 +74,7 @@
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      <td>{{$data[$i]->f_name}}</td>
-      <td>{{$data[$i]->l_name}}</td>
+      <td>{{$data[$i]->f_name}} {{$data[$i]->l_name}}</td>      
       <td>{{$data[$i]->email}}</td>
       <td>{{$data[$i]->phone}}</td>
       <td>{{$data[$i]->b_name}}</td>
@@ -111,8 +109,7 @@
   <tfoot>
     <tr>
       <th></th>
-      <th>First Name</th>
-      <th>Last Name</th>
+      <th>Name</th>      
       <th>Email</th>
       <th>Phone</th>
       <th>Branch</th>
