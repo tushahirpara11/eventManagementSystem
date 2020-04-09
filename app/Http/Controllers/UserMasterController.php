@@ -140,13 +140,18 @@ class UserMasterController extends Controller
      */
     public function update(Request $request)
     {
-        DB::update('update user_masters set f_name = "' . $request->get('f_name') . '", l_name = "' . $request->get('l_name') .
-            '", email = "' . $request->get('email') . '", gender="' . $request->input('gender') . '", phone = "' . $request->get('phone') .
-            '", dob = "' . $request->get('dob') . '", b_id = ' . $request->get('b_id') .
-            ' where u_id = ' . $request->get('u_id'));
-        return redirect('/admin/user');        
+        DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
+        l_name = "' . $request->get('l_name') . '",
+        email = "' . $request->get('email') . '",
+        phone = "' . $request->get('phone') . '",
+        gender = "' . $request->get('gender') . '",
+        dob = "' . $request->get('dob') . '",
+        enrollmentno = "' . $request->get('enrollment') . '",
+        b_id = "' . $request->get('branch') . '",
+        s_id = "' . $request->get('stream') . '",
+        d_id = "' . $request->get('division') . '" where u_id = ' . $request->get('id'));
+        return Redirect::back()->with('success', 'Update Profile Successfull');        
     }
-    
     public function updateAdmin(Request $request)
     {
         DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
@@ -217,7 +222,24 @@ class UserMasterController extends Controller
             if ($password == decrypt($data[0]->password)) {
                 session(['user' => $data[0]->f_name]);
                 session(['id' => $data[0]->u_id]);
-                return redirect('/student/events');
+                $cdata = DB::table('event_registrations')->where('u_id','=',session('id'))->get();
+                if(count($cdata) == 0)
+                {
+                    return redirect('student/events');
+                }
+                else
+                {
+                    if($cdata[0]->r_id == 4)
+                    {
+                        return redirect('student/events');
+                    }
+                    else
+                    {
+                        session(['r_id' => 3]);
+                        session(['coordinator' => $data[0]->u_id]);
+                        return redirect('student_coordinator/events');
+                    }
+                }
             } else {
                 return redirect::back()->with('error', 'Invalid Password !!!!');
             }
@@ -255,7 +277,14 @@ class UserMasterController extends Controller
     public function getEvents()
     {
         $events = event_master::where('e_status', '=', 1)->get();
-        return view('/student/event_list', compact('events'));
+        if(session()->has('coordinator'))
+        {
+            return view('/student_coordinator/event_list', compact('events'));
+        }
+        else
+        {
+            return view('/student/event_list', compact('events'));
+        }
     }
     public function userProfile()
     {
@@ -263,12 +292,20 @@ class UserMasterController extends Controller
         $stream = stream_master::all();
         $division = division_master::all();
         $profile=user_master::where('u_id', '=', session('id'))->get();
-        return view('/student/profile',compact('profile','branch','stream','division'));
+        if(session()->has('coordinator'))
+        {
+            return view('/student_coordinator/profile',compact('profile','branch','stream','division'));
+        }
+        else
+        {
+            return view('/student/profile',compact('profile','branch','stream','division'));
+        }
     }
     public function logout(Request $request)
     {
         if (session()->has('user')) {
             $request->session()->flush('user');
+            $request->session()->flush('coordinator');
             $cookie = Cookie::forget('user');
             return redirect('student/login')->withCookie($cookie);
             // return redirect(URL::previous());
@@ -291,7 +328,14 @@ class UserMasterController extends Controller
     {
         $e_id=$request->e_id;
         $sub_event=sub_event_master::where('e_id','=',$e_id)->get();
-        return view('/student/event_registration',compact('sub_event'));
+        if(session()->has('coordinator'))
+        {
+            return view('/student_coordinator/event_registration',compact('sub_event'));
+        }
+        else
+        {
+            return view('/student/event_registration',compact('sub_event'));
+        }
     }
     public function mail(Request $request)
     {
@@ -314,7 +358,14 @@ class UserMasterController extends Controller
     }
     public function change_password_form()
     {
-        return view('/student/change_password');
+        if(session()->has('coordinator'))
+        {
+            return view('/student_coordinator/change_password');
+        }
+        else
+        {
+            return view('/student/change_password');
+        }
     }
     public function get_login_form()
     {
@@ -323,6 +374,10 @@ class UserMasterController extends Controller
     public function get_forgot_password_form()
     {
         return view('/student/forgot_password');
+    }
+    public function get_student_coordinator_form()
+    {
+        return view('/student_coordinator/index');
     }
     public function resetPassword(Request $request)
     {
@@ -344,6 +399,13 @@ class UserMasterController extends Controller
         $sub_events=sub_event_master::all();
         $events=event_master::all();
         $vanue=venue::all();
-        return view('/student/registered_events',compact('event_registration','sub_events','events','vanue'));
+        if(session()->has('coordinator'))
+        {
+            return view('/student_coordinator/registered_events',compact('event_registration','sub_events','events','vanue'));
+        }
+        else
+        {
+            return view('/student/registered_events',compact('event_registration','sub_events','events','vanue'));
+        }
     }
 } 

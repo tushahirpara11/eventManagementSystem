@@ -1,4 +1,4 @@
-@extends('student/index')
+@extends('student_coordinator/index')
 @section('title','Event Registrtion')
 @section('head','Event Registrtion')
 @section('content')
@@ -7,7 +7,7 @@
             <div class="card-header bg-primary"><h3>Event Registration<h3></div><br>
                 <div class="card-block">
                     <div class="container">
-                        <form method="post"  action="/student/event_registration">
+                        <form method="post"  action="/student_coordinator/event_registration">
                             {{ csrf_field() }}
                             <label for="usr">Select Event :</label> 
                             <select name="s_e_id" class="form-control">

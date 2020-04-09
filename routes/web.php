@@ -179,3 +179,16 @@ Route::post('/send/email','UserMasterController@mail');
 Route::get('student/reset_password', 'UserMasterController@reset_password_form');
 Route::post('/student/reset_password','UserMasterController@resetPassword');
 Route::post('/ajaxGroup', 'GroupController@getGroup')->name('ajaxGroup');
+
+
+/* Student Coordinator */
+
+Route::get('/student_coordinator/index','UserMasterController@get_student_coordinator_form');
+Route::get('/student_coordinator/events','UserMasterController@getEvents');
+Route::get('/student_coordinator/profile','UserMasterController@userProfile');
+Route::post('/student_coordinator/update', 'UserMasterController@update');
+Route::get('/student_coordinator/change_password','UserMasterController@change_password_form');
+Route::post('/student_coordinator/change_password','UserMasterController@change_password');
+Route::post('/student_coordinator/sub_event_list','UserMasterController@getSubevent');
+Route::post('/student_coordinator/event_registration','EventRegistrationController@coordinator_store');
+Route::get('/student_coordinator/registered_events','UserMasterController@registered_events');
