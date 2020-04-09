@@ -14,16 +14,15 @@ class CreatePracticeSchedulesTable extends Migration
     public function up()
     {
         Schema::create('practice_schedules', function (Blueprint $table) {
-            $table->increments('p_id',7);            
-            $table->integer('s_e_id')->unsigned();                        
-            $table->integer('e_r_id')->unsigned();                        
-            $table->integer('u_id')->unsigned();                        
+            $table->increments('p_id', 7);
+            $table->integer('s_e_id')->unsigned();            
+            $table->json('participants');
+            $table->integer('u_id')->unsigned();
             $table->text('description');
             $table->date('date');
             $table->time('time');
-            $table->foreign('s_e_id')->references('s_e_id')->on('sub_event_masters')->onUpdade('cascade')->onDelete('cascade');
-            $table->foreign('e_r_id')->references('e_r_id')->on('event_registrations')->onUpdade('cascade')->onDelete('cascade');
-            $table->foreign('u_id')->references('u_id')->on('user_masters')->onUpdade('cascade')->onDelete('cascade');            
+            $table->foreign('s_e_id')->references('s_e_id')->on('sub_event_masters')->onUpdade('cascade')->onDelete('cascade');            
+            $table->foreign('u_id')->references('u_id')->on('user_masters')->onUpdade('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

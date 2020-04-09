@@ -3,7 +3,7 @@
 
 	------
 
-	Theme by: Laborator - www.laborator.co
+	Theme by: LJEMS - www.laborator.co
 
 	Developed by: Arlind Nushi
 	Designed by: Art Ramadani

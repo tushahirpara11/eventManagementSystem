@@ -37,9 +37,9 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $count = role::where(['r_name' => $request->get('r_name')])->get();
+        $count = role::where(['r_name' => strtoupper($request->get('r_name'))])->get();
         if (count($count) == 0) {
-            $role = new role(['r_name' => $request->get('r_name')]);
+            $role = new role(['r_name' => strtoupper($request->get('r_name'))]);
             $role->save();
             return Redirect::back()->with('success', 'Role Added Successfully.');
         } else {
@@ -49,9 +49,9 @@ class RoleController extends Controller
 
     public function storeEacRole(Request $request)
     {
-        $count = role::where(['r_name' => $request->get('r_name')])->get();
+        $count = role::where(['r_name' => strtoupper($request->get('r_name'))])->get();
         if (count($count) == 0) {
-            $role = new role(['r_name' => $request->get('r_name')]);
+            $role = new role(['r_name' => strtoupper($request->get('r_name'))]);
             $role->save();
             return Redirect::back()->with('success', 'Role Added Successfully.');
         } else {
@@ -106,13 +106,13 @@ class RoleController extends Controller
      */
     public function update(Request $request)
     {
-        DB::update('update roles set r_name = "' . $request->get('r_name') . '" where r_id = ' . $request->r_id);
+        DB::update('update roles set r_name = "' . strtoupper($request->get('r_name')) . '" where r_id = ' . $request->r_id);
         return redirect('/admin/role');
     }
 
     public function updateEacRole(Request $request)
     {
-        DB::update('update roles set r_name = "' . $request->get('r_name') . '" where r_id = ' . $request->r_id);
+        DB::update('update roles set r_name = "' . strtoupper($request->get('r_name')) . '" where r_id = ' . $request->r_id);
         return redirect('/eac/role');
     }
 

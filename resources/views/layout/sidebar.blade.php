@@ -14,31 +14,8 @@
                   <li> <a href="{{route('admin.guest')}}"><span class="entypo-layout">Guest</span></a></li>
                   <li> <a href="{{route('admin.user')}}"><span class="entypo-layout">User</span></a></li>
                   <li> <a href="{{route('admin.group')}}"><span class="entypo-layout">Group</span></a></li>
-                  
-                  <li> <a href="../../layouts/fixed-sidebar/index.html"><span class="title">Fixed Sidebar</span></a> </li>
-                  <li> <a href="../../layouts/chat-open/index.html"><span class="title">Chat Open</span></a> </li>
-                  <li> <a href="../../layouts/horizontal-menu-boxed/index.html"><span class="title">Horizontal Menu
-                                    Boxed</span></a> </li>
-                  <li> <a href="../../layouts/horizontal-menu-fluid/index.html"><span class="title">Horizontal Menu
-                                    Fluid</span></a> </li>
-                  <li> <a href="../../layouts/mixed-menus/index.html"><span class="title">Mixed Menus</span></a> </li>
-                  <li> <a href="../../layouts/right-sidebar/index.html"><span class="title">Right Sidebar</span></a> </li>
-                  <li> <a href="../../layouts/both-menus-right-sidebar/index.html"><span class="title">Both Menus (Right
-                                    Sidebar)</span></a> </li>
-                  <li class="has-sub"> <a href="../../layouts/page-transition-fade/index.html"><span class="title">Page
-                                    Enter Transitions</span></a>
-                        <ul>
-                              <li> <a href="../../layouts/page-transition-fade/index.html"><span class="title">Fade Scale</span></a>
-                              </li>
-                              <li> <a href="../../layouts/page-transition-left-in/index.html"><span class="title">Left In</span></a>
-                              </li>
-                              <li> <a href="../../layouts/page-transition-right-in/index.html"><span class="title">Right
-                                                In</span></a> </li>
-                              <li> <a href="../../layouts/page-transition-fade-only/index.html"><span class="title">Fade
-                                                Only</span></a> </li>
-                        </ul>
-                  </li>
-                  <li> <a href="../../layouts/boxed/index.html"><span class="title">Boxed Layout</span></a> </li>
+                  <li> <a href="{{route('admin.Expence')}}"><span class="entypo-layout">Expence Type</span></a></li>                  
             </ul>
       </li>
+      <li> <a href="/admin/logout"><span class="entypo-logout">Log Out</span> </a> </li>
 </ul>

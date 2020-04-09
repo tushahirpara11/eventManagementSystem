@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\SessionHasAdmin::class,
         'eac' => \App\Http\Middleware\SessionHasEac::class,
         'coordinator' => \App\Http\Middleware\SessionHasCoordinator::class,
+        'fc' => \App\Http\Middleware\SessionHasFc::class,
     ];
 }
