@@ -53,7 +53,25 @@ class EventRegistrationController extends Controller
         return redirect('/student/events')->with('success','Event Registration Successfull !!!');
         }
     }
-
+    public function coordinator_store(Request $request)
+    {
+        $check=event_registration::where('s_e_id','=',$request->s_e_id)->where('u_id','=',$request->user_id)->get();
+        if(count($check) > 0 )
+        {
+            return redirect('/student_coordinator/events')->with('error','You Already Registered For This Event !!!');
+        }
+        else
+        {
+        event_registration::create([
+            's_e_id' => $request->s_e_id,
+            'u_id' => $request->user_id,
+            'g_id' => $request->g_id,
+            'r_id' => $request->role_id,
+            'status' => 1,
+        ]);
+        return redirect('/student_coordinator/events')->with('success','Event Registration Successfull !!!');
+        } 
+    }
     /**
      * Display the specified resource.
      *

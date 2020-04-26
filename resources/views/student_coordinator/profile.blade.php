@@ -1,4 +1,4 @@
-@extends('student/index')
+@extends('student_coordinator/index')
 @section('title','Student Profile')
 @section('head','Student Profile')
 @section('content')
@@ -118,7 +118,7 @@
           <h3>Update Student Profile<h3>
         </div><br>
         <div class="card-block">
-          <form method="POST" id="update" action="/student/update">
+          <form method="POST" id="update" action="/student_coordinator/update">
             {{ csrf_field() }}
             <input type="hidden" name="id" value="{{$profile[0]->u_id}}">
             <table class='table  table-hover table-striped'>
