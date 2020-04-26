@@ -204,9 +204,16 @@
   $(document).ready(function() {
     $("#addstream").submit(function(e) {      
       let stream_name = $("#s_name").val();
+      let b_id = $("#b_id").val();
 
       $(".error").remove();
       // return false;      
+			if(b_id == "" || b_id == null) {
+				e.preventDefault();
+        $("#b_id").after(
+          '<span class="error">This field is required</span>'
+        );
+			}
       if (!/^[a-zA-Z]/.test(stream_name) || stream_name == "") {
         e.preventDefault();
         $("#s_name").after(

@@ -9,7 +9,7 @@
       <li> <a href="{{route('eac.user')}}"><span class="entypo-layout">User</span></a></li>
       <li> <a href="{{route('eac.group')}}"><span class="entypo-layout">Group</span></a></li>
       <li> <a href="{{route('eac.attendence')}}"><span class="entypo-layout">Attendence</span></a></li>
-      <li> <a href="{{route('eac.scheduling')}}"><span class="entypo-layout">Event Scheduling</span></a></li>
+      <li> <a href="{{route('eac.showschedule')}}"><span class="entypo-layout">Event Scheduling</span></a></li>
       <li> <a href="{{route('eac.Expence')}}"><span class="entypo-layout">Manage Expence</span></a></li>
     </ul>
   </li>

@@ -272,11 +272,11 @@ class UserMasterController extends Controller
                 $group = group::where(['u_id' => $count[0]->u_id])->get();
                 if (count($group) == 1) {
                     $role = role::where(['r_id' => $group[0]->r_id])->get();
-                    if (count($role) == 1 && $role[0]->r_name == 'SEC') {
+                    if (count($role) == 1 && $role[0]->r_name == 'FEC') {
                         session(['eac' => $count[0]->email]);
                         session(['e_id' => $group[0]->e_id]);
                         session(['b_id' => $count[0]->b_id]);
-                        return redirect('/eac/choreographer');
+                        return redirect('/eac/dashboard');
                     } else {
                         return Redirect::back()->with('error', 'You have not Permission to access routes!');
                     }

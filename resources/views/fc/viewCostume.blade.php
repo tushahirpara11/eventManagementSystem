@@ -73,33 +73,50 @@
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
       <td>{{$data[$i]->s_e_name}}</td>
-      <td>{{$data[$i]->f_name}} {{$data[$i]->l_name}}</td>
-      <td>{{$data[$i]->issuer}}</td>
-      <td>{{$data[$i]->returner}}</td>
-      <td>@if($data[$i]->status == 1)
-        <form action="{{ route('admin.updatesubeventstatus', [$data[$i]->s_e_id,0]) }}" method="post" style="display: inline;">
-          {{csrf_field()}}
-          <button type="submit" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-cancel"></i>Deactive</button>
-        </form>
-        @elseif($data[$i]->status == 0)
-        <form action="{{ route('admin.updatesubeventstatus', [$data[$i]->s_e_id,1]) }}" method="post" style="display: inline;">
-          {{csrf_field()}}
-          <button type="submit" class="btn btn-success btn-sm btn-icon icon-left"><i class="entypo-check"></i>Active</button>
-        </form>
+      @for($j = 0; $j < count($student); $j++)
+      @if($student[$j]->u_id == $data[$i]->u_id)
+        <td>{{$student[$j]->f_name}} {{$student[$j]->l_name}}</td>
+      @endif
+      @endfor
+      @for($j = 0; $j < count($student); $j++)
+      @if($student[$j]->u_id == $data[$i]->issuer)
+        <td>{{$student[$j]->f_name}} {{$student[$j]->l_name}}</td>
+      @endif
+      @endfor
+      @for($j = 0; $j < count($student); $j++)
+      @if($data[$i]->returner != "")
+      @if($student[$j]->u_id == $data[$i]->returner)
+        <td>{{$student[$j]->f_name}} {{$student[$j]->l_name}}</td>
+      @endif
+      @else
+      <td>-</td>
+      @break
+      @endif
+      @endfor      
+      <td>{{$data[$i]->issue_date}}</td>
+      @if($data[$i]->return_date != '')
+      <td>{{$data[$i]->return_date}}</td>
+      @else
+      <td>-</td>
+      @endif
+      <td>@if($data[$i]->status == 0)
+      <span class="badge badge-primary" style="background: navy">Issued</span>
+        @elseif($data[$i]->status == 1)
+      <span class="badge badge-success">Return</span>
         @endif
       </td>
       <td class="col-md-2">
         <form style="display: inline;">
-          <a href="javascript:;" id="" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+          <a href="javascript:;" id="{{$data[$i]->costume_id}}_{{$data[$i]->status}}_{{Session::get('fc')}}_{{$data[$i]->s_e_id}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
         </form> &nbsp; &nbsp;
-        <form action="{{ route('admin.deletesubevent', [$data[$i]->s_e_id]) }}" method="post" style="display: inline;">
+        <form action="{{ route('fc.deleteCostumes', [$data[$i]->costume_id]) }}" method="post" style="display: inline;">
           {{csrf_field()}}
           {{ method_field('DELETE') }}
           <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
         </form>
       </td>
       </tr>
-      @endfor
+    @endfor
   </tbody>
   <tfoot>
     <tr>
@@ -164,22 +181,25 @@
   </form>
 </div>
 <div class="modal fade" id="modal-6">
-  <form method="post" id="updatesubevent" action="{{route('admin.updatesubevent')}}">
+  <form method="post" id="updateCostume" action="{{route('fc.updateCostumes')}}">
     {{csrf_field()}}
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update Sub Event</h4>
+          <h4 class="modal-title">Update Costume</h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-1" class="control-label">Event Name</label>
-                <input type="hidden" name="s_e_id" id="s_e_id_field" />
-                <select name="e_id" id="e_id" style="position: static;" class="form-control" data-placeholder="Select one stream...">
-                  <option id="e_id_field" value=""></option>
-                  <option value=""></option>
+                <label for="field-1" class="control-label">Status</label>
+                <input type="hidden" name="costume_id" id="costume_id_field" />                
+                <input type="hidden" name="s_e_id" id="s_e_id_field" />                
+                <input type="hidden" name="u_id" id="u_id_field" />
+                <select name="status" id="status" style="position: static;" class="form-control" data-placeholder="Select one stream...">
+                  <option id="status_id_field" value=""></option>
+                  <option value="0">Issued</option>
+                  <option value="1">Return</option>
                 </select>
               </div>
             </div>
@@ -194,18 +214,19 @@
 <script>
   function openmodal(id) {
     let record_id = id.split("_");
-    let s_e_id = record_id[0];
-    let e_id = record_id[1];
-    let e_id_val = record_id[2];
-    let s_e_name = record_id[3];
-    let s_e_discription = record_id[4];
-    let s_e_duration = record_id[5];
+    let costume_id = record_id[0];
+    let status_id = record_id[1];
+    let user_id = record_id[2];
+    let s_e_id = record_id[3];
 
+    $('#costume_id_field').val(costume_id);
+    if(status_id == 0) {
+    $('#status_id_field').val(status_id).text('Issued');
+    } else {
+      $('#status_id_field').val(status_id).text('Return');
+    }
+    $('#u_id_field').val(user_id);
     $('#s_e_id_field').val(s_e_id);
-    $('#e_id_field').val(e_id).text(e_id_val);
-    $('#s_e_name_field').val(s_e_name);
-    $('#s_e_discription_field').val(s_e_discription);
-    $('#s_e_duration_field').val(s_e_duration);
 
     jQuery('#modal-6').modal('show', {
       backdrop: 'static'
@@ -220,7 +241,7 @@
 
       $(".error").remove();
       // return false;
-      if (u_id == "") {
+      if (u_id == null) {
         e.preventDefault();
         $("#u_id").after(
           '<span class="error">This field is required</span>'
@@ -228,47 +249,16 @@
       }
     });
     $("#updatesubevent").submit(function(e) {
-      let e_id_field = $("#e_id_field").val();
-      let s_e_name_field = $("#s_e_name_field").val();
-      let s_e_discription_field = $("#s_e_discription_field").val();
-      let s_e_duration_field = $("#s_e_duration_field").val();
-
+      let status = $("#status").val();
+      
       $(".error").remove();
       // return false;
-      if (e_id_field == "") {
+      if (status == null) {
         e.preventDefault();
-        $("#e_id_field").after(
+        $("#status").after(
           '<span class="error">This field is required</span>'
         );
-      }
-      if (!/^[a-zA-Z]/.test(s_e_name_field) || s_e_name_field == "") {
-        e.preventDefault();
-        $("#s_e_name_field").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (s_e_name_field.length >= 50) {
-        e.preventDefault();
-        $("#s_e_name_field").after(
-          '<span class="error">Sub Event Name should maximum 50 characters only.</span>'
-        );
-      }
-      if (!/^[a-zA-Z]/.test(s_e_discription_field) || s_e_discription_field == "") {
-        e.preventDefault();
-        $("#s_e_discription_field").after(
-          '<span class="error">This field is required</span>'
-        );
-      } else if (s_e_discription_field.length > 255) {
-        e.preventDefault();
-        $("#s_e_discription_field").after(
-          '<span class="error">Sub Event Discription should maximum 255 characters only.</span>'
-        );
-      }
-      if (s_e_duration_field == "") {
-        e.preventDefault();
-        $("#s_e_duration_field").after(
-          '<span class="error">This field is required</span>'
-        );
-      }
+      }      
     });
   });
 </script>
