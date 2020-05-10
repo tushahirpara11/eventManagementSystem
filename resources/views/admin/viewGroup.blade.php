@@ -370,9 +370,9 @@
 		$("#s_e_id").html('');
 		$("#u_id").html('');
 		var e_id = $(this).val();
-		var token = $("input[name='_token']").val();
+		var token = $("input[name='_token']").val();		
 		$.ajax({
-			url: "<?php echo route('ajaxSubEvent') ?>",
+			url: "<?php echo route('ajaxAdminSubEvent') ?>",
 			method: 'get',
 			data: {
 				_token: token,
@@ -394,7 +394,7 @@
 		var e_id = $(this).val();
 		var token = $("input[name='_token']").val();
 		$.ajax({
-			url: "<?php echo route('ajaxSubEvent') ?>",
+			url: "<?php echo route('ajaxAdminSubEvent') ?>",
 			method: 'get',
 			data: {
 				e_id: e_id,

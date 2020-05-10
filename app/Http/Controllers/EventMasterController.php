@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\branchMaster;
 use App\event_master;
+use App\user_master;
 use App\venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,30 @@ class EventMasterController extends Controller
 	{
 		//
 	}
+
+	public function adminDashboadrd()
+	{
+		$branch = DB::select('select count(*) as count from branch_masters');
+		$stream = DB::select('select count(*) as count from stream_masters');
+		$division = DB::select('select count(*) as count from division_masters');
+		$venue = DB::select('select count(*) as count from venues');
+		$events = DB::select('select count(*) as count from event_masters');
+		$subEvents = DB::select('select count(*) as count from sub_event_masters');
+		$role = DB::select('select count(*) as count from roles');
+		$choreographer = DB::select('select count(*) as count from choreographers');
+		$user = DB::select('select count(*) as count from user_masters');
+		$group = DB::select('select count(*) as count from groups');
+		$guest = DB::select('select count(*) as count from guests');
+		$expence_type = DB::select('select count(*) as count from expence_types');		
+		return view('admin.dashboard')->with([
+			'branch' => $branch, 'stream' => $stream, 'venue' => $venue,
+			'division' => $division, 'events' => $events, 'subEvents' => $subEvents,
+			'role' => $role, 'choreographer' => $choreographer,
+			'expence_type' => $expence_type, 'user' => $user, 'group' => $group,
+			'guest' => $guest
+		]);
+	}
+
 	public function dashboadrd()
 	{
 		$subEvents = DB::select('select count(*) as count from sub_event_masters where e_id=' . Session::get('e_id'));
@@ -44,6 +69,19 @@ class EventMasterController extends Controller
 			'subEvents' => $subEvents, 'choreographer' => $choreographer,
 			'user' => $user, 'group' => $group, 'schedule' => $schedule,
 			'expence' => $expence, 'guest' => $guest
+		]);
+	}
+
+	public function fcdashboard()
+	{
+		$user = DB::select('select count(*) as count from event_registrations where s_e_id=' . Session::get('f_s_e_id'));
+		$attendence = DB::select('select count(*) as count from attendences where s_e_id=' . Session::get('f_s_e_id'));
+		$expence = DB::select('select count(*) as count from expences where s_e_id=' . Session::get('f_s_e_id'));
+		$practiceSchedule = DB::select('select count(*) as count from practice_schedules where s_e_id=' . Session::get('f_s_e_id'));
+		$costumes = DB::select('select count(*) as count from costumes where s_e_id=' . Session::get('f_s_e_id'));
+		return view('fc.dashboard')->with([
+			'user' => $user, 'attendence' => $attendence, 'expence' => $expence,
+			'practiceSchedule' => $practiceSchedule, 'costumes' => $costumes,
 		]);
 	}
 	/**

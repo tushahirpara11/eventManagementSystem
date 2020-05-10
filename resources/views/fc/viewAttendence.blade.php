@@ -66,7 +66,7 @@
 			<th class="col-xs-1">Actions</th>
 		</tr>
 	</thead>
-	<tbody>	
+	<tbody>
 		@if(count($data) != 0)
 		@for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
 			<td>{{$i+1}}</td>
@@ -99,12 +99,10 @@
 		</tr>
 	</tfoot>
 </table><br />
-@if(count($data) != 0)
 @if(count($attendence) == 0 && $attendence != 'undefined')
 <button type="click" onclick="jQuery('#modal-6').modal('show', {
       backdrop: 'static'
     });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Attendence</button>
-@endif
 @endif
 <script>
 	function checkResponce() {
@@ -114,7 +112,6 @@
 		this.form.submit();
 	}
 </script>
-@if(count($data) != 0)
 <div class="modal fade" style="width: 50%!important;margin: auto;margin-top: 2%" id="modal-6">
 	<div class="modal-content">
 		<div class="modal-header">
@@ -158,10 +155,10 @@
 		</form>
 	</div>
 </div>
-@endif
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 	const yourArray = [];
+
 	function getchecked(id) {
 		if ($(id)[0].checked === true) {
 			yourArray.push(parseInt($(id).val()));

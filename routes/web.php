@@ -18,13 +18,14 @@ Route::get('/admin', function () {
 	if (session()->has('admin') == 0) {
 		return view('admin/index');
 	} else {
-		return redirect('/admin/branch');
+		return redirect('/admin/dashboard');
 	}
 })->name('login');
 
 Route::post('/admin/authenticate', 'BranchMasterController@checkLogin');
 
 Route::group(['middleware' => ['admin']], function () {
+	Route::get('/admin/dashboard', 'EventMasterController@adminDashboadrd')->name('admin.dashboard');
 	/*Branch Master */
 	Route::get('/admin/branch', 'BranchMasterController@show')->name('admin.branch');
 	Route::post('/admin/branch', 'BranchMasterController@store')->name('admin.addbranch');
@@ -92,7 +93,7 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::post('/admin/group', 'GroupController@store')->name('admin.addgroup');
 	Route::post('/admin/updategroup', 'GroupController@update')->name('admin.updategroup');
 	Route::delete('/admin/deletegroup/{id}', 'GroupController@delete')->name('admin.deletegroup');
-	Route::get('/ajaxSubEvent', 'GroupController@getsubevent')->name('ajaxSubEvent');
+	Route::get('/ajaxAdminSubEvent', 'GroupController@getsubevent')->name('ajaxAdminSubEvent');
 
 	/*Expence Type */
 	Route::get('/admin/expence', 'ExpenceTypeController@show')->name('admin.Expence');
@@ -173,7 +174,7 @@ Route::group(['middleware' => ['eac']], function () {
 	Route::post('/eac/update/', 'SchedulingController@update')->name('eac.updateSchedule');
 	Route::delete('/eac/delete/{id}', 'SchedulingController@delete')->name('eac.deleteSchedule');
 	Route::get('/eac/viewSchedule', 'SchedulingController@show')->name('eac.showschedule');
-	
+
 	/*Session Expire*/
 	Route::get('/eac/logout', 'UserMasterController@destroyEac')->name('eac.logout');
 });
@@ -184,13 +185,15 @@ Route::get('/fc', function () {
 	if (session()->has('fc') == 0) {
 		return view('fc/index');
 	} else {
-		return redirect('fc/user');
+		return redirect('fc/dashboard');
 	}
 })->name('login');
 
 Route::post('/fc/authenticate', 'UserMasterController@validateFcLogin');
 
 Route::group(['middleware' => ['fc']], function () {
+
+	Route::get('/fc/dashboard', 'EventMasterController@fcdashboard')->name('fc.dashboard');
 
 	/*Manage user*/
 	Route::get('/fc/user', 'UserMasterController@showFcUser')->name('fc.user');
@@ -254,12 +257,12 @@ Route::post('/ajaxGroup', 'GroupController@getGroup')->name('ajaxGroup');
 
 /* Student Coordinator */
 
-Route::get('/student_coordinator/index','UserMasterController@get_student_coordinator_form');
-Route::get('/student_coordinator/events','UserMasterController@getEvents');
-Route::get('/student_coordinator/profile','UserMasterController@userProfile');
+Route::get('/student_coordinator/index', 'UserMasterController@get_student_coordinator_form');
+Route::get('/student_coordinator/events', 'UserMasterController@getEvents');
+Route::get('/student_coordinator/profile', 'UserMasterController@userProfile');
 Route::post('/student_coordinator/update', 'UserMasterController@update');
-Route::get('/student_coordinator/change_password','UserMasterController@change_password_form');
-Route::post('/student_coordinator/change_password','UserMasterController@change_password');
-Route::post('/student_coordinator/sub_event_list','UserMasterController@getSubevent');
-Route::post('/student_coordinator/event_registration','EventRegistrationController@coordinator_store');
-Route::get('/student_coordinator/registered_events','UserMasterController@registered_events');
+Route::get('/student_coordinator/change_password', 'UserMasterController@change_password_form');
+Route::post('/student_coordinator/change_password', 'UserMasterController@change_password');
+Route::post('/student_coordinator/sub_event_list', 'UserMasterController@getSubevent');
+Route::post('/student_coordinator/event_registration', 'EventRegistrationController@coordinator_store');
+Route::get('/student_coordinator/registered_events', 'UserMasterController@registered_events');
