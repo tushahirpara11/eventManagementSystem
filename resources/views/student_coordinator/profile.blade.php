@@ -36,7 +36,7 @@
     <div class="col-lg-6">
       <div class="card">
         <div class="card-header bg-primary">
-          <h3>Student Profile<h3>
+          <h3>Student Coordinator Profile<h3>
         </div><br>
         <div class="card-block">
           <table class='table  table-hover table-striped'>

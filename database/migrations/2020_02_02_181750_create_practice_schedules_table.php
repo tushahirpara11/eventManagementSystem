@@ -16,7 +16,7 @@ class CreatePracticeSchedulesTable extends Migration
         Schema::create('practice_schedules', function (Blueprint $table) {
             $table->increments('p_id', 7);
             $table->integer('s_e_id')->unsigned();            
-            $table->json('participants');
+            $table->text('participants');
             $table->integer('u_id')->unsigned();
             $table->text('description');
             $table->date('date');

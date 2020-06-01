@@ -8,6 +8,7 @@ use App\sub_event_master;
 use App\user_master;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class ExpenceController extends Controller
@@ -38,6 +39,19 @@ class ExpenceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function store(Request $request)
+    {
+        expence::create([
+            'e_id' => $request->get('event'),
+            's_e_id' => $request->get('sub_event'),
+            'e_t_id' => $request->get('expence_type'),
+            'u_id' => $request->get('u_id'),
+            'amount' => $request->get('amount'),
+            'description' => $request->get('desc'),
+            'status' => $request->get('status'),
+        ]);
+        return Redirect::back()->with('success','Expence Add Successfully');
+    }
     public function storeFcExpence(Request $request)
     {
         $e_id = sub_event_master::where('s_e_id', $request->get('s_e_id'))->get(['e_id']);
@@ -154,5 +168,12 @@ class ExpenceController extends Controller
     public function destroy(expence $expence)
     {
         //
+    }
+    public function get_sub_event(Request $request)
+    {
+        if($request->ajax()){
+            $data = sub_event_master::where('e_id', '=', $request->e_id)->get();
+            return response()->json(['option' => $data]);
+        }
     }
 }

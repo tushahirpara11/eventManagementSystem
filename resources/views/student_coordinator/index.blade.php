@@ -35,8 +35,8 @@
             </div>
           </li>
           &nbsp;&nbsp;&nbsp;
-            <button name="expense" id="expense"  class="btn btn-success">Add expense</button> &nbsp;&nbsp;&nbsp;
-            <button name="expense" id="attendance" class="btn btn-danger">Attendance</button> 
+            <a href="/student_coordinator/add_expence"><button name="expense" id="expense"  class="btn btn-success">Add expense</button></a> &nbsp;&nbsp;&nbsp;
+            <a href="/student_coordinator/take_attendance"><button name="expense" id="attendance" class="btn btn-danger">Attendance</button></a>
         </ul>
         <h3><font color="white">Student Coordinator Panel</font></h3>
       </div>

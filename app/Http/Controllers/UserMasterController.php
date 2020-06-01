@@ -12,6 +12,7 @@ use App\role;
 use App\sub_event_master;
 use App\event_registration;
 use App\venue;
+use App\expence_type;
 use App\Mail\SendMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -272,6 +273,7 @@ class UserMasterController extends Controller
                     {
                         session(['r_id' => 3]);
                         session(['coordinator' => $data[0]->u_id]);
+                        session(['s_e_id' => $cdata[0]->s_e_id]);
                         return redirect('student_coordinator/events');
                     }
                 }
@@ -341,14 +343,12 @@ class UserMasterController extends Controller
     public function getEvents()
     {
         $events = event_master::where('e_status', '=', 1)->get();
-        if(session()->has('coordinator'))
-        {
-            return view('/student_coordinator/event_list', compact('events'));
-        }
-        else
-        {
             return view('/student/event_list', compact('events'));
-        }
+    }
+    public function get_coordinator_Events()
+    {
+        $events = event_master::where('e_status', '=', 1)->get();
+        return view('/student_coordinator/event_list', compact('events'));
     }
     public function userProfile()
     {
@@ -356,14 +356,15 @@ class UserMasterController extends Controller
         $stream = stream_master::all();
         $division = division_master::all();
         $profile=user_master::where('u_id', '=', session('id'))->get();
-        if(session()->has('coordinator'))
-        {
-            return view('/student_coordinator/profile',compact('profile','branch','stream','division'));
-        }
-        else
-        {
-            return view('/student/profile',compact('profile','branch','stream','division'));
-        }
+        return view('/student/profile',compact('profile','branch','stream','division'));
+    }
+    public function get_coordinator_Profile()
+    {
+        $branch = branchMaster::all();
+        $stream = stream_master::all();
+        $division = division_master::all();
+        $profile=user_master::where('u_id', '=', session('id'))->get();
+        return view('/student_coordinator/profile',compact('profile','branch','stream','division'));
     }
     public function logout(Request $request)
     {
@@ -389,14 +390,13 @@ class UserMasterController extends Controller
     {
         $e_id=$request->e_id;
         $sub_event=sub_event_master::where('e_id','=',$e_id)->get();
-        if(session()->has('coordinator'))
-        {
-            return view('/student_coordinator/event_registration',compact('sub_event'));
-        }
-        else
-        {
-            return view('/student/event_registration',compact('sub_event'));
-        }
+        return view('/student/event_registration',compact('sub_event'));
+    }
+    public function get_coordinator_Subevent(Request $request)
+    {
+        $e_id=$request->e_id;
+        $sub_event=sub_event_master::where('e_id','=',$e_id)->get();
+        return view('/student_coordinator/event_registration',compact('sub_event'));
     }
     public function mail(Request $request)
     {
@@ -416,14 +416,11 @@ class UserMasterController extends Controller
     }
     public function change_password_form()
     {
-        if(session()->has('coordinator'))
-        {
-            return view('/student_coordinator/change_password');
-        }
-        else
-        {
-            return view('/student/change_password');
-        }
+        return view('/student/change_password');
+    }
+    public function coordinator_change_password_form()
+    {
+        return view('/student_coordinator/change_password');
     }
     public function get_login_form()
     {
@@ -455,13 +452,21 @@ class UserMasterController extends Controller
         $sub_events=sub_event_master::all();
         $events=event_master::all();
         $vanue=venue::all();
-        if(session()->has('coordinator'))
-        {
-            return view('/student_coordinator/registered_events',compact('event_registration','sub_events','events','vanue'));
-        }
-        else
-        {
-            return view('/student/registered_events',compact('event_registration','sub_events','events','vanue'));
-        }
+        return view('/student/registered_events',compact('event_registration','sub_events','events','vanue'));
+    }
+    public function get_coordinator_registered_events()
+    {
+        $event_registration=event_registration::where('u_id','=',session('id'))->get();
+        $sub_events=sub_event_master::all();
+        $events=event_master::all();
+        $vanue=venue::all();
+        return view('/student_coordinator/registered_events',compact('event_registration','sub_events','events','vanue'));
+    }
+    public function get_expence_form()
+    {
+        $expence_type=expence_type::all();
+        $events=event_master::all();
+        $sub_events=sub_event_master::all();
+        return view('/student_coordinator/add_expence',compact('expence_type','events','sub_events'));
     }
 }
