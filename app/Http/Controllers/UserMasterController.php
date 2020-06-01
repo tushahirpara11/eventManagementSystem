@@ -23,137 +23,137 @@ use Illuminate\Support\Facades\Mail;
 
 class UserMasterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		//
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		//
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $check = user_master::where('email', $request->email)->orwhere('phone', $request->phone)->get();
-        if (count($check) == 0) {
-            user_master::create([
-                'f_name' => $request->f_name,
-                'l_name' => $request->l_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => encrypt($request->password),
-                'dob' => $request->dob,
-                'gender' => $request->gender,
-                'u_type' => $request->u_type,
-                'enrollmentno' => $request->enrollment,
-                'b_id' => $request->branch,
-                's_id' => $request->stream,
-                'd_id' => $request->division,
-            ]);
-            return Redirect::back()->with('success', 'Registration successfull !!! Please Login');
-        } else {
-            return Redirect::back()->with('error', 'Email Address of Phone already Exists!!!');
-        }
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		$check = user_master::where('email', $request->email)->orwhere('phone', $request->phone)->get();
+		if (count($check) == 0) {
+			user_master::create([
+				'f_name' => $request->f_name,
+				'l_name' => $request->l_name,
+				'email' => $request->email,
+				'phone' => $request->phone,
+				'password' => encrypt($request->password),
+				'dob' => $request->dob,
+				'gender' => $request->gender,
+				'u_type' => $request->u_type,
+				'enrollmentno' => $request->enrollment,
+				'b_id' => $request->branch,
+				's_id' => $request->stream,
+				'd_id' => $request->division,
+			]);
+			return Redirect::back()->with('success', 'Registration successfull !!! Please Login');
+		} else {
+			return Redirect::back()->with('error', 'Email Address of Phone already Exists!!!');
+		}
+	}
 
-    public function adminStore(Request $request)
-    {
-        $count = user_master::where(['email' => $request->get('email'), 'phone' => $request->get('phone')])->get();
-        if (count($count) == 0) {
-            user_master::create([
-                'f_name' => $request->f_name,
-                'l_name' => $request->l_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => encrypt($request->password),
-                'dob' => $request->dob,
-                'gender' => $request->gender,
-                'u_type' => 2,
-                'b_id' => $request->b_id,
-            ]);
-            return Redirect::back()->with('success', 'User Added Successfull.');
-        } else {
-            return Redirect::back()->with('error', 'User Already exists.');
-        }
-    }
+	public function adminStore(Request $request)
+	{
+		$count = user_master::where(['email' => $request->get('email'), 'phone' => $request->get('phone')])->get();
+		if (count($count) == 0) {
+			user_master::create([
+				'f_name' => $request->f_name,
+				'l_name' => $request->l_name,
+				'email' => $request->email,
+				'phone' => $request->phone,
+				'password' => encrypt($request->password),
+				'dob' => $request->dob,
+				'gender' => $request->gender,
+				'u_type' => 2,
+				'b_id' => $request->b_id,
+			]);
+			return Redirect::back()->with('success', 'User Added Successfull.');
+		} else {
+			return Redirect::back()->with('error', 'User Already exists.');
+		}
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\user_master  $user_master
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        return view('admin/viewUser')->with(['data' => user_master::where('u_type', 2)->get(), 'branch' => branchMaster::get()]);
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\user_master  $user_master
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show()
+	{
+		return view('admin/viewUser')->with(['data' => user_master::where('u_type', 2)->get(), 'branch' => branchMaster::get()]);
+	}
 
-    public function showEacUser()
-    {
-        return view('eac/viewUser')->with([
-            'data' => DB::select('select * from user_masters u,branch_masters b where u.b_id=b.b_id and u.email !="' . Session::get('fc') . '" and u.b_id=' . Session::get('b_id')),
-            'branch' => branchMaster::get()
-        ]);
-    }
+	public function showEacUser()
+	{
+		return view('eac/viewUser')->with([
+			'data' => DB::select('select * from user_masters u,branch_masters b where u.b_id=b.b_id and u.email !="' . Session::get('fc') . '" and u.b_id=' . Session::get('b_id')),
+			'branch' => branchMaster::get()
+		]);
+	}
 
-    public function showFcUser()
-    {             
-        return view('fc/viewUser')->with([
-            'data' => DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=sm.s_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id')),
-            'branch' => branchMaster::get(),
-            'stream' => stream_master::get(),
-            'division' => division_master::get()
-        ]);
-    }
+	public function showFcUser()
+	{
+		return view('fc/viewUser')->with([
+			'data' => DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=sm.s_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id')),
+			'branch' => branchMaster::get(),
+			'stream' => stream_master::get(),
+			'division' => division_master::get()
+		]);
+	}
 
-    function delete($id)
-    {
-        $deleteUser = DB::delete('delete from user_masters where u_id=' . $id);
-        if ($deleteUser) {
-            return Redirect::back()->with('success', "User Deleted Successfully");
-        } else {
-            return Redirect::back()->with('error', "User not Deleted");
-        }
-    }
+	function delete($id)
+	{
+		$deleteUser = DB::delete('delete from user_masters where u_id=' . $id);
+		if ($deleteUser) {
+			return Redirect::back()->with('success', "User Deleted Successfully");
+		} else {
+			return Redirect::back()->with('error', "User not Deleted");
+		}
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\user_master  $user_master
-     * @return \Illuminate\Http\Response
-     */
-    public function edit()
-    {
-        //
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \App\user_master  $user_master
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit()
+	{
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\user_master  $user_master
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\user_master  $user_master
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request)
+	{
+		DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
         l_name = "' . $request->get('l_name') . '",
         email = "' . $request->get('email') . '",
         phone = "' . $request->get('phone') . '",
@@ -163,11 +163,11 @@ class UserMasterController extends Controller
         b_id = "' . $request->get('branch') . '",
         s_id = "' . $request->get('stream') . '",
         d_id = "' . $request->get('division') . '" where u_id = ' . $request->get('id'));
-        return Redirect::back()->with('success', 'Update Profile Successfull');        
-    }
-    public function updateAdmin(Request $request)
-    {
-        DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
+		return Redirect::back()->with('success', 'Update Profile Successfull');
+	}
+	public function updateAdmin(Request $request)
+	{
+		DB::update('update user_masters set f_name = "' . $request->get('f_name') . '",     
         l_name = "' . $request->get('l_name') . '",
         email = "' . $request->get('email') . '",
         phone = "' . $request->get('phone') . '",
@@ -177,32 +177,32 @@ class UserMasterController extends Controller
         b_id = "' . $request->get('branch') . '",
         s_id = "' . $request->get('stream') . '",
         d_id = "' . $request->get('division') . '" where u_id = ' . $request->get('id'));
-        return Redirect::back()->with('success', 'Update Profile Successfull');
-    }
+		return Redirect::back()->with('success', 'Update Profile Successfull');
+	}
 
-    public function updateEacUser(Request $request)
-    {
-        $update = DB::update('update user_masters set f_name = "' . $request->get('f_name') . '", l_name = "' . $request->get('l_name') .
-            '", email = "' . $request->get('email') . '", gender="' . $request->input('gender') . '", phone = "' . $request->get('phone') .
-            '", dob = "' . $request->get('dob') . '", b_id = ' . $request->get('b_id') .
-            ' where u_id = ' . $request->get('u_id'));
-        if ($update) {
-            return redirect('/eac/user')->with('success', "User Updated Successfully");
-        } else {
-            return redirect('/eac/user')->with('error', "User Not Updated");
-        }
-    }
+	public function updateEacUser(Request $request)
+	{
+		$update = DB::update('update user_masters set f_name = "' . $request->get('f_name') . '", l_name = "' . $request->get('l_name') .
+			'", email = "' . $request->get('email') . '", gender="' . $request->input('gender') . '", phone = "' . $request->get('phone') .
+			'", dob = "' . $request->get('dob') . '", b_id = ' . $request->get('b_id') .
+			' where u_id = ' . $request->get('u_id'));
+		if ($update) {
+			return redirect('/eac/user')->with('success', "User Updated Successfully");
+		} else {
+			return redirect('/eac/user')->with('error', "User Not Updated");
+		}
+	}
 
-    public function updateFcUser(Request $request)
-    {
-        $update = DB::update('update user_masters set u_type = ' . $request->get('u_type') .
-            ' where u_id = ' . $request->get('u_id'));
-        if ($update) {
-            return redirect('/fc/user')->with('success', "User Updated Successfully");
-        } else {
-            return redirect('/fc/user')->with('error', "User Not Updated");
-        }
-    }
+	public function updateFcUser(Request $request)
+	{
+		$update = DB::update('update user_masters set u_type = ' . $request->get('u_type') .
+			' where u_id = ' . $request->get('u_id'));
+		if ($update) {
+			return redirect('/fc/user')->with('success', "User Updated Successfully");
+		} else {
+			return redirect('/fc/user')->with('error', "User Not Updated");
+		}
+	}
 
     /**
      * Remove the specified resource from storage.
@@ -311,34 +311,34 @@ class UserMasterController extends Controller
         }
     }
 
-    function validateFcLogin(Request $request)
-    {
-        $count = user_master::where([
-            'email' => $request->get('email'), 'u_type' => $request->get('u_type')
-        ])->get();
-        if (count($count) == 1) {
-            if ($request->get('password') == decrypt($count[0]->password)) {
-                $group = group::where(['u_id' => $count[0]->u_id])->get();
-                if (count($group) == 1) {
-                    $role = role::where(['r_id' => $group[0]->r_id])->get();
-                    if (count($role) == 1 && $role[0]->r_name == 'FC') {
-                        session(['fc' => $count[0]->email]);
-                        session(['f_s_e_id' => $group[0]->s_e_id]);
-                        session(['f_b_id' => $count[0]->b_id]);
-                        return redirect('/fc/user');
-                    } else {
-                        return Redirect::back()->with('error', 'You have not Permission to access routes!');
-                    }
-                } else {
-                    return Redirect::back()->with('error', 'You have not Provide to access this routes!');
-                }
-            } else {
-                return redirect::back()->with('error', 'Invalid Password..!');
-            }
-        } else {
-            return Redirect::back()->with('error', 'Invalid Credential..!');
-        }
-    }
+	function validateFcLogin(Request $request)
+	{
+		$count = user_master::where([
+			'email' => $request->get('email'), 'u_type' => $request->get('u_type')
+		])->get();
+		if (count($count) == 1) {
+			if ($request->get('password') == decrypt($count[0]->password)) {
+				$group = group::where(['u_id' => $count[0]->u_id])->get();
+				if (count($group) == 1) {
+					$role = role::where(['r_id' => $group[0]->r_id])->get();
+					if (count($role) == 1 && $role[0]->r_name == 'FC') {
+						session(['fc' => $count[0]->email]);
+						session(['f_s_e_id' => $group[0]->s_e_id]);
+						session(['f_b_id' => $count[0]->b_id]);
+						return redirect('/fc/user');
+					} else {
+						return Redirect::back()->with('error', 'You have not Permission to access routes!');
+					}
+				} else {
+					return Redirect::back()->with('error', 'You have not Provide to access this routes!');
+				}
+			} else {
+				return redirect::back()->with('error', 'Invalid Password..!');
+			}
+		} else {
+			return Redirect::back()->with('error', 'Invalid Credential..!');
+		}
+	}
 
     public function getEvents()
     {

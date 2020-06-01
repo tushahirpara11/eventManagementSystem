@@ -56,7 +56,7 @@
             <!-- Profile Info -->
             <li class="profile-info dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="{{ asset('backend/images/thumb-1%402x.png') }}" alt="" class="img-circle" width="44" />
-                Admin
+                Faculty Cordinator (FC)
               </a>
               <ul class="dropdown-menu">
                 <!-- Reverse Caret -->

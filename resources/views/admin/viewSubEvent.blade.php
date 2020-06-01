@@ -251,7 +251,7 @@
 
       $(".error").remove();
       // return false;
-      if (e_id == "") {
+      if (e_id == "" || e_id == null) {
         e.preventDefault();
         $("#e_id").after(
           '<span class="error">This field is required</span>'

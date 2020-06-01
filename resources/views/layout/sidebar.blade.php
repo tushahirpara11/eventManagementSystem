@@ -1,5 +1,5 @@
 <ul id="main-menu" class="main-menu">
-      <li class="active opened active "> <a href="#"><i class="entypo-gauge"></i><span class="title">Dashboard</span></a>
+      <li class="active opened active "> <a href="{{route('admin.dashboard')}}"><i class="entypo-gauge"></i><span class="title">Dashboard</span></a>
       </li>
       <li class="has-sub"> <a href="../../layouts/layout-api/index.html"><i class="entypo-layout"></i><span class="title">Manage Records</span></a>
             <ul>
