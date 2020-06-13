@@ -132,6 +132,7 @@
 							</tr>
 						</thead>
 						<tbody>
+						@if(count($student))
 							<input type="hidden" value="{{$student[0]->s_e_id}}" name="s_e_id" />
 							<input type="hidden" value="{{Session::get('fc')}}" name="fc" />
 							@for($i = 0; $i < count($student); $i++) <tr>
@@ -144,6 +145,7 @@
 								</tr>
 								@endfor
 								<input type="hidden" value="" name="present" />
+								@endif
 						</tbody>
 					</table>
 				</div>

@@ -64,8 +64,7 @@
 		</th>
 		<tr>
 			<th>#No.</th>
-			<th>Division ID</th>
-			<th>Stream ID</th>
+			<th>Stream Name</th>
 			<th>Divison Name</th>
 			<th>Actions</th>
 		</tr>
@@ -73,16 +72,11 @@
 	<tbody>
 		@for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
 			<td>{{$i+1}}</td>
-			<td id="d_id">{{$data[$i]->d_id}}</td>
-			<td id="s_id">{{$data[$i]->s_id}}</td>
+			<td>{{$data[$i]->s_name}}</td>
 			<td id="division_name">{{$data[$i]->d_name}}</td>
-			<td class="col-md-3">
-				@for($j = 0; $j < count($stream); $j++) @if($data[$i]->s_id == $stream[$j]->s_id)
-					<!-- {{ $temp = $stream[$j]->s_name }} -->
-					@endif
-					@endfor
+			<td class="col-md-3">			
 					<form style="display: inline;">
-						<a href="javascript:;" id="{{$data[$i]->d_id}}_{{$data[$i]->s_id}}_{{$temp}}_{{$data[$i]->d_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+						<a href="javascript:;" id="{{$data[$i]->d_id}}_{{$data[$i]->s_id}}_{{$data[$i]->s_name}}_{{$data[$i]->d_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
 					</form> &nbsp; &nbsp;
 					<form action="{{ route('admin.deletedivision', [$data[$i]->d_id]) }}" method="post" style="display: inline;">
 						{{csrf_field()}}
@@ -96,8 +90,7 @@
 	<tfoot>
 		<tr>
 			<th></th>
-			<th>Division ID</th>
-			<th>Stream ID</th>
+			<th>Stream Name</th>
 			<th>Division Name</th>
 			<th></th>
 		</tr>
@@ -125,8 +118,9 @@
 							<div class="form-group">
 								<label for="field-2" class="control-label">Stream Name</label>
 								<select name="s_id" id="s_id" class="form-control" data-placeholder="Select one stream...">
-									@for($i = 0; $i < count($stream); $i++) <option value="{{$stream[$i]->s_id}}">{{$stream[$i]->s_name}}</option>
-										@endfor
+									@for($i = 0; $i < count($stream); $i++)
+										<option value="{{$stream[$i]->s_id}}">{{$stream[$i]->s_name}}</option>			
+									@endfor
 								</select>
 							</div>
 						</div>

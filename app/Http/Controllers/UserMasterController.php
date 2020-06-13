@@ -14,12 +14,14 @@ use App\event_registration;
 use App\venue;
 use App\expence_type;
 use App\Mail\SendMailable;
+use App\Mail\EacSendMailable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\FcSendMailable;
 
 class UserMasterController extends Controller
 {
@@ -192,7 +194,7 @@ class UserMasterController extends Controller
 			return redirect('/eac/user')->with('error', "User Not Updated");
 		}
 	}
-
+	
 	public function updateFcUser(Request $request)
 	{
 		$update = DB::update('update user_masters set u_type = ' . $request->get('u_type') .
@@ -204,112 +206,126 @@ class UserMasterController extends Controller
 		}
 	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\user_master  $user_master
-     * @return \Illuminate\Http\Response
-     */
-    public function destroyEac()
-    {
-        if (session()->has('eac')) {
-            session()->flush('eac');
-            $cookie = Cookie::forget('eac');
-            return redirect('eac/')->withCookie($cookie);
-        }
-    }
-    public function destroyFc()
-    {
-        if (session()->has('fc')) {
-            session()->flush('fc');
-            $cookie = Cookie::forget('fc');
-            return redirect('fc/')->withCookie($cookie);
-        }
-    }
-    public function get_data()
-    {
-        $branches = branchMaster::all();
-        $streams = stream_master::all();
-        $divisions = division_master::all();
-        return view('/student/registration', compact('branches', 'streams', 'divisions'));
-    }
-    public function getStream(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = stream_master::where('b_id', '=', $request->b_id)->get();
-            return response()->json(['option' => $data]);
-        }
-    }
-    public function getDivision(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = division_master::where('s_id', '=', $request->s_id)->get();
-            return response()->json(['option' => $data]);
-        }
-    }
-    public function validateUser(Request $request)
-    {
-        $email = $request->email;
-        $password = $request->password;
-        $data = DB::table('user_masters')->where('email', '=', $email)->get();
-        if (empty($data[0]->email)) {
-            return redirect::back()->with('error', 'Invalid EmailID !!!!');
-        } else {
-            if ($password == decrypt($data[0]->password)) {
-                session(['user' => $data[0]->f_name]);
-                session(['id' => $data[0]->u_id]);
-                $cdata = DB::table('event_registrations')->where('u_id','=',session('id'))->get();
-                if(count($cdata) == 0)
-                {
-                    return redirect('student/events');
-                }
-                else
-                {
-                    if($cdata[0]->r_id == 4)
-                    {
-                        return redirect('student/events');
-                    }
-                    else
-                    {
-                        session(['r_id' => 3]);
-                        session(['coordinator' => $data[0]->u_id]);
-                        session(['s_e_id' => $cdata[0]->s_e_id]);
-                        return redirect('student_coordinator/events');
-                    }
-                }
-            } else {
-                return redirect::back()->with('error', 'Invalid Password !!!!');
-            }
-        }
-    }
-    function validateEacLogin(Request $request)
-    {
-        $count = user_master::where([
-            'email' => $request->get('email'), 'u_type' => $request->get('u_type')
-        ])->get();
-        if (count($count) == 1) {
-            if ($request->get('password') == decrypt($count[0]->password)) {
-                $group = group::where(['u_id' => $count[0]->u_id])->get();
-                if (count($group) == 1) {
-                    $role = role::where(['r_id' => $group[0]->r_id])->get();
-                    if (count($role) == 1 && $role[0]->r_name == 'SEC') {
-                        session(['eac' => $count[0]->email]);
-                        session(['e_id' => $group[0]->e_id]);
-                        session(['b_id' => $count[0]->b_id]);
-                        return redirect('/eac/choreographer');
-                    } else {
-                        return Redirect::back()->with('error', 'You have not Permission to access routes!');
-                    }
-                } else {
-                    return Redirect::back()->with('error', 'You have not Provide to access this routes!');
-                }
-            } else {
-                return redirect::back()->with('error', 'Invalid Password..!');
-            }
-        } else {
-            return Redirect::back()->with('error', 'Invalid Credential..!');
-        }
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\user_master  $user_master
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroyEac()
+	{
+		if (session()->has('eac')) {
+			session()->flush('eac');
+			$cookie = Cookie::forget('eac');
+			return redirect('eac/')->withCookie($cookie);
+		}
+	}
+	public function destroyFc()
+	{
+		if (session()->has('fc')) {
+			session()->flush('fc');
+			$cookie = Cookie::forget('fc');
+			return redirect('fc/')->withCookie($cookie);
+		}
+	}
+	public function get_data()
+	{
+		$branches = branchMaster::all();
+		$streams = stream_master::all();
+		$divisions = division_master::all();
+		return view('/student/registration', compact('branches', 'streams', 'divisions'));
+	}
+	public function getStream(Request $request)
+	{
+		if ($request->ajax()) {
+			$data = stream_master::where('b_id', '=', $request->b_id)->get();
+			return response()->json(['option' => $data]);
+		}
+	}
+	public function getDivision(Request $request)
+	{
+		if ($request->ajax()) {
+			$data = division_master::where('s_id', '=', $request->s_id)->get();
+			return response()->json(['option' => $data]);
+		}
+	}
+	public function validateUser(Request $request)
+	{
+		$email = $request->email;
+		$password = $request->password;
+		$data = DB::table('user_masters')->where('email', '=', $email)->get();
+		if (empty($data[0]->email)) {
+			return redirect::back()->with('error', 'Invalid EmailID !!!!');
+		} else {
+			if ($password == decrypt($data[0]->password)) {
+				session(['user' => $data[0]->f_name]);
+				session(['id' => $data[0]->u_id]);
+				$cdata = DB::table('event_registrations')->where('u_id', '=', session('id'))->get();
+				if (count($cdata) == 0) {
+					return redirect('student/events');
+				} else {
+					if ($cdata[0]->r_id == 4) {
+						return redirect('student/events');
+					} else {
+						session(['r_id' => 3]);
+						session(['coordinator' => $data[0]->u_id]);
+						session(['s_e_id' => $cdata[0]->s_e_id]);
+						return redirect('student_coordinator/events');
+					}
+				}
+			} else {
+				return redirect::back()->with('error', 'Invalid Password !!!!');
+			}
+		}
+	}
+	function validateEacLogin(Request $request)
+	{
+		$count = user_master::where([
+			'email' => $request->get('email'), 'u_type' => $request->get('u_type')
+		])->get();
+		// return $count/;
+		if (count($count) == 1) {
+			if ($request->get('password') == decrypt($count[0]->password)) {
+				$group = group::where(['u_id' => $count[0]->u_id])->get();
+				if (count($group) == 1) {
+					$role = role::where(['r_id' => $group[0]->r_id])->get();
+					if (count($role) == 1 && $role[0]->r_name == 'FEC') {
+						session(['eac' => $count[0]->email]);
+						session(['e_id' => $group[0]->e_id]);
+						session(['b_id' => $count[0]->b_id]);
+						return redirect('/eac/choreographer');
+					} else {
+						return Redirect::back()->with('error', 'You have not Permission to access routes!');
+					}
+				} else {
+					return Redirect::back()->with('error', 'You have not Provide to access this routes!');
+				}
+			} else {
+				return redirect::back()->with('error', 'Invalid Password..!');
+			}
+		} else {
+			return Redirect::back()->with('error', 'Invalid Credential..!');
+		}
+	}
+
+	function validateEacForgotPassword(Request $request)
+	{
+		return view('eac.forgotPassword');
+	}
+
+	function validateFcForgotPassword(Request $request)
+	{
+		return view('fc.forgotPassword');
+	}
+
+	function EacResetPassword(Request $request)
+	{
+		return view('eac.resetPassword');
+	}
+	function FcResetPassword(Request $request)
+	{
+		return view('fc.resetPassword');
+	}
 
 	function validateFcLogin(Request $request)
 	{
@@ -340,133 +356,203 @@ class UserMasterController extends Controller
 		}
 	}
 
-    public function getEvents()
-    {
-        $events = event_master::where('e_status', '=', 1)->get();
-            return view('/student/event_list', compact('events'));
-    }
-    public function get_coordinator_Events()
-    {
-        $events = event_master::where('e_status', '=', 1)->get();
-        return view('/student_coordinator/event_list', compact('events'));
-    }
-    public function userProfile()
-    {
-        $branch = branchMaster::all();
-        $stream = stream_master::all();
-        $division = division_master::all();
-        $profile=user_master::where('u_id', '=', session('id'))->get();
-        return view('/student/profile',compact('profile','branch','stream','division'));
-    }
-    public function get_coordinator_Profile()
-    {
-        $branch = branchMaster::all();
-        $stream = stream_master::all();
-        $division = division_master::all();
-        $profile=user_master::where('u_id', '=', session('id'))->get();
-        return view('/student_coordinator/profile',compact('profile','branch','stream','division'));
-    }
-    public function logout(Request $request)
-    {
-        if (session()->has('user')) {
-            $request->session()->flush('user');
-            $request->session()->flush('coordinator');
-            $cookie = Cookie::forget('user');
-            return redirect('student/login')->withCookie($cookie);
-        }
-    }
-    public function change_password(Request $request)
-    {
-        $data = user_master::where('u_id', '=', session('id'))->get();
-        if (decrypt($data[0]->password) == $request->oldpassword) {
-            $pass = encrypt($request->get('newpassword'));
-            DB::update('update user_masters set password = "' . $pass . '" where u_id = ' . session('id'));
-            return Redirect::back()->with('success', 'Password Change Successfully !!!!!');
-        } else {
-            return Redirect::back()->with('error', 'Old Password Does Not Match !!!!!');
-        }
-    }
-    public function getSubevent(Request $request)
-    {
-        $e_id=$request->e_id;
-        $sub_event=sub_event_master::where('e_id','=',$e_id)->get();
-        return view('/student/event_registration',compact('sub_event'));
-    }
-    public function get_coordinator_Subevent(Request $request)
-    {
-        $e_id=$request->e_id;
-        $sub_event=sub_event_master::where('e_id','=',$e_id)->get();
-        return view('/student_coordinator/event_registration',compact('sub_event'));
-    }
-    public function mail(Request $request)
-    {
-        $check = user_master::where('email', '=', $request->email)->get();
-        $name = "http://127.0.0.1:8000/student/reset_password";
-        if (count($check) > 0) {
-            session(['email' => $request->email]);
-            Mail::to($request->email)->send(new SendMailable($name));
-            return Redirect::back()->with('success', 'Check Your Mail!!!');
-        } else {
-            return Redirect::back()->with('error', 'You Are Not Registered !!!!! ');
-        }
-    }
-    public function reset_password_form()
-    {
-        return view('/student/reset_password');
-    }
-    public function change_password_form()
-    {
-        return view('/student/change_password');
-    }
-    public function coordinator_change_password_form()
-    {
-        return view('/student_coordinator/change_password');
-    }
-    public function get_login_form()
-    {
-        return view('/student/login');
-    }
-    public function get_forgot_password_form()
-    {
-        return view('/student/forgot_password');
-    }
-    public function get_student_coordinator_form()
-    {
-        return view('/student_coordinator/index');
-    }
-    public function resetPassword(Request $request)
-    {
-        $mail = $request->email;
-        $password = encrypt($request->password);
-        $check = DB::update('update user_masters set password = "' . $password . '" where email = "' . $mail . '"');
-        if ($check) {
-            return redirect('/student/login')->with('success', 'Password Reset Successfully !!! Please Login');
-        } else {
-            return Redirect::back()->with('error', 'Something Went Wrong !!!!');
-        }
-    }
+	public function getEvents()
+	{
+		$events = event_master::where('e_status', '=', 1)->get();
+		return view('/student/event_list', compact('events'));
+	}
+	public function get_coordinator_Events()
+	{
+		$events = event_master::where('e_status', '=', 1)->get();
+		return view('/student_coordinator/event_list', compact('events'));
+	}
+	public function userProfile()
+	{
+		$branch = branchMaster::all();
+		$stream = stream_master::all();
+		$division = division_master::all();
+		$profile = user_master::where('u_id', '=', session('id'))->get();
+		return view('/student/profile', compact('profile', 'branch', 'stream', 'division'));
+	}
+	public function get_coordinator_Profile()
+	{
+		$branch = branchMaster::all();
+		$stream = stream_master::all();
+		$division = division_master::all();
+		$profile = user_master::where('u_id', '=', session('id'))->get();
+		return view('/student_coordinator/profile', compact('profile', 'branch', 'stream', 'division'));
+	}
+	public function logout(Request $request)
+	{
+		if (session()->has('user')) {
+			$request->session()->flush('user');
+			$request->session()->flush('coordinator');
+			$cookie = Cookie::forget('user');
+			return redirect('student/login')->withCookie($cookie);
+		}
+	}
+	public function change_password(Request $request)
+	{
+		$data = user_master::where('u_id', '=', session('id'))->get();
+		if (decrypt($data[0]->password) == $request->oldpassword) {
+			$pass = encrypt($request->get('newpassword'));
+			DB::update('update user_masters set password = "' . $pass . '" where u_id = ' . session('id'));
+			return Redirect::back()->with('success', 'Password Change Successfully !!!!!');
+		} else {
+			return Redirect::back()->with('error', 'Old Password Does Not Match !!!!!');
+		}
+	}
+	public function getSubevent(Request $request)
+	{
+		$e_id = $request->e_id;
+		$sub_event = sub_event_master::where('e_id', '=', $e_id)->get();
+		return view('/student/event_registration', compact('sub_event'));
+	}
+	public function get_coordinator_Subevent(Request $request)
+	{
+		$e_id = $request->e_id;
+		$sub_event = sub_event_master::where('e_id', '=', $e_id)->get();
+		return view('/student_coordinator/event_registration', compact('sub_event'));
+	}
+	public function mail(Request $request)
+	{
+		$check = user_master::where('email', '=', $request->email)->get();
+		$name = "http://127.0.0.1:8000/student/reset_password";
+		if (count($check) > 0) {
+			session(['email' => $request->email]);
+			Mail::to($request->email)->send(new SendMailable($name));
+			return Redirect::back()->with('success', 'Check Your Mail!!!');
+		} else {
+			return Redirect::back()->with('error', 'You Are Not Registered !!!!! ');
+		}
+	}
+	public function reset_password_form()
+	{
+		return view('/student/reset_password');
+	}
+	public function change_password_form()
+	{
+		return view('/student/change_password');
+	}
+	public function coordinator_change_password_form()
+	{
+		return view('/student_coordinator/change_password');
+	}
+	public function get_login_form()
+	{
+		return view('/student/login');
+	}
+	public function get_forgot_password_form()
+	{
+		return view('/student/forgot_password');
+	}
+	public function get_student_coordinator_form()
+	{
+		return view('/student_coordinator/index');
+	}
+	public function resetPassword(Request $request)
+	{
+		$mail = $request->email;
+		$password = encrypt($request->password);
+		$check = DB::update('update user_masters set password = "' . $password . '" where email = "' . $mail . '"');
+		if ($check) {
+			return redirect('/student/login')->with('success', 'Password Reset Successfully !!! Please Login');
+		} else {
+			return Redirect::back()->with('error', 'Something Went Wrong !!!!');
+		}
+	}
 
-    public function registered_events()
-    {
-        $event_registration=event_registration::where('u_id','=',session('id'))->get();
-        $sub_events=sub_event_master::all();
-        $events=event_master::all();
-        $vanue=venue::all();
-        return view('/student/registered_events',compact('event_registration','sub_events','events','vanue'));
-    }
-    public function get_coordinator_registered_events()
-    {
-        $event_registration=event_registration::where('u_id','=',session('id'))->get();
-        $sub_events=sub_event_master::all();
-        $events=event_master::all();
-        $vanue=venue::all();
-        return view('/student_coordinator/registered_events',compact('event_registration','sub_events','events','vanue'));
-    }
-    public function get_expence_form()
-    {
-        $expence_type=expence_type::all();
-        $events=event_master::all();
-        $sub_events=sub_event_master::all();
-        return view('/student_coordinator/add_expence',compact('expence_type','events','sub_events'));
-    }
+	public function registered_events()
+	{
+		$event_registration = event_registration::where('u_id', '=', session('id'))->get();
+		$sub_events = sub_event_master::all();
+		$events = event_master::all();
+		$vanue = venue::all();
+		return view('/student/registered_events', compact('event_registration', 'sub_events', 'events', 'vanue'));
+	}
+	public function get_coordinator_registered_events()
+	{
+		$event_registration = event_registration::where('u_id', '=', session('id'))->get();
+		$sub_events = sub_event_master::all();
+		$events = event_master::all();
+		$vanue = venue::all();
+		return view('/student_coordinator/registered_events', compact('event_registration', 'sub_events', 'events', 'vanue'));
+	}
+	public function get_expence_form()
+	{
+		$expence_type = expence_type::all();
+		$events = event_master::all();
+		$sub_events = sub_event_master::all();
+		return view('/student_coordinator/add_expence', compact('expence_type', 'events', 'sub_events'));
+	}
+	function EacSendForgotPassword(Request $request)
+	{
+		$count = user_master::where('email', $request->get('email'))->get();
+		if (count($count) == 1) {
+			$group = group::where(['u_id' => $count[0]->u_id])->get();
+			if (count($group) == 1) {
+				$role = role::where(['r_id' => $group[0]->r_id])->get();
+				if (count($role) == 1 && $role[0]->r_name == 'FEC') {
+					$name = "http://127.0.0.1:8080/eac/resetPassword";
+					session(['ForgotEacEmail' => $request->get('email')]);
+					Mail::to($request->get('email'))->send(new EacSendMailable($name));
+					if (count(Mail::failures()) > 0) {
+						return Redirect::back()->with('error', 'Please Check Your Network');
+					} else {
+						return Redirect::back()->with('success', 'Check Your Mail');
+					}
+				} else {
+					return Redirect::back()->with('error', 'Something went Worng');
+				}
+			}
+		} else {
+			return Redirect::back()->with('error', 'Email is Not Registered');
+		}
+	}
+
+	function FcSendForgotPassword(Request $request)
+	{
+		$count = user_master::where('email', $request->get('email'))->get();
+		if (count($count) == 1) {
+			$group = group::where(['u_id' => $count[0]->u_id])->get();
+			if (count($group) == 1) {
+				$role = role::where(['r_id' => $group[0]->r_id])->get();
+				if (count($role) == 1 && $role[0]->r_name == 'FC') {
+					$name = "http://127.0.0.1:8080/fc/resetPassword";
+					session(['ForgotFcEmail' => $request->get('email')]);
+					Mail::to($request->get('email'))->send(new FcSendMailable($name));
+					if (count(Mail::failures()) > 0) {
+						return Redirect::back()->with('error', 'Please Check Your Network');
+					} else {
+						return Redirect::back()->with('success', 'Check Your Mail');
+					}
+				} else {
+					return Redirect::back()->with('error', 'Something went Worng');
+				}
+			}
+		} else {
+			return Redirect::back()->with('error', 'Email is Not Registered');
+		}
+	}
+
+
+	public function EacUpdatePassword(Request $request)
+	{
+		$check = DB::update('update user_masters set password = "' . encrypt($request->get('password')) . '" where email = "' . $request->get('email') . '"');
+		if ($check) {
+			return redirect('/eac')->with('success', 'Password Reset Successfully !!! Please Login');
+		} else {
+			return Redirect::back()->with('error', 'Something Went Wrong !!!!');
+		}
+	}
+
+	public function FcUpdatePassword(Request $request)
+	{
+		$check = DB::update('update user_masters set password = "' . encrypt($request->get('password')) . '" where email = "' . $request->get('email') . '"');
+		if ($check) {
+			return redirect('/fc')->with('success', 'Password Reset Successfully !!! Please Login');
+		} else {
+			return Redirect::back()->with('error', 'Something Went Wrong !!!!');
+		}
+	}
 }

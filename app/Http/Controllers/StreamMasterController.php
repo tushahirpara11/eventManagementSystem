@@ -56,7 +56,8 @@ class StreamMasterController extends Controller
      */
     public function show()
     {
-        return view('admin/viewStream')->with(['data' => stream_master::get(), 'branch' => branchMaster::get()]);
+			$data = DB::select('select * from stream_masters s, branch_masters b where s.b_id=b.b_id');
+      return view('admin/viewStream')->with(['data' => $data, 'branch' => branchMaster::get()]);
     }
 
     function delete($id)

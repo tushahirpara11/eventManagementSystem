@@ -59,9 +59,8 @@
 	<thead>
 		<tr>
 			<th class="col-xs-1">#No.</th>
-			<th class="col-xs-1">Event ID</th>
-			<th class="col-xs-1">Branch ID</th>
-			<th class="col-xs-1">Venue ID</th>
+			<th class="col-xs-1">Branch Name</th>
+			<th class="col-xs-1">Venue Name</th>
 			<th>Event Name</th>
 			<th>Event Discription</th>
 			<th>Start Date</th>
@@ -73,9 +72,8 @@
 	<tbody>
 		@for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
 			<td>{{$i+1}}</td>
-			<td>{{$data[$i]->e_id}}</td>
-			<td>{{$data[$i]->b_id}}</td>
-			<td>{{$data[$i]->v_id}}</td>
+			<td>{{$data[$i]->b_name}}</td>
+			<td>{{$data[$i]->v_name}}</td>
 			<td>{{$data[$i]->e_name}}</td>
 			<td>{{$data[$i]->e_discription}}</td>
 			<td>{{$data[$i]->e_start_date}}</td>
@@ -93,22 +91,14 @@
 				@endif
 			</td>
 			<td class="col-md-2">
-				@for($j = 0; $j < count($branch); $j++) @if($data[$i]->b_id == $branch[$j]->b_id)
-					<!-- {{ $branch_name = $branch[$j]->b_name }}           -->
-					@endif
-					@endfor
-					@for($j = 0; $j < count($venue); $j++) @if($data[$i]->v_id == $venue[$j]->v_id)
-						<!-- {{ $venue_name = $venue[$j]->v_name }} -->
-						@endif
-						@endfor
-						<form style="display: inline;">
-							<a href="javascript:;" id="{{$data[$i]->e_id}}_{{$data[$i]->b_id}}_{{$branch_name}}_{{$data[$i]->v_id}}_{{$venue_name}}_{{$data[$i]->e_name}}_{{$data[$i]->e_discription}}_{{$data[$i]->e_start_date}}_{{$data[$i]->e_end_date}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
-						</form> &nbsp; &nbsp;
-						<form action="{{ route('admin.deleteevent', [$data[$i]->e_id]) }}" method="post" style="display: inline;">
-							{{csrf_field()}}
-							{{ method_field('DELETE') }}
-							<button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
-						</form>
+				<form style="display: inline;">
+					<a href="javascript:;" id="{{$data[$i]->e_id}}_{{$data[$i]->b_id}}_{{$data[$i]->b_name}}_{{$data[$i]->v_id}}_{{$data[$i]->v_name}}_{{$data[$i]->e_name}}_{{$data[$i]->e_discription}}_{{$data[$i]->e_start_date}}_{{$data[$i]->e_end_date}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+				</form> &nbsp; &nbsp;
+				<form action="{{ route('admin.deleteevent', [$data[$i]->e_id]) }}" method="post" style="display: inline;">
+					{{csrf_field()}}
+					{{ method_field('DELETE') }}
+					<button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
+				</form>
 			</td>
 			</tr>
 			@endfor
@@ -116,9 +106,8 @@
 	<tfoot>
 		<tr>
 			<th></th>
-			<th>Event ID</th>
-			<th>Branch ID</th>
-			<th>Venue ID</th>
+			<th>Branch Name</th>
+			<th>Venue Name</th>
 			<th>Event Name</th>
 			<th>Event Discription</th>
 			<th>Start Date</th>
@@ -305,7 +294,7 @@
 				twoDigitDate = "0" + twoDigitDate;
 			}
 			let currentDate = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + twoDigitDate;
-			
+
 			$(".error").remove();
 			// return false;
 			if (b_id == "" || b_id == null) {
@@ -366,7 +355,6 @@
 			}
 		});
 		$("#updateevent").submit(function(e) {
-			alert($('#e_start_date_field').val());
 			let b_id_field = $('#b_id_field').val();
 			let v_id_field = $('#v_id_field').val();
 			let e_name_field = $('#e_name_field').val();

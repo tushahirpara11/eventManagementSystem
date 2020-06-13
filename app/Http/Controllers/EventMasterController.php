@@ -132,7 +132,8 @@ class EventMasterController extends Controller
 	 */
 	public function show(event_master $event_master)
 	{
-		return view('admin/viewEvent')->with(['data' => event_master::get(), 'venue' => venue::get(), 'branch' => branchMaster::get()]);
+		$data = DB::select('select * from event_masters e, venues v, branch_masters b where e.v_id=v.v_id and e.b_id=b.b_id');
+		return view('admin/viewEvent')->with(['data' => $data, 'venue' => venue::get(), 'branch' => branchMaster::get()]);
 	}
 	public function showEacEvent(event_master $event_master)
 	{

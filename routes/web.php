@@ -117,6 +117,11 @@ Route::get('/eac', function () {
 
 Route::post('/eac/authenticate', 'UserMasterController@validateEacLogin');
 
+Route::get('/eac/forgotpassword', 'UserMasterController@validateEacForgotPassword')->name('forgotpassword');
+Route::post('/eac/forgotpassword', 'UserMasterController@EacSendForgotPassword')->name('mail');
+Route::get('/eac/resetPassword', 'UserMasterController@EacResetPassword');
+Route::post('/eac/resetPassword', 'UserMasterController@EacUpdatePassword')->name('resetPassword');
+
 Route::group(['middleware' => ['eac']], function () {
 
 	Route::get('/eac/dashboard', 'EventMasterController@dashboadrd')->name('eac.dashboard');
@@ -191,15 +196,20 @@ Route::get('/fc', function () {
 
 Route::post('/fc/authenticate', 'UserMasterController@validateFcLogin');
 
+Route::get('/fc/forgotpassword', 'UserMasterController@validateFcForgotPassword')->name('fcForgotpassword');
+Route::post('/fc/forgotpassword', 'UserMasterController@FcSendForgotPassword')->name('fcMail');
+Route::get('/fc/resetPassword', 'UserMasterController@FcResetPassword');
+Route::post('/fc/resetPassword', 'UserMasterController@FcUpdatePassword')->name('fcResetPassword');
+
 Route::group(['middleware' => ['fc']], function () {
 
-	Route::get('/fc/dashboard', 'EventMasterController@fcdashboard')->name('fc.dashboard');
-
+	Route::get('/fc/dashboard', 'EventMasterController@fcdashboard')->name('fc.dashboard');	
+	
 	/*Manage user*/
 	Route::get('/fc/user', 'UserMasterController@showFcUser')->name('fc.user');
 	Route::post('/fc/updateuser', 'UserMasterController@updateFcUser')->name('fc.updateuser');
 	Route::post('/fc/updateuser/{status}/{s_e_id}/{id}', 'EventRegistrationController@updateStatus')->name('fc.updateEventRegisterStatus');
-
+	
 	/*Manage Attendence*/
 	Route::get('/fc/attendence', 'AttendenceController@showFcAttendence')->name('fc.attendence');
 	Route::post('/fc/addAttendence', 'AttendenceController@storeFcAttendence')->name('fc.addAttendence');
