@@ -60,6 +60,32 @@ class AttendenceController extends Controller
 			return back()->with('error', "Today's Attendence Already Taken");
 		}
 	}
+	public function show_coordinator_attendance()
+	{
+		$students = DB::select('select * from user_masters u, event_registrations e where u.u_id = e.u_id and e.s_e_id = ' . Session::get('s_e_id'));
+		return view('/student_coordinator/attendance', compact('students'));
+	}
+	public function store_coordinator_attendance(Request $request)
+	{
+		$checkAttendence = attendence::where('date', date("Y-m-d"))
+			->where('s_e_id', $request->s_e_id)
+			->get();
+		if (count($checkAttendence) == 0) {
+			$storedAtt = new attendence([
+				's_e_id' => $request->s_e_id,
+				'u_id' => $request->u_id,
+				'present' => json_encode('[' . $request->present . ']'),
+				'date' => date("Y-m-d")
+			]);
+			if ($storedAtt->save()) {
+				return back()->with('success', 'Attendence added Successfully');
+			} else {
+				return back()->with('error', 'Attendence not Added');
+			}
+		} else {
+			return back()->with('error', "Today's Attendence Already Taken");
+		}
+	}
 
 	/**
 	 * Display the specified resource.
@@ -80,7 +106,7 @@ class AttendenceController extends Controller
 		if (DB::select('select * from attendences')) {
 			$attendece = DB::select('select count(*) as count from attendences a,practice_schedules p where a.s_e_id=p.s_e_id and a.date=p.date and a.s_e_id =' . Session::get('f_s_e_id') . ' and a.date = "' . date("Y-m-d") . '"');
 		} else {
-			$attendece = [];			
+			$attendece = [];
 		}
 		return view('fc.viewAttendence')->with(['data' => $data, 'student' => $student, 'attendence' => $attendece]);
 	}

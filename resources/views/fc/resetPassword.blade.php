@@ -11,6 +11,11 @@
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<link rel="icon" href="{{ asset('backend/images/favicon.ico') }}">
+	<style>
+		.error {
+			color: red !important;
+		}
+	</style>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-141030632-1"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
@@ -58,7 +63,7 @@
 		<div class="login-container">
 			<div class="login-form">
 				<div class="login-content">
-					<form method="post" action="{{route('fcResetPassword')}}">
+					<form method="post" id="resertPassFC" action="{{route('fcResetPassword')}}">
 						{{ csrf_field() }}
 						<div class="form-forgotpassword-success"> <i class="entypo-check"></i>
 							<h3>Change Your Passsword.</h3>
@@ -66,16 +71,16 @@
 						<div class="form-steps">
 							<div class="step current" id="step-1">
 								<div class="form-group">
-									<div class="input-group">
+									<div class="input-group" id="pass">
 										<input type="hidden" class="form-control" name="email" value="{{Session::get('ForgotFcEmail')}}" />
 										<div class="input-group-addon"> <i class="entypo-key"></i> </div>
-										<input type="password" class="form-control" name="password" id="password" placeholder="New Password" data-mask="password" autocomplete="off" required="" />
+										<input type="password" class="form-control" name="password" id="password" placeholder="New Password" data-mask="password" autocomplete="off" />
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="input-group">
+									<div class="input-group" id="cpass">
 										<div class="input-group-addon"> <i class="entypo-key"></i> </div>
-										<input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" data-mask="password" autocomplete="off" required="" />
+										<input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" data-mask="password" autocomplete="off" />
 									</div>
 								</div>
 								<div class="form-group">
@@ -115,6 +120,44 @@
 				var s = document.getElementsByTagName('script')[0];
 				s.parentNode.insertBefore(ga, s);
 			})();
+		</script>
+		<script src="{{ asset('backend/js/jquery-1.11.3.min.js') }}"></script>
+		<script>
+			$(document).ready(function() {
+				$("#resertPassFC").submit(function(e) {
+					let password = $("#password").val();
+					let confirmPassword = $("#confirmPassword").val();
+
+					$(".error").remove();
+					if (password == "") {
+						e.preventDefault();
+						$("#pass").after(
+							'<span class="error">This field is required</span>'
+						);
+					} else if (password.length != 8) {
+						e.preventDefault();
+						$("#pass").after(
+							'<span class="error">Password must be maximum 8 characters only.</span>'
+						);
+					}
+					if (confirmPassword == "") {
+						e.preventDefault();
+						$("#cpass").after(
+							'<span class="error">This field is required</span>'
+						);
+					} else if (confirmPassword.length != 8) {
+						e.preventDefault();
+						$("#cpass").after(
+							'<span class="error">Confirm Password must be maximum 8 characters only.</span>'
+						);
+					} else if (password != confirmPassword) {
+						e.preventDefault();
+						$("#cpass").after(
+							'<span class="error">Password and Confirm password must be same.</span>'
+						);
+					}
+				});
+			});
 		</script>
 		@yield('script')
 </body>
