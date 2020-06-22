@@ -125,6 +125,11 @@ Route::post('/eac/resetPassword', 'UserMasterController@EacUpdatePassword')->nam
 Route::group(['middleware' => ['eac']], function () {
 
 	Route::get('/eac/dashboard', 'EventMasterController@dashboadrd')->name('eac.dashboard');
+	
+	/*Reports */
+	Route::get('/eac/EventWiseReport', 'SubEventMasterController@genederReport')->name('eac.eventReport');
+	Route::get('/eac/Expense', 'SubEventMasterController@expenseReport')->name('eac.expenseReport');
+
 
 	/*Sub Event Master */
 	Route::get('/eac/subevent', 'SubEventMasterController@showEacSubEvent')->name('eac.subevent');
