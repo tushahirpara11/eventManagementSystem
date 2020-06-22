@@ -286,5 +286,7 @@ Route::middleware('coordinator')->group(function()
     Route::post('/student_coordinator/add_expence','ExpenceController@store');
     Route::get('/student_coordinator/take_attendance','AttendenceController@show_coordinator_attendance');
     Route::post('/ajaxevent','ExpenceController@get_sub_event')->name('ajaxevent');
-    Route::post('/student_coordinator/add_attendance','AttendenceController@store_coordinator_attendance');
+		Route::post('/student_coordinator/add_attendance','AttendenceController@store_coordinator_attendance');
+    Route::get('/student_coordinator/view_attendance','AttendenceController@showStudentCoAttendence');
+    Route::get('/student_coordinator/view_expense','ExpenceController@showStudentCoExpence');
 });

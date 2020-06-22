@@ -32,7 +32,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<input type="hidden" value="{{Session::get('s_e_id')}}" name="s_e_id" />
+								<input type="hidden" value="{{Session::get('c_s_e_id')}}" name="s_e_id" />
 								<input type="hidden" value="{{Session::get('coordinator')}}" name="u_id" />
 								@for($i = 0; $i < count($students); $i++) <tr>
 									<td>{{$i+1}}</td>

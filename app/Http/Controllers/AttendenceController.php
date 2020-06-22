@@ -62,7 +62,7 @@ class AttendenceController extends Controller
 	}
 	public function show_coordinator_attendance()
 	{
-		$students = DB::select('select * from user_masters u, event_registrations e where u.u_id = e.u_id and e.s_e_id = ' . Session::get('s_e_id'));
+		$students = DB::select('select * from user_masters u, event_registrations e where u.u_id = e.u_id and e.s_e_id = ' . Session::get('c_s_e_id'));
 		return view('/student_coordinator/attendance', compact('students'));
 	}
 	public function store_coordinator_attendance(Request $request)
@@ -97,6 +97,11 @@ class AttendenceController extends Controller
 	{
 		$data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = s.s_e_id and a.u_id=u.u_id');
 		return view('eac.viewAttendence')->with(['data' => $data]);
+	}
+	public function showStudentCoAttendence()
+	{
+		$data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = s.s_e_id and a.u_id=u.u_id and a.s_e_id=' . Session::get('c_s_e_id'));		
+		return view('student_coordinator.view_attendence')->with(['data' => $data]);
 	}
 	public function showFcAttendence()
 	{

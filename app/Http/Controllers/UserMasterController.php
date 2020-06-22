@@ -269,7 +269,7 @@ class UserMasterController extends Controller
 					} else {
 						session(['r_id' => 3]);
 						session(['coordinator' => $data[0]->u_id]);
-						session(['s_e_id' => $cdata[0]->s_e_id]);
+						session(['c_s_e_id' => $cdata[0]->s_e_id]);
 						return redirect('student_coordinator/events');
 					}
 				}
