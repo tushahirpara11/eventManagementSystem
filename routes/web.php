@@ -219,7 +219,7 @@ Route::group(['middleware' => ['fc']], function () {
 	Route::get('/fc/attendence', 'AttendenceController@showFcAttendence')->name('fc.attendence');
 	Route::post('/fc/addAttendence', 'AttendenceController@storeFcAttendence')->name('fc.addAttendence');
 	Route::post('/fc/updateattendence', 'AttendenceController@updateFcAttendence')->name('fc.updateattendence');
-	Route::get('/fc/edit/{id}/{date}', 'AttendenceController@edit')->name('fc.ediAttendence');
+	Route::get('/fc/edit/{id}/{date}', 'AttendenceController@editFc')->name('fc.ediAttendence');
 	Route::delete('/fc/deleteattendence/{id}', 'AttendenceController@deleteFcAttendence')->name('fc.deleteattendence');
 
 	/*Manage Expence*/

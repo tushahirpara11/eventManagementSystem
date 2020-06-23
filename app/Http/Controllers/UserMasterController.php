@@ -118,7 +118,7 @@ class UserMasterController extends Controller
 	public function showFcUser()
 	{
 		return view('fc/viewUser')->with([
-			'data' => DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=sm.s_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id')),
+			'data' => DB::select('select * from user_masters u,branch_masters b,stream_masters sm,division_masters dm,event_registrations er where b.b_id=u.b_id and sm.s_id=u.s_id and dm.d_id=u.d_id and u.u_id=er.u_id and er.s_e_id =' . Session::get('f_s_e_id')),
 			'branch' => branchMaster::get(),
 			'stream' => stream_master::get(),
 			'division' => division_master::get()

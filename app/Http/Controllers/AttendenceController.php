@@ -100,7 +100,7 @@ class AttendenceController extends Controller
 	}
 	public function showStudentCoAttendence()
 	{
-		$data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = s.s_e_id and a.u_id=u.u_id and a.s_e_id=' . Session::get('c_s_e_id'));		
+		$data = DB::select('select * from attendences a, user_masters u, sub_event_masters s where a.s_e_id = s.s_e_id and a.u_id=u.u_id and a.s_e_id=' . Session::get('c_s_e_id'));
 		return view('student_coordinator.view_attendence')->with(['data' => $data]);
 	}
 	public function showFcAttendence()
@@ -127,7 +127,23 @@ class AttendenceController extends Controller
 		$data = DB::select('select * from user_masters where u_id IN (SELECT u_id FROM event_registrations where status=' . 1 . ' and s_e_id =' . $id . ')');
 		$attendence = DB::select('select * from attendences where s_e_id =' . $id . ' and date = "' . $date . '"');
 		$a = json_decode($attendence[0]->present, true);
-		return view('eac.updateAttendence')->with(['data' => $data, 'present' => $a, 'attendence' => $attendence]);
+		$b = [];
+		for ($i = 0; $i < count($a); $i++) {
+			array_push($b, (int) $a[$i]);
+		}
+		return view('eac.updateAttendence')->with(['data' => $data, 'present' => $b, 'attendence' => $attendence]);
+	}
+
+	public function editFc($id, $date)
+	{
+		$data = DB::select('select * from user_masters where u_id IN (SELECT u_id FROM event_registrations where status=' . 1 . ' and s_e_id =' . $id . ')');
+		$attendence = DB::select('select * from attendences where s_e_id =' . $id . ' and date = "' . $date . '"');
+		$a = json_decode($attendence[0]->present, true);
+		$b = [];
+		for ($i = 0; $i < count($a); $i++) {
+			array_push($b, (int) $a[$i]);
+		}
+		return view('fc.updateAttendence')->with(['data' => $data, 'present' => $b, 'attendence' => $attendence]);
 	}
 
 	/**
@@ -138,6 +154,35 @@ class AttendenceController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function updateEacAttendence(Request $request)
+	{
+		if ($request->ajax()) {
+			$ans = DB::table('attendences')
+				->where('date', $request->date)->where('s_e_id', $request->s_e_id)
+				->update(['present' => json_encode($request->present)]);
+			return response()->json(['flag' => $ans]);
+		}
+	}
+	public function deleteFcAttendence($id)
+	{
+		$refresh = DB::delete('delete from attendences where a_id=' . $id);
+		if($refresh) {
+			return Redirect::back()->with('success', 'Attendence Deleted Successfully.');
+		} else {
+			return Redirect::back()->with('error', 'Attendence not Deleted.');
+		}
+	}
+
+	public function deleteEacAttendence($id)
+	{
+		$refresh = DB::delete('delete from attendences where a_id=' . $id);
+		if($refresh) {
+			return Redirect::back()->with('success', 'Attendence Deleted Successfully.');
+		} else {
+			return Redirect::back()->with('error', 'Attendence not Deleted.');
+		}
+	}
+
+	public function updatefcAttendence(Request $request)
 	{
 		if ($request->ajax()) {
 			$ans = DB::table('attendences')

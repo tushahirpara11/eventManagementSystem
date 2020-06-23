@@ -65,6 +65,8 @@
 			<th>Event Discription</th>
 			<th>Start Date</th>
 			<th>End Date</th>
+			<th>Start Time</th>
+			<th>End Time</th>
 			<th class="col-xs-1">Status</th>
 			<th>Actions</th>
 		</tr>
@@ -78,6 +80,8 @@
 			<td>{{$data[$i]->e_discription}}</td>
 			<td>{{$data[$i]->e_start_date}}</td>
 			<td>{{$data[$i]->e_end_date}}</td>
+			<td>{{$data[$i]->e_start_time}}</td>
+			<td>{{$data[$i]->e_end_time}}</td>
 			<td>@if($data[$i]->e_status == 1)
 				<form action="{{ route('admin.updatestatus', [$data[$i]->e_id,0]) }}" method="post" style="display: inline;">
 					{{csrf_field()}}
@@ -92,7 +96,7 @@
 			</td>
 			<td class="col-md-2">
 				<form style="display: inline;">
-					<a href="javascript:;" id="{{$data[$i]->e_id}}_{{$data[$i]->b_id}}_{{$data[$i]->b_name}}_{{$data[$i]->v_id}}_{{$data[$i]->v_name}}_{{$data[$i]->e_name}}_{{$data[$i]->e_discription}}_{{$data[$i]->e_start_date}}_{{$data[$i]->e_end_date}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+					<a href="javascript:;" id="{{$data[$i]->e_id}}_{{$data[$i]->b_id}}_{{$data[$i]->b_name}}_{{$data[$i]->v_id}}_{{$data[$i]->v_name}}_{{$data[$i]->e_name}}_{{$data[$i]->e_discription}}_{{$data[$i]->e_start_date}}_{{$data[$i]->e_end_date}}_{{$data[$i]->e_start_time}}_{{$data[$i]->e_end_time}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
 				</form> &nbsp; &nbsp;
 				<form action="{{ route('admin.deleteevent', [$data[$i]->e_id]) }}" method="post" style="display: inline;">
 					{{csrf_field()}}
@@ -112,6 +116,8 @@
 			<th>Event Discription</th>
 			<th>Start Date</th>
 			<th>End Date</th>
+			<th>Start Time</th>
+			<th>End Time</th>
 			<th>Status</th>
 			<th></th>
 		</tr>
@@ -178,6 +184,16 @@
 								<input type="date" name="e_end_date" id="e_end_date" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
 							</div>
 						</div>
+						<div class="col-md-6">
+							<div class="form-group"> <label for="field-2" class="control-label">Event Start Time</label>
+								<input type="time" name="e_start_time" id="e_start_time" class="form-control datepicker">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> <label for="field-2" class="control-label">Event End Time</label>
+								<input type="time" name="e_end_time" id="e_end_time" class="form-control datepicker">
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -239,6 +255,16 @@
 								<input type="date" name="e_end_date" id="e_end_date_field" class="form-control datepicker" data-start-date="-2d" data-end-date="+1w">
 							</div>
 						</div>
+						<div class="col-md-6">
+							<div class="form-group"> <label for="field-2" class="control-label">Event Start Time</label>
+								<input type="time" name="e_start_time" id="e_start_time_field" class="form-control time">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"> <label for="field-2" class="control-label">Event End Date</label>
+								<input type="time" name="e_end_time" id="e_end_time_field" class="form-control timepicker">
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -259,6 +285,8 @@
 		let e_discription = record_id[6];
 		let e_start_date = record_id[7];
 		let e_end_date = record_id[8];
+		let e_start_time = record_id[9];
+		let e_end_time = record_id[10];
 
 		$('#e_id_field').val(e_id);
 		$('#b_id_field').val(b_id).text(b_id_val);
@@ -267,6 +295,8 @@
 		$('#e_discription_field').val(e_discription);
 		$('#e_start_date_field').val(e_start_date);
 		$('#e_end_date_field').val(e_end_date);
+		$('#e_start_time_field').val(e_start_time);
+		$('#e_end_time_field').val(e_end_time);
 
 		jQuery('#modal-6').modal('show', {
 			backdrop: 'static'
@@ -283,6 +313,8 @@
 			let e_discription = $("#e_discription").val();
 			let e_start_date = $("#e_start_date").val();
 			let e_end_date = $("#e_end_date").val();
+			let e_start_time = $("#e_start_time").val();
+			let e_end_time = $("#e_end_time").val();
 
 			let fullDate = new Date();
 			let twoDigitMonth = fullDate.getMonth() + "";
@@ -353,6 +385,19 @@
 					'<span class="error">Starting date should be Greater than today\'s date</span>'
 				);
 			}
+
+			if (e_start_time == "") {
+				e.preventDefault();
+				$("#e_start_time").after(
+					'<span class="error">This field is required</span>'
+				);
+			}
+			if (e_end_time == "") {
+				e.preventDefault();
+				$("#e_end_time").after(
+					'<span class="error">This field is required</span>'
+				);
+			}
 		});
 		$("#updateevent").submit(function(e) {
 			let b_id_field = $('#b_id_field').val();
@@ -361,7 +406,8 @@
 			let e_discription_field = $('#e_discription_field').val();
 			let e_start_date_field = $('#e_start_date_field').val();
 			let e_end_date_field = $('#e_end_date_field').val();
-
+			let e_start_time_field = $('#e_start_time_field').val();
+			let e_end_time_field = $('#e_end_time_field').val();
 			$(".error").remove();
 			// return false;
 			if (b_id_field == "") {
@@ -408,6 +454,18 @@
 			if (e_end_date_field == "") {
 				e.preventDefault();
 				$("#e_end_date_field").after(
+					'<span class="error">This field is required</span>'
+				);
+			}
+			if (e_start_time_field == "") {
+				e.preventDefault();
+				$("#e_start_time_field").after(
+					'<span class="error">This field is required</span>'
+				);
+			}
+			if (e_end_time_field == "") {
+				e.preventDefault();
+				$("#e_end_time_field").after(
 					'<span class="error">This field is required</span>'
 				);
 			}

@@ -77,7 +77,7 @@
         <form style="display: inline;">
           <a href="{{route('eac.ediAttendence',[$data[$i]->s_e_id,$data[$i]->date])}}" id="" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
         </form> &nbsp; &nbsp;
-        <form action="" method="post" style="display: inline;">
+        <form action="{{route('eac.deleteattendence',[$data[$i]->a_id])}}" method="post" style="display: inline;">
           {{csrf_field()}}
           {{ method_field('DELETE') }}
           <button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>

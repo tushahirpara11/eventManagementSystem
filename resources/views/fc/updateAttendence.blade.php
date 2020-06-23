@@ -1,4 +1,4 @@
-@extends('eaclayout.app')
+@extends('fclayout.app')
 @section('content')
 <h3>Update Attendece</h3> <br />
 <script type="text/javascript">
@@ -112,7 +112,7 @@
     $("#submitAttendece").submit(function(e) {
       e.preventDefault()
       $.ajax({
-        url: "<?php echo route('eac.updateattendence'); ?>",
+        url: "<?php echo route('fc.updateattendence'); ?>",
         type: "POST",
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -124,7 +124,7 @@
         },
         success: function(url) {
           if (url.flag == 0 || url.flag == 1) {
-            window.location = 'http://127.0.0.1:8080/eac/attendence';
+            window.location = 'http://127.0.0.1:8080/fc/attendence';
           }
         }
       });

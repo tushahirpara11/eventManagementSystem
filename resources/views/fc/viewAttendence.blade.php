@@ -76,9 +76,9 @@
 			<td>{{$data[$i]->date}}</td>
 			<td class="col-md-2">
 				<form style="display: inline;">
-					<a href="{{route('eac.ediAttendence',[$data[$i]->s_e_id,$data[$i]->date])}}" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+					<a href="{{route('fc.ediAttendence',[$data[$i]->s_e_id,$data[$i]->date])}}" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
 				</form> &nbsp; &nbsp;
-				<form action="" method="post" style="display: inline;">
+				<form action="{{route('fc.deleteattendence',[$data[$i]->a_id])}}" method="post" style="display: inline;">
 					{{csrf_field()}}
 					{{ method_field('DELETE') }}
 					<button type="submit" onclick="return checkResponce();" class="btn btn-danger btn-sm btn-icon icon-left"><i class="entypo-trash"></i>Delete</button>
@@ -99,7 +99,7 @@
 		</tr>
 	</tfoot>
 </table><br />
-@if(count($attendence) == 0 && $attendence != 'undefined')
+@if($attendence[0]->count == 0 && $attendence != 'undefined')
 <button type="click" onclick="jQuery('#modal-6').modal('show', {
       backdrop: 'static'
     });" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Attendence</button>
