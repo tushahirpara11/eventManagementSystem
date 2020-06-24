@@ -124,7 +124,7 @@ class GroupController extends Controller
 		return view('admin/viewGroup')->with([
 			'data' => group::get(), 'event' =>  $event,
 			'sub_event' => $subevent, 'user' => $user,
-			'role' => DB::select('select * from roles where r_name != "STUDENT" and r_name != "FEC" order by r_name DESC')
+			'role' => DB::select('select * from roles where r_name != "STUDENT" order by r_name DESC')
 		]);
 	}
 

@@ -145,7 +145,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update Branch</h4>
+          <h4 class="modal-title">Update Stream</h4>
         </div>
         <div class="modal-body">
         <input type="hidden" class="form-control" name="s_id" value="" id="s_id_field" placeholder="Stream ID">

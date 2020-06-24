@@ -50,12 +50,12 @@
 		</tr>
 	</thead>
 	<tbody>
-		@for($i=0; $i < count($data); $i++) <tr class="odd gradeX">			
+		@for($i=0; $i < count($data); $i++) <tr class="odd gradeX">
 			<td class="col-xs-1">{{$i+1}}</td>
 			<td class="col-xs-1">{{$data[$i]->s_e_name}}</td>
 			<!-- {{$total=0}} -->
 			@for($j = 0; $j < count($expense_type); $j++) <!-- {{$e=$expense_type[$j]->name}} -->
-				@if(array_key_exists($expense_type[$j]->name,$data[$i]) && $data[$i]->$e)				
+				@if(array_key_exists($expense_type[$j]->name,$data[$i]) && $data[$i]->$e)
 				<td class="col-xs-1">{{$data[$i]->$e}}</td>
 				<!-- {{$total += $data[$i]->$e}} -->
 				@else
@@ -66,13 +66,33 @@
 				<td class="col-xs-1">{{$total}}</td>
 				<td class="col-xs-1">{{$data[$i]->created_at}}</td>
 				</tr>
-				@endfor				
+				@endfor
 	</tbody>
+	<tr>
+	@for($i=0; $i < count($data); $i++) <tr class="odd gradeX">
+			<td class="col-xs-1">Total</td>
+			<td class="col-xs-1">{{$data[$i]->s_e_name}}</td>
+			<!-- {{$total=0}} -->
+			@for($j = 0; $j < count($expense_type); $j++) <!-- {{$e=$expense_type[$j]->name}} -->
+				@if(array_key_exists($expense_type[$j]->name,$data[$i]) && $data[$i]->$e)
+				<td class="col-xs-1">{{$data[$i]->$e}}</td>
+				<!-- {{$total += $data[$i]->$e}} -->
+				@else
+				<td class="col-xs-1">0</td>
+				<!-- {{$total += 0}} -->
+				@endif
+				@endfor
+				<td class="col-xs-1">{{$total}}</td>
+				<td class="col-xs-1">{{$data[$i]->created_at}}</td>
+				</tr>
+				@endfor
+	</tr>
 	<tfoot>
 		<tr>
 			<th></th>
 			<th>Enrollment No.</th>
 			<th>Name</th>
+			<th></th>
 			<th></th>
 			<th></th>
 			<th></th>

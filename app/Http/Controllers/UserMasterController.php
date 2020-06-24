@@ -96,6 +96,27 @@ class UserMasterController extends Controller
 		}
 	}
 
+	public function eacStore(Request $request)
+	{
+		$count = user_master::where(['email' => $request->get('email'), 'phone' => $request->get('phone')])->get();
+		if (count($count) == 0) {
+			user_master::create([
+				'f_name' => $request->f_name,
+				'l_name' => $request->l_name,
+				'email' => $request->email,
+				'phone' => $request->phone,
+				'password' => encrypt($request->password),
+				'dob' => $request->dob,
+				'gender' => $request->gender,
+				'u_type' => 2,
+				'b_id' => $request->b_id,
+			]);
+			return Redirect::back()->with('success', 'User Added Successfull.');
+		} else {
+			return Redirect::back()->with('error', 'User Already exists.');
+		}
+	}
+
 	/**
 	 * Display the specified resource.
 	 *
@@ -293,7 +314,7 @@ class UserMasterController extends Controller
 						session(['eac' => $count[0]->email]);
 						session(['e_id' => $group[0]->e_id]);
 						session(['b_id' => $count[0]->b_id]);
-						return redirect('/eac/choreographer');
+						return redirect('/eac/dashboard');
 					} else {
 						return Redirect::back()->with('error', 'You have not Permission to access routes!');
 					}
@@ -341,7 +362,7 @@ class UserMasterController extends Controller
 						session(['fc' => $count[0]->email]);
 						session(['f_s_e_id' => $group[0]->s_e_id]);
 						session(['f_b_id' => $count[0]->b_id]);
-						return redirect('/fc/user');
+						return redirect('/fc/dashboard');
 					} else {
 						return Redirect::back()->with('error', 'You have not Permission to access routes!');
 					}
@@ -411,7 +432,7 @@ class UserMasterController extends Controller
 	public function get_coordinator_Subevent(Request $request)
 	{
 		$e_id = $request->e_id;
-		$sub_event = sub_event_master::where('e_id', '=', $e_id)->get();
+		$sub_event = sub_event_master::where('e_id', '=', $e_id)->where('status',1)->get();
 		return view('/student_coordinator/event_registration', compact('sub_event'));
 	}
 	public function mail(Request $request)

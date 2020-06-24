@@ -17,7 +17,7 @@
   <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
-<h3>User Masters</h3> <br />
+<h3>Attendence</h3> <br />
 <script type="text/javascript">
   jQuery(document).ready(function($) {
     var $table4 = jQuery("#table-4");

@@ -41,7 +41,8 @@ class SubEventMasterController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		$count = sub_event_master::where('s_e_name', $request->get('s_e_name'))->get();
+		$count = sub_event_master::where('e_id', $request->get('e_id'))
+			->where('s_e_name', $request->get('s_e_name'))->get();
 		if (count($count) == 0) {
 			$insertSubEvent = new sub_event_master([
 				's_e_name' => $request->get('s_e_name'), 's_e_discription' => $request->get('s_e_discription'),

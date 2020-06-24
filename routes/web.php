@@ -152,6 +152,7 @@ Route::group(['middleware' => ['eac']], function () {
 
 	/*Manage user*/
 	Route::get('/eac/user', 'UserMasterController@showEacUser')->name('eac.user');
+	Route::post('/eac/adduser', 'UserMasterController@eacStore')->name('eac.adduser');
 	Route::post('/eac/updateuser', 'UserMasterController@updateEacUser')->name('eac.updateuser');
 	Route::delete('/eac/deleteuser/{id}', 'UserMasterController@deleteEacUser')->name('eac.deleteuser');
 

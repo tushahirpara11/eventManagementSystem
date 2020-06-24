@@ -94,6 +94,14 @@
 	</tfoot>
 </table><br />
 <a href="{{route('eac.getschedule')}}" class="btn btn-info btn-lg btn-icon icon-left"><i class="entypo-plus"></i>Add Scheduling</a>
+<script>
+  function checkResponce() {
+    if (!confirm('Are you sure want to Delete this Record?')) {
+      return false;
+    }
+    this.form.submit();
+  }
+</script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 	const yourArray = [];

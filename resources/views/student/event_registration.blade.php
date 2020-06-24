@@ -2,6 +2,11 @@
 @section('title','Event Registrtion')
 @section('head','Event Registrtion')
 @section('content')
+<style>
+	.error {
+		color: red;
+	}
+</style>
 <div class="col-lg-12">
 	<div class="col-lg-6" style="margin: auto;">
 		<div class="card">
@@ -37,6 +42,27 @@
 	</div>
 </div>
 <script>
+	$(document).ready(function() {
+		$("#registration").submit(function(e) {
+			let u_name = $("#u_name").val();
+			let s_e_id = $("#s_e_id").val();
+
+			$(".error").remove();
+			// return false;
+			if (u_name == "" || u_name == null) {
+				e.preventDefault();
+				$("#u_name").after(
+					'<span class="error">This field is required</span><br/>'
+				);
+			}
+			if (s_e_id == "" || s_e_id == null) {
+				e.preventDefault();
+				$("#s_e_id").after(
+					'<span class="error">This field is required</span>'
+				);
+			}
+		});
+	});
 	$("select[name='s_e_id']").click(function() {
 		$("#u_name").html('');
 		var s_e_id = $(this).val();
