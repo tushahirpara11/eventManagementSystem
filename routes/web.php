@@ -99,7 +99,10 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::get('/admin/expence', 'ExpenceTypeController@show')->name('admin.Expence');
 	Route::post('/admin/expence', 'ExpenceTypeController@store')->name('admin.addExpence');
 	Route::post('/admin/updateexpence', 'ExpenceTypeController@update')->name('admin.updateExpence');
-	Route::delete('/admin/deleteexpence/{id}', 'ExpenceTypeController@delete')->name('admin.deleteExpence');
+    Route::delete('/admin/deleteexpence/{id}', 'ExpenceTypeController@delete')->name('admin.deleteExpence');
+    
+    /*Reports */
+    Route::get('/admin/report', 'UserMasterController@show_report_form')->name('admin.report');
 
 	/*Session Expire*/
 	Route::get('/admin/logout', 'BranchMasterController@destroy');

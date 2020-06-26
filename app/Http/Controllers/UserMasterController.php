@@ -468,5 +468,11 @@ class UserMasterController extends Controller
         $events=event_master::all();
         $sub_events=sub_event_master::all();
         return view('/student_coordinator/add_expence',compact('expence_type','events','sub_events'));
-    }
+	}
+	
+	/* reports function */
+	public function show_report_form()
+	{
+		return view('/admin/reports_from');
+	}
 }
