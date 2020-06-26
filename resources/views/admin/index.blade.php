@@ -75,9 +75,7 @@
               Login In
             </button>
           </div>
-        </form>
-        <div class="login-bottom-links"> <a href="../forgot-password/index.html" class="link">Forgot your password?</a>
-        </div>
+        </form>       
       </div>
     </div>
 

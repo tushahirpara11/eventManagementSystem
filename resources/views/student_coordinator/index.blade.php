@@ -20,6 +20,8 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/student_coordinator/events">All Events</a>
               <a class="dropdown-item" href="/student_coordinator/registered_events">Registered Events</a>
+              <a class="dropdown-item" href="/student_coordinator/view_attendance">View Attendence</a>
+              <a class="dropdown-item" href="/student_coordinator/view_expense">View Expense</a>
               <div class="dropdown-divider"></div>              
             </div>
           </li>

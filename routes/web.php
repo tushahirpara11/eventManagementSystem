@@ -120,9 +120,19 @@ Route::get('/eac', function () {
 
 Route::post('/eac/authenticate', 'UserMasterController@validateEacLogin');
 
+Route::get('/eac/forgotpassword', 'UserMasterController@validateEacForgotPassword')->name('forgotpassword');
+Route::post('/eac/forgotpassword', 'UserMasterController@EacSendForgotPassword')->name('mail');
+Route::get('/eac/resetPassword', 'UserMasterController@EacResetPassword');
+Route::post('/eac/resetPassword', 'UserMasterController@EacUpdatePassword')->name('resetPassword');
+
 Route::group(['middleware' => ['eac']], function () {
 
 	Route::get('/eac/dashboard', 'EventMasterController@dashboadrd')->name('eac.dashboard');
+	
+	/*Reports */
+	Route::get('/eac/EventWiseReport', 'SubEventMasterController@genederReport')->name('eac.eventReport');
+	Route::get('/eac/Expense', 'SubEventMasterController@expenseReport')->name('eac.expenseReport');
+
 
 	/*Sub Event Master */
 	Route::get('/eac/subevent', 'SubEventMasterController@showEacSubEvent')->name('eac.subevent');
@@ -145,6 +155,7 @@ Route::group(['middleware' => ['eac']], function () {
 
 	/*Manage user*/
 	Route::get('/eac/user', 'UserMasterController@showEacUser')->name('eac.user');
+	Route::post('/eac/adduser', 'UserMasterController@eacStore')->name('eac.adduser');
 	Route::post('/eac/updateuser', 'UserMasterController@updateEacUser')->name('eac.updateuser');
 	Route::delete('/eac/deleteuser/{id}', 'UserMasterController@deleteEacUser')->name('eac.deleteuser');
 
@@ -194,20 +205,25 @@ Route::get('/fc', function () {
 
 Route::post('/fc/authenticate', 'UserMasterController@validateFcLogin');
 
+Route::get('/fc/forgotpassword', 'UserMasterController@validateFcForgotPassword')->name('fcForgotpassword');
+Route::post('/fc/forgotpassword', 'UserMasterController@FcSendForgotPassword')->name('fcMail');
+Route::get('/fc/resetPassword', 'UserMasterController@FcResetPassword');
+Route::post('/fc/resetPassword', 'UserMasterController@FcUpdatePassword')->name('fcResetPassword');
+
 Route::group(['middleware' => ['fc']], function () {
 
-	Route::get('/fc/dashboard', 'EventMasterController@fcdashboard')->name('fc.dashboard');
-
+	Route::get('/fc/dashboard', 'EventMasterController@fcdashboard')->name('fc.dashboard');	
+	
 	/*Manage user*/
 	Route::get('/fc/user', 'UserMasterController@showFcUser')->name('fc.user');
 	Route::post('/fc/updateuser', 'UserMasterController@updateFcUser')->name('fc.updateuser');
 	Route::post('/fc/updateuser/{status}/{s_e_id}/{id}', 'EventRegistrationController@updateStatus')->name('fc.updateEventRegisterStatus');
-
+	
 	/*Manage Attendence*/
 	Route::get('/fc/attendence', 'AttendenceController@showFcAttendence')->name('fc.attendence');
 	Route::post('/fc/addAttendence', 'AttendenceController@storeFcAttendence')->name('fc.addAttendence');
 	Route::post('/fc/updateattendence', 'AttendenceController@updateFcAttendence')->name('fc.updateattendence');
-	Route::get('/fc/edit/{id}/{date}', 'AttendenceController@edit')->name('fc.ediAttendence');
+	Route::get('/fc/edit/{id}/{date}', 'AttendenceController@editFc')->name('fc.ediAttendence');
 	Route::delete('/fc/deleteattendence/{id}', 'AttendenceController@deleteFcAttendence')->name('fc.deleteattendence');
 
 	/*Manage Expence*/
@@ -274,5 +290,7 @@ Route::middleware('coordinator')->group(function()
     Route::post('/student_coordinator/add_expence','ExpenceController@store');
     Route::get('/student_coordinator/take_attendance','AttendenceController@show_coordinator_attendance');
     Route::post('/ajaxevent','ExpenceController@get_sub_event')->name('ajaxevent');
-    Route::post('/student_coordinator/add_attendance','AttendenceController@store_coordinator_attendance');
+		Route::post('/student_coordinator/add_attendance','AttendenceController@store_coordinator_attendance');
+    Route::get('/student_coordinator/view_attendance','AttendenceController@showStudentCoAttendence');
+    Route::get('/student_coordinator/view_expense','ExpenceController@showStudentCoExpence');
 });

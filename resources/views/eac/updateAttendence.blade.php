@@ -62,7 +62,8 @@
         @for($k = 0; $k < count($attendence); $k++) <td>{{$attendence[$k]->date}}</td>
           @endfor
           <td>
-            @for($j = 0; $j < count($present); $j++) @if($data[$i]->u_id == $present[$j])
+						@for($j = 0; $j < count($present); $j++)						
+						@if($data[$i]->u_id == $present[$j])
               <!-- {{$flag=1}} -->
               @break
               @endif

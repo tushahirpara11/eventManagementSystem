@@ -46,7 +46,7 @@ class EventMasterController extends Controller
 		$user = DB::select('select count(*) as count from user_masters');
 		$group = DB::select('select count(*) as count from groups');
 		$guest = DB::select('select count(*) as count from guests');
-		$expence_type = DB::select('select count(*) as count from expence_types');		
+		$expence_type = DB::select('select count(*) as count from expence_types');
 		return view('admin.dashboard')->with([
 			'branch' => $branch, 'stream' => $stream, 'venue' => $venue,
 			'division' => $division, 'events' => $events, 'subEvents' => $subEvents,
@@ -97,24 +97,8 @@ class EventMasterController extends Controller
 			$insertEvent = new event_master([
 				'e_name' => $request->get('e_name'), 'e_discription' => $request->get('e_discription'),
 				'e_status' => $request->get('e_status'), 'e_start_date' => $request->get('e_start_date'),
-				'e_end_date' => $request->get('e_end_date'), 'b_id' => $request->get('b_id'),
-				'v_id' => $request->get('v_id')
-			]);
-			$insertEvent->save();
-			return Redirect::back()->with('success', 'Event Added Successfully.');
-		} else {
-			return Redirect::back()->with('error', 'Event Already Exists...');
-		}
-	}
-
-	public function storeEacEvent(Request $request)
-	{
-		$count = event_master::where('e_name', $request->get('e_name'))->get();
-		if (count($count) == 0) {
-			$insertEvent = new event_master([
-				'e_name' => $request->get('e_name'), 'e_discription' => $request->get('e_discription'),
-				'e_status' => $request->get('e_status'), 'e_start_date' => $request->get('e_start_date'),
-				'e_end_date' => $request->get('e_end_date'), 'b_id' => $request->get('b_id'),
+				'e_end_date' => $request->get('e_end_date'), 'e_start_time' => $request->get('e_start_time'),
+				'e_end_time' => $request->get('e_end_time'), 'b_id' => $request->get('b_id'),
 				'v_id' => $request->get('v_id')
 			]);
 			$insertEvent->save();
@@ -132,7 +116,8 @@ class EventMasterController extends Controller
 	 */
 	public function show(event_master $event_master)
 	{
-		return view('admin/viewEvent')->with(['data' => event_master::get(), 'venue' => venue::get(), 'branch' => branchMaster::get()]);
+		$data = DB::select('select * from event_masters e, venues v, branch_masters b where e.v_id=v.v_id and e.b_id=b.b_id');
+		return view('admin/viewEvent')->with(['data' => $data, 'venue' => venue::get(), 'branch' => branchMaster::get()]);
 	}
 	public function showEacEvent(event_master $event_master)
 	{
@@ -145,21 +130,10 @@ class EventMasterController extends Controller
 		return Redirect::back();
 	}
 
-	public function deleteEacEvent($id)
-	{
-		DB::delete('delete from event_masters where e_id=' . $id);
-		return Redirect::back();
-	}
-
 	function updatestatus($eid, $status)
 	{
 		DB::update('update event_masters set e_status = "' . $status . '" where e_id = ' . $eid);
 		return redirect('/admin/event');
-	}
-	function updatestatusEacEvent($eid, $status)
-	{
-		DB::update('update event_masters set e_status = "' . $status . '" where e_id = ' . $eid);
-		return redirect('/eac/event');
 	}
 
 	/**
@@ -185,16 +159,9 @@ class EventMasterController extends Controller
 		DB::update('update event_masters set b_id = ' . $request->get('b_id') . ', v_id = ' . $request->get('v_id') .
 			', e_name = "' . $request->get('e_name') . '", e_discription = "' . $request->get('e_discription') .
 			'", e_start_date = "' . $request->get('e_start_date') . '", e_end_date = "' . $request->get('e_end_date') .
-			'" where e_id = ' . $request->e_id);
+			'", e_start_time = "' . $request->get('e_start_time') . '", e_end_time = "' . $request->get('e_end_time') . '"
+			 where e_id = ' . $request->e_id);
 		return redirect('/admin/event');
-	}
-	public function updateEacEvent(Request $request)
-	{
-		DB::update('update event_masters set b_id = ' . $request->get('b_id') . ', v_id = ' . $request->get('v_id') .
-			', e_name = "' . $request->get('e_name') . '", e_discription = "' . $request->get('e_discription') .
-			'", e_start_date = "' . $request->get('e_start_date') . '", e_end_date = "' . $request->get('e_end_date') .
-			'" where e_id = ' . $request->e_id);
-		return redirect('/eac/event');
 	}
 
 	/**

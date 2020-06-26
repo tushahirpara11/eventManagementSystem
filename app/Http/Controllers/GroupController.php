@@ -124,7 +124,7 @@ class GroupController extends Controller
 		return view('admin/viewGroup')->with([
 			'data' => group::get(), 'event' =>  $event,
 			'sub_event' => $subevent, 'user' => $user,
-			'role' => DB::select('select * from roles where r_name != "STUDENT" and r_name != "SEC" order by r_name DESC')
+			'role' => DB::select('select * from roles where r_name != "STUDENT" order by r_name DESC')
 		]);
 	}
 
@@ -138,7 +138,7 @@ class GroupController extends Controller
 		return view('eac/viewGroup')->with([
 			'data' => $data, 'event' =>  $event,
 			'sub_event' => $subevent, 'user' => $user,
-			'role' => DB::select('select * from roles where r_name != "STUDENT" and r_name != "SEC" order by r_name DESC')
+			'role' => DB::select('select * from roles where r_name != "STUDENT" and r_name != "FEC" order by r_name DESC')
 		]);
 	}
 
@@ -147,7 +147,7 @@ class GroupController extends Controller
 		if ($request->ajax()) {
 			$branchData = event_master::where('e_id', $request->e_id)->get();
 			$sub_event = sub_event_master::where('e_id', $request->e_id)->get();
-			$data = user_master::where('b_id', $branchData[0]->b_id)->get();
+			$data = user_master::where('b_id', $branchData[0]->b_id)->where('u_type',2)->get();
 			return response()->json(['option' => $data, 'sub_event' => $sub_event]);
 		}
 	}

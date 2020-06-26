@@ -64,8 +64,7 @@
     </th>
     <tr>
       <th>#No.</th>
-      <th>Stream ID</th>
-      <th>Branch ID</th>
+      <th>Branch Name</th>
       <th>Stream Name</th>
       <th>Actions</th>
     </tr>
@@ -73,17 +72,11 @@
   <tbody>
     @for($i = 0; $i < count($data); $i++) <tr class="odd gradeX">
       <td>{{$i+1}}</td>
-      <td id="s_id">{{$data[$i]->s_id}}</td>
-      <td id="b_code">{{$data[$i]->b_id}}</td>
+      <td id="b_code">{{$data[$i]->b_name}}</td>
       <td id="stream_name">{{$data[$i]->s_name}}</td>
-      <td class="col-md-3">
-        @for($j = 0; $j < count($branch); $j++)
-          @if($data[$i]->b_id == $branch[$j]->b_id)
-          <!-- {{ $temp = $branch[$j]->b_name }} -->
-          @endif
-        @endfor
+      <td class="col-md-3">       
         <form style="display: inline;">
-          <a href="javascript:;" id="{{$data[$i]->s_id}}_{{$data[$i]->b_id}}_{{$temp}}_{{$data[$i]->s_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
+          <a href="javascript:;" id="{{$data[$i]->s_id}}_{{$data[$i]->b_id}}_{{$data[$i]->b_name}}_{{$data[$i]->s_name}}" onclick="openmodal(this.id);" class="btn btn-default btn-sm btn-icon icon-left"><i class="entypo-pencil"></i>Edit</a>
         </form> &nbsp; &nbsp;
         <form action="{{ route('admin.deletestream', [$data[$i]->s_id]) }}" method="post" style="display: inline;">
           {{csrf_field()}}
@@ -97,8 +90,7 @@
   <tfoot>
     <tr>
       <th></th>
-      <th>Stream ID</th>
-      <th>Branch ID</th>
+      <th>Branch Name</th>
       <th>Stream Name</th>
       <th></th>
     </tr>
@@ -124,7 +116,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Stream Name</label>
+                <label for="field-2" class="control-label">Branch Name</label>
                 <select name="b_id" id="b_id" class="form-control" data-placeholder="Select one stream...">
                   @for($i = 0; $i < count($branch); $i++)
                     <option value="{{$branch[$i]->b_id}}">{{$branch[$i]->b_name}}</option>                  
@@ -135,7 +127,7 @@
             <div class="clearfix"></div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="field-2" class="control-label">Branch Name</label>
+                <label for="field-2" class="control-label">Stream Name</label>
                 <input type="text" class="form-control" name="s_name" id="s_name" placeholder="Branch Name">
               </div>
             </div>
@@ -153,7 +145,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update Branch</h4>
+          <h4 class="modal-title">Update Stream</h4>
         </div>
         <div class="modal-body">
         <input type="hidden" class="form-control" name="s_id" value="" id="s_id_field" placeholder="Stream ID">

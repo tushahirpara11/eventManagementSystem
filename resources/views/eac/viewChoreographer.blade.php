@@ -122,7 +122,7 @@
               <div class="form-group">
                 <label for="field-1" class="control-label">Sub Event Name</label>
                 <select name="s_e_id" id="s_e_id" style="position: static;" class="form-control" data-placeholder="Select one Event...">
-                  @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->e_id}}">{{$subevent[$i]->s_e_name}}</option>
+                  @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->s_e_id}}">{{$subevent[$i]->s_e_name}}</option>
                     @endfor
                 </select>
               </div>
@@ -168,7 +168,7 @@
                 <label for="field-1" class="control-label">Sub Event Name</label>
                 <select name="s_e_id" id="s_e_id" style="position: static;" class="form-control" data-placeholder="Select one Event...">
                   <option id="s_e_id_field" value=""></option>
-                  @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->e_id}}">{{$subevent[$i]->s_e_name}}</option>
+                  @for($i = 0; $i < count($subevent); $i++) <option value="{{$subevent[$i]->s_e_id}}">{{$subevent[$i]->s_e_name}}</option>
                     @endfor
                 </select>
               </div>
