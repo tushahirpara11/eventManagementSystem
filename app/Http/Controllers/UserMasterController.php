@@ -34,7 +34,10 @@ class UserMasterController extends Controller
 	{
 		//
 	}
-
+	public function home_page()
+	{
+		return view('student/login');	
+	}
 	/**
 	 * Show the form for creating a new resource.
 	 *

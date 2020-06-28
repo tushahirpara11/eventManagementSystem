@@ -101,8 +101,6 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::post('/admin/updateexpence', 'ExpenceTypeController@update')->name('admin.updateExpence');
     Route::delete('/admin/deleteexpence/{id}', 'ExpenceTypeController@delete')->name('admin.deleteExpence');
     
-    /*Reports */
-    Route::get('/admin/report', 'UserMasterController@show_report_form')->name('admin.report');
 
 	/*Session Expire*/
 	Route::get('/admin/logout', 'BranchMasterController@destroy');
@@ -261,6 +259,7 @@ Route::middleware('student')->group(function () {
 	Route::post('/student/event_registration', 'EventRegistrationController@store');
 	Route::post('/student/sub_event_list', 'UserMasterController@getSubevent');
 });
+Route::get('/','UserMasterController@home_page');
 Route::get('/student/registration', 'UserMasterController@get_data');
 Route::post('/student/register', 'UserMasterController@store');
 Route::get('/student/login', 'UserMasterController@get_login_form');

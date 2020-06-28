@@ -15,7 +15,6 @@
                   <li> <a href="{{route('admin.user')}}"><span class="entypo-layout">User</span></a></li>
                   <li> <a href="{{route('admin.group')}}"><span class="entypo-layout">Group</span></a></li>
                   <li> <a href="{{route('admin.Expence')}}"><span class="entypo-layout">Expence Type</span></a></li> 
-                  <li> <a href="{{route('admin.report')}}"><span class="entypo-layout">Reports</span></a></li>                 
             </ul>
       </li>
       <li> <a href="/admin/logout"><span class="entypo-logout">Log Out</span> </a> </li>
