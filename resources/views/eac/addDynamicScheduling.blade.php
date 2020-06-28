@@ -45,7 +45,7 @@
 	<table class="table table-bordered datatable" id="table-4">
 		<thead>
 			<tr>
-				<th class="col-xs-1">#No.</th>
+				<th class="col-xs-1">#Sub Event Id.</th>
 				<th class="col-xs-1">Event Name</th>
 				<th class="col-xs-1">Duration</th>
 				<th class="col-xs-1">Overlape</th>
@@ -73,7 +73,7 @@
 	<table class="table table-bordered datatable" id="table-4">
 		<thead>
 			<tr>
-				<th class="col-xs-1">#No.</th>
+				<th class="col-xs-1">#Sub Event Id.</th>
 				<th class="col-xs-1">Sub Event Name</th>
 				<th class="col-xs-1">Action</th>
 			</tr>
@@ -123,14 +123,14 @@
 						for (let i = 0; i < data.data.length; i++) {
 							if (i == 0) {
 								$('#t_body').html(`<tr class="odd gradeX">
-								<td>${i+1}</td>
+								<td>${data.data[i].s_e_id}</td>
 								<td>${data.data[i].s_e_name}</td>
 								<td>${data.data[i].s_e_duration.slice(0, -3)}</td>
 								<td>${data.data[i].overlap}</td>
 								</tr>`);
 							} else if (data.data[i].s_e_id != data.data[i - 1].s_e_id) {
 								$('#t_body').html(`<tr class="odd gradeX">
-								<td>${i+1}</td>
+								<td>${data.data[i].s_e_id}</td>
 								<td>${data.data[i].s_e_name}</td>
 								<td>${data.data[i].s_e_duration.slice(0, -3)}</td>
 								<td>${data.data[i].overlap}</td>
@@ -143,14 +143,14 @@
 						for (let i = 0; i < data.data.length; i++) {
 							if (i == 0) {
 								a += `<tr class="odd gradeX">
-									<td>${i+1}</td>
+									<td>${data.data[i][0].s_e_id}</td>
 									<td>${data.data[i][0].s_e_name}</td>
 									<td>${data.data[i][0].s_e_duration.slice(0, -3)}</td>
 									<td>${data.data[i][0].overlap}</td>
 									</tr>`;
 							} else if (data.data[i][0].s_e_id != data.data[i - 1][0].s_e_id) {
 								a += `<tr class="odd gradeX">
-									<td>${i+1}</td>
+									<td>${data.data[i][0].s_e_id}</td>
 									<td>${data.data[i][0].s_e_name}</td>
 									<td>${data.data[i][0].s_e_duration.slice(0, -3)}</td>
 									<td>${data.data[i][0].overlap}</td>
@@ -179,14 +179,14 @@
 						for (let i = 0; i < data.data.length; i++) {
 							if (i == 0) {
 								$('#t_body').html(`<tr class="odd gradeX">
-								<td>${i+1}</td>
+								<td>${data.data[i].s_e_id}</td>
 								<td>${data.data[i].s_e_name}</td>
 								<td>${data.data[i].s_e_duration.slice(0, -3)}</td>
 								<td>${data.data[i].overlap}</td>
 								</tr>`);
 							} else if (data.data[i].s_e_id != data.data[i - 1].s_e_id) {
 								$('#t_body').html(`<tr class="odd gradeX">
-								<td>${i+1}</td>
+								<td>${data.data[i].s_e_id}</td>
 								<td>${data.data[i].s_e_name}</td>
 								<td>${data.data[i].s_e_duration.slice(0, -3)}</td>
 								<td>${data.data[i].overlap}</td>
@@ -199,14 +199,14 @@
 						for (let i = 0; i < data.data.length; i++) {
 							if (i == 0) {
 								a += `<tr class="odd gradeX">
-								<td>${i+1}</td>
+								<td>${data.data[i][0].s_e_id}</td>
 								<td>${data.data[i][0].s_e_name}</td>
 								<td>${data.data[i][0].s_e_duration.slice(0, -3)}</td>
 								<td>${data.data[i][0].overlap}</td>
 								</tr>`;
 							} else if (data.data[i][0].s_e_id != data.data[i - 1][0].s_e_id) {
 								a += `<tr class="odd gradeX">
-								<td>${i+1}</td>
+								<td>${data.data[i][0].s_e_name}</td>
 								<td>${data.data[i][0].s_e_name}</td>
 								<td>${data.data[i][0].s_e_duration.slice(0, -3)}</td>
 								<td>${data.data[i][0].overlap}</td>

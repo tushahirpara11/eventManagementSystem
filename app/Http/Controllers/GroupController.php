@@ -57,12 +57,11 @@ class GroupController extends Controller
 		}
 		if ($request->get('r_id') == 1) {
 			$count = DB::select(
-				'select * from groups where r_id = ' . $request->get('r_id')
+				'select * from groups where u_id=' . $request->get('u_id')
 			);
 		} else {
 			$count = DB::select(
-				'select * from groups where u_id = ' . $request->get('u_id') .
-					' and e_id = ' . $request->get('e_id')
+				'select * from groups where u_id = ' . $request->get('u_id')
 			);
 		}
 		if (count($count) == 0) {
@@ -87,6 +86,15 @@ class GroupController extends Controller
 		}
 		if ($request->get('r_id') == 1) {
 			$count = DB::select(
+				'select * from groups where u_id=' . $request->get('u_id')
+			);
+		} else {
+			$count = DB::select(
+				'select * from groups where u_id = ' . $request->get('u_id')
+			);
+		}
+		/* if ($request->get('r_id') == 1) {
+			$count = DB::select(
 				'select * from groups where r_id = ' . $request->get('r_id')
 			);
 		} else {
@@ -94,7 +102,7 @@ class GroupController extends Controller
 				'select * from groups where u_id = ' . $request->get('u_id') .
 					' and e_id = ' . $request->get('e_id')
 			);
-		}
+		} */
 
 		if (count($count) == 0) {
 			$storeGroup = new group([
@@ -143,11 +151,11 @@ class GroupController extends Controller
 	}
 
 	public function getsubevent(Request $request)
-	{		
+	{
 		if ($request->ajax()) {
 			$branchData = event_master::where('e_id', $request->e_id)->get();
 			$sub_event = sub_event_master::where('e_id', $request->e_id)->get();
-			$data = user_master::where('b_id', $branchData[0]->b_id)->where('u_type',2)->get();
+			$data = user_master::where('b_id', $branchData[0]->b_id)->where('u_type', 2)->get();
 			return response()->json(['option' => $data, 'sub_event' => $sub_event]);
 		}
 	}

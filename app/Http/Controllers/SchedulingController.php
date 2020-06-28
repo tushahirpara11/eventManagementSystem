@@ -69,7 +69,7 @@ class SchedulingController extends Controller
 
 	public function getEvents()
 	{
-		return view('eac.addDynamicScheduling')->with(['data' => sub_event_master::get()]);
+		return view('eac.addDynamicScheduling')->with(['data' => sub_event_master::where('e_id', session('e_id'))->get()]);
 	}
 
 	public function addOverlap(Request $request)
@@ -78,7 +78,7 @@ class SchedulingController extends Controller
 		if ($request->ajax()) {
 			if ($request->s_e_id != null) {
 				if (count($request->s_e_id) == 1) {
-					$data = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,0 as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $request->s_e_id[0]);
+					$data = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,0 as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $request->s_e_id[0] . ' group by sem.s_e_id,sem.s_e_name,sem.s_e_duration');
 					if (count($data) == 0) {
 						$eventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $request->s_e_id[0]);
 						return response()->json(['data' => $eventA]);
@@ -91,24 +91,30 @@ class SchedulingController extends Controller
 						if ($temp < count($request->s_e_id)) {
 							array_push($pairArray, [$request->s_e_id[$i], ($request->s_e_id[$temp])]);
 						}
-					}					
-					$startingdata = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,0 as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $request->s_e_id[0]);
+					}
+					$startingdata = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,0 as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $request->s_e_id[0] . ' group by sem.s_e_id,sem.s_e_name,sem.s_e_duration');
 					if (count($startingdata) == 0) {
-						$firstData = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $request->s_e_id[0]);
+						$firstData = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $request->s_e_id[0] . ' group by s_e_id,s_e_name,s_e_duration');
 						array_push($scheduleData, $firstData);
 					} else {
 						array_push($scheduleData, $startingdata);
 					}
 					for ($k = 0; $k < count($pairArray); $k++) {
-						$data = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,count(er.u_id) as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $pairArray[$k][0] . ' and er.u_id in ( SELECT u_id FROM event_registrations Where s_e_id=' . $pairArray[$k][1] . ') group by sem.s_e_id,sem.s_e_name,sem.s_e_duration,er.u_id');
+						$data = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,count(er.u_id) as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $pairArray[$k][1] . ' and er.u_id in ( SELECT u_id FROM event_registrations Where s_e_id=' . $pairArray[$k][0] . ') group by sem.s_e_id,sem.s_e_name,sem.s_e_duration');
 						if (count($data) == 0) {
 							$eventA = event_registration::where('s_e_id', $pairArray[$k][0])->get();
 							$eventB = event_registration::where('s_e_id', $pairArray[$k][1])->get();
 							if (count($eventA) == 0) {
-								$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][1]);
+								$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][0]);
+								array_push($scheduleData, $statusZeroEventA);
+							} else {
+								$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][0]);
 								array_push($scheduleData, $statusZeroEventA);
 							}
 							if (count($eventB) == 0) {
+								$statusZeroEventB = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][1]);
+								array_push($scheduleData, $statusZeroEventB);
+							} else {
 								$statusZeroEventB = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][1]);
 								array_push($scheduleData, $statusZeroEventB);
 							}
@@ -116,6 +122,7 @@ class SchedulingController extends Controller
 							array_push($scheduleData, $data);
 						}
 					}
+					// return $scheduleData;
 					return response()->json(['data' => $scheduleData]);
 				}
 			} else {
@@ -165,9 +172,9 @@ class SchedulingController extends Controller
 			}
 		}
 		$scheduleData = array();
-		$startingdata = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,0 as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $ary[0]);
+		$startingdata = DB::select('select sem.s_e_id,sem.s_e_name,sem.s_e_duration,0 as overlap from sub_event_masters sem,event_registrations er where sem.s_e_id = er.s_e_id and er.s_e_id=' . $ary[0] . ' group by sem.s_e_id,sem.s_e_name,sem.s_e_duration');
 		if (count($startingdata) == 0) {
-			$firstData = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $ary[0]);
+			$firstData = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $ary[0]. ' group by s_e_id,s_e_name,s_e_duration');
 			array_push($scheduleData, $firstData);
 		} else {
 			array_push($scheduleData, $startingdata);
@@ -178,18 +185,24 @@ class SchedulingController extends Controller
 				$eventA = event_registration::where('s_e_id', $pairArray[$k][0])->get();
 				$eventB = event_registration::where('s_e_id', $pairArray[$k][1])->get();
 				if (count($eventA) == 0) {
-					$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][1]);
+					$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][0]);
+					array_push($scheduleData, $statusZeroEventA);
+				} else {
+					$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][0]);
 					array_push($scheduleData, $statusZeroEventA);
 				}
 				if (count($eventB) == 0) {
 					$statusZeroEventB = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][1]);
 					array_push($scheduleData, $statusZeroEventB);
+				} else {
+					$statusZeroEventA = DB::select('select s_e_id,s_e_name,s_e_duration,0 as overlap from sub_event_masters where s_e_id=' . $pairArray[$k][1]);
+					array_push($scheduleData, $statusZeroEventA);
 				}
 			} else {
 				array_push($scheduleData, $data);
 			}
 		}
-		return view('eac.updateDynamicScheduling')->with(['data' => $scheduleData, 'sched_id' => $request->get('sched_id'), 'eventSequence' => json_encode($ary), 'sub_event' => sub_event_master::get()]);
+		return view('eac.updateDynamicScheduling')->with(['data' => $scheduleData, 'sched_id' => $request->get('sched_id'), 'eventSequence' => json_encode($ary), 'sub_event' => sub_event_master::where('e_id',session('e_id'))->get()]);
 	}
 
 	/**
@@ -203,7 +216,7 @@ class SchedulingController extends Controller
 	{
 		$update = DB::table('schedulings')
 			->where('sched_id', $request->get('sched_id'))
-			->update(['sched_details' => $request->get('sched_details')]);		
+			->update(['sched_details' => $request->get('sched_details')]);
 		if ($update == 1) {
 			return redirect('/eac/viewSchedule')->with('success', 'Event Schedule Updated Successfully.');
 		} else {
