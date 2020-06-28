@@ -99,7 +99,8 @@ Route::group(['middleware' => ['admin']], function () {
 	Route::get('/admin/expence', 'ExpenceTypeController@show')->name('admin.Expence');
 	Route::post('/admin/expence', 'ExpenceTypeController@store')->name('admin.addExpence');
 	Route::post('/admin/updateexpence', 'ExpenceTypeController@update')->name('admin.updateExpence');
-	Route::delete('/admin/deleteexpence/{id}', 'ExpenceTypeController@delete')->name('admin.deleteExpence');
+    Route::delete('/admin/deleteexpence/{id}', 'ExpenceTypeController@delete')->name('admin.deleteExpence');
+    
 
 	/*Session Expire*/
 	Route::get('/admin/logout', 'BranchMasterController@destroy');
@@ -258,6 +259,7 @@ Route::middleware('student')->group(function () {
 	Route::post('/student/event_registration', 'EventRegistrationController@store');
 	Route::post('/student/sub_event_list', 'UserMasterController@getSubevent');
 });
+Route::get('/','UserMasterController@home_page');
 Route::get('/student/registration', 'UserMasterController@get_data');
 Route::post('/student/register', 'UserMasterController@store');
 Route::get('/student/login', 'UserMasterController@get_login_form');
@@ -280,7 +282,7 @@ Route::middleware('coordinator')->group(function()
     Route::get('/student_coordinator/profile','UserMasterController@get_coordinator_Profile');
     Route::post('/student_coordinator/update', 'UserMasterController@update');
     Route::get('/student_coordinator/change_password','UserMasterController@coordinator_change_password_form');
-    Route::post('/student_coordinator/change_password','UserMasterController@change_password');
+    Route::post('/student_coordinator/change_password','UserMasterController@change_coordinator_password');
     Route::post('/student_coordinator/sub_event_list','UserMasterController@get_coordinator_Subevent');
     Route::post('/student_coordinator/event_registration','EventRegistrationController@coordinator_store');
     Route::get('/student_coordinator/add_expence','UserMasterController@get_expence_form');
