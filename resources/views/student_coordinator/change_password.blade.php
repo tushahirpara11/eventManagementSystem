@@ -34,7 +34,7 @@
 
 						<input type="password" name="c_newpassword" id="c_newpassword" class="form-control" placeholder="Confirm New Password :" /><br>
 						<div class="col-md-12">
-							<input type="button" value="Edit" id="editbtn" class="btn btn-success m-2" style="width: 500px;"><br>
+							<input type="submit" value="Edit" id="editbtn" class="btn btn-success m-2" style="width: 500px;"><br>
 						</div>
 					</form>
 				</div>

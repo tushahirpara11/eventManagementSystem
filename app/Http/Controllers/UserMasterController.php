@@ -423,6 +423,17 @@ class UserMasterController extends Controller
 			return Redirect::back()->with('error', 'Old Password Does Not Match !!!!!');
 		}
 	}
+	public function change_coordinator_password(Request $request)
+	{
+		$data = user_master::where('u_id', '=', session('id'))->get();
+		if (decrypt($data[0]->password) == $request->oldpassword) {
+			$pass = encrypt($request->get('newpassword'));
+			DB::update('update user_masters set password = "' . $pass . '" where u_id = ' . session('id'));
+			return Redirect::back()->with('success', 'Password Change Successfully !!!!!');
+		} else {
+			return Redirect::back()->with('error', 'Old Password Does Not Match !!!!!');
+		}
+	}
 	public function getSubevent(Request $request)
 	{
 		$e_id = $request->e_id;
@@ -502,8 +513,8 @@ class UserMasterController extends Controller
 	public function get_expence_form()
 	{
 		$expence_type = expence_type::all();
-		$events = event_master::all();
-		$sub_events = sub_event_master::all();
+		$sub_events = sub_event_master::where('s_e_id','=',session('c_s_e_id'))->get();
+		$events = DB::select('select * from event_masters e, sub_event_masters se where e.e_id = se.e_id and se.s_e_id = '.session('c_s_e_id'));
 		return view('/student_coordinator/add_expence', compact('expence_type', 'events', 'sub_events'));
 	}
 	function EacSendForgotPassword(Request $request)

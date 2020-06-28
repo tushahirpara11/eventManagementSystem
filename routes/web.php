@@ -283,7 +283,7 @@ Route::middleware('coordinator')->group(function()
     Route::get('/student_coordinator/profile','UserMasterController@get_coordinator_Profile');
     Route::post('/student_coordinator/update', 'UserMasterController@update');
     Route::get('/student_coordinator/change_password','UserMasterController@coordinator_change_password_form');
-    Route::post('/student_coordinator/change_password','UserMasterController@change_password');
+    Route::post('/student_coordinator/change_password','UserMasterController@change_coordinator_password');
     Route::post('/student_coordinator/sub_event_list','UserMasterController@get_coordinator_Subevent');
     Route::post('/student_coordinator/event_registration','EventRegistrationController@coordinator_store');
     Route::get('/student_coordinator/add_expence','UserMasterController@get_expence_form');
